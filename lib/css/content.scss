@@ -1,0 +1,85 @@
+@import 'global';
+
+$gutter: 5px;
+
+$color-nuetral-lighter: #eeeeee;
+$color-nuetral-light: #dddddd;
+$color-nuetral: #999999;
+$color-alert: #D52354;
+
+$color-purple: #A85AD4;
+$color-orange: #F7A632;
+$color-green: #D4E529;
+
+.panel {
+  border: 1px solid $color-nuetral-light;
+  border-radius: 3px;
+  &.daily .panel-title {
+    background-color: $color-orange;
+  }
+  &.weekly .panel-title {
+    background-color: $color-green;
+  }
+  &.monthly .panel-title {
+    background-color: $color-purple;
+  }
+}
+
+.panel-title {
+  background: $color-nuetral-lighter;
+  font-size: 14px;
+  margin: 0px;
+  padding: $gutter ($gutter * 2);
+}
+
+.panel-item {
+  border-top: 1px solid $color-nuetral-light;
+  display: block;
+  padding: $gutter;
+}
+
+.panel-item-meta {
+  color: $color-nuetral;
+  font-size: 10px;
+  float: right;
+  & > span,
+  & > a,
+  .octicon {
+    padding-right: $gutter;
+  }
+}
+
+.panel-footer {
+  @extend .panel-title;
+  border-top: 1px solid $color-nuetral-light;
+}
+
+.issue {
+  line-height: 1em;
+  &:hover {
+    text-decoration: none;
+  }
+  &.reviewing {
+      color: $color-nuetral-light;
+      // Only show the check icon if the item is in review
+      .octicon-check {
+        display: inline;
+      }
+  }
+  &.overdue {
+      color: $color-alert !important;
+      // Only show the alert icon if the item is overdue
+      .octicon-alert {
+        display: inline;
+      }
+  }
+  // Hide the icons for all issues by default
+  .octicon {
+    padding-right: $gutter;
+    display: none;
+  }
+}
+
+.assignee {
+  padding-left: ($gutter * 4);
+}

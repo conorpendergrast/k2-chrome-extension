@@ -1,0 +1,82 @@
+.panel {
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+}
+
+.panel.daily .panel-title,
+.panel.daily .panel-footer {
+  background-color: #F7A632;
+}
+
+.panel.weekly .panel-title,
+.panel.weekly .panel-footer {
+  background-color: #D4E529;
+}
+
+.panel.monthly .panel-title,
+.panel.monthly .panel-footer {
+  background-color: #A85AD4;
+}
+
+.panel-title,
+.panel-footer {
+  background: #eeeeee;
+  font-size: 14px;
+  margin: 0px;
+  padding: 5px 10px;
+}
+
+.panel-item {
+  border-top: 1px solid #dddddd;
+  display: block;
+  padding: 5px;
+}
+
+.panel-item-meta {
+  color: #999999;
+  font-size: 10px;
+  float: right;
+}
+
+.panel-item-meta > span,
+.panel-item-meta > a,
+.panel-item-meta .octicon {
+  padding-right: 5px;
+}
+
+.panel-footer {
+  border-top: 1px solid #dddddd;
+}
+
+.issue {
+  line-height: 1em;
+}
+
+.issue:hover {
+  text-decoration: none;
+}
+
+.issue.reviewing {
+  color: #dddddd;
+}
+
+.issue.reviewing .octicon-check {
+  display: inline;
+}
+
+.issue.overdue {
+  color: #D52354 !important;
+}
+
+.issue.overdue .octicon-alert {
+  display: inline;
+}
+
+.issue .octicon {
+  padding-right: 5px;
+  display: none;
+}
+
+.assignee {
+  padding-left: 20px;
+}
