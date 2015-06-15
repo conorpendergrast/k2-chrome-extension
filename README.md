@@ -1,17 +1,14 @@
-[![Gitter chat](https://badges.gitter.im/codefresh-io/cf-chrome-ext.png)](https://gitter.im/codefresh-io/cf-chrome-ext "Gitter chat")
-
-CodeFresh Chrome Extension
+K2 Chrome Extension
 =============
 
-GitHub UI integration for Codefresh platform using chrome extensions.
+GitHub UI integration for K2 - Kernel Scheduling Method
 
 # Installing this repo
 ```
-git clone git@github.com:codefresh-io/cf-chrome-ext.git
-cd cf-chrome-ext
-npm install -g gulp bower
+git clone git@github.com:tgolen/k2-chrome-extension.git
+cd k2-chrome-extension
+npm install -g gulp
 npm install
-bower install
 ```
 
 # Installing the Chrome Extension
@@ -26,8 +23,6 @@ There are three main gulp tasks to use with this project. All files are output t
 1. `gulp` - Run this when doing development. It will watch files and run all code standardizing tasks whenever the files are saved. It will build all the JS code together in an unminified version for easier debugging.
 1. `gulp build` - This will doing the same thing as the normal gulp task except it won't watch files and will exit when finished.
 1. `gulp package` - This will output a minified version of the code which can be used to submit to the Chrome Store.
-
-The minified files should not be committed to the repo.
 
 # Code Standards
 This repo uses several tools to keep the code standardized.
