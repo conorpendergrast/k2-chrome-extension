@@ -40,10 +40,23 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    let Items = this._getItems();
+    if (this.props.loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (!this.props.data.length) {
+      return (
+        <div className="blankslate capped clean-background">
+          <span className="mega-octicon octicon-thumbsup"></span>
+          <h3>{this.props.emptyTitle}</h3>
+          <p>{this.props.emptyText}</p>
+        </div>
+      );
+    }
+
     return (
       <div>
-        {Items}
+        {this._getItems()}
       </div>
     );
   }

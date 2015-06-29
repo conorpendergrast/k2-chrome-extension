@@ -4,11 +4,12 @@
 let React = require('react');
 let API = require('../../lib/api');
 let PanelList = require('../../component/panel/_list');
+let IssueStore = require('../../store/issue');
 
 module.exports = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
-      daily: [],
+      daily: IssueStore.getState(),
       weekly: [],
       monthly: [],
       none: [],
@@ -23,22 +24,22 @@ module.exports = React.createClass({
    *
    * @date 2015-06-07
    */
-  loadData: function() {
+  loadData() {
     let _this = this;
 
-    // Get issues with daily label
+    /*/ Get issues with daily label
     API.getDailyIssues(function(err, data) {
       if (err) {
-        return console.error(err);
+        return;
       }
 
       _this.setState({daily: data});
-    });
+    });*/
 
     // Get issues with weekly label
     API.getWeeklyIssues(function(err, data) {
       if (err) {
-        return console.error(err);
+        return;
       }
 
       _this.setState({weekly: data});
@@ -47,7 +48,7 @@ module.exports = React.createClass({
     // Get issues with monthly label
     API.getMonthlyIssues(function(err, data) {
       if (err) {
-        return console.error(err);
+        return;
       }
 
       _this.setState({monthly: data});
@@ -56,7 +57,7 @@ module.exports = React.createClass({
     // Get issues with no k2 labels
     API.getNoneIssues(function(err, data) {
       if (err) {
-        return console.error(err);
+        return;
       }
 
       _this.setState({none: data});
@@ -65,7 +66,7 @@ module.exports = React.createClass({
     // Get assigned pull requests
     API.getPullsAssigned(function(err, data) {
       if (err) {
-        return console.error(err);
+        return;
       }
 
       _this.setState({pullsAssigned: data});
@@ -74,17 +75,31 @@ module.exports = React.createClass({
     // Get authored pull requests
     API.getPullsAuthored(function(err, data) {
       if (err) {
-        return console.error(err);
+        return;
       }
 
       _this.setState({pullsAuthored: data});
     });
   },
-  componentDidMount: function() {
+  componentDidMount() {
     this.loadData();
     setInterval(this.loadData, this.props.pollInterval);
+
+    IssueStore.listen(this.onChange);
   },
-  render: function() {
+
+  componentWillUnmount() {
+    IssueStore.unlisten(this.onChange);
+  },
+
+  onChange(state) {
+    this.setState({daily: state});
+  },
+  render() {
+    let listOptions = {
+      emptyTitle: 'No Issues',
+      emptyText: 'You completed all issues'
+    };
     return (
       <div>
         <button onClick={this.loadData} className="btn right tooltipped tooltipped-sw" aria-label="Refresh Data"><span className="octicon octicon-sync"></span></button>
@@ -93,16 +108,20 @@ module.exports = React.createClass({
         <br />
         <div className="columns">
           <div className="one-fourth column">
-            <PanelList title="Daily" extraClass="daily" list={this.state.daily} item="issue" />
+            <PanelList title="Daily" extraClass="daily" list={this.state.daily} item="issue"
+              listOptions={listOptions} />
           </div>
           <div className="one-fourth column">
-            <PanelList title="Weekly" extraClass="weekly" list={this.state.weekly} item="issue" />
+            <PanelList title="Weekly" extraClass="weekly" list={this.state.weekly} item="issue"
+              listOptions={listOptions} />
           </div>
           <div className="one-fourth column">
-            <PanelList title="Monthly" extraClass="monthly" list={this.state.monthly} item="issue" />
+            <PanelList title="Monthly" extraClass="monthly" list={this.state.monthly} item="issue"
+              listOptions={listOptions} />
           </div>
           <div className="one-fourth column">
-            <PanelList title="None" extraClass="none" list={this.state.none} item="issue" />
+            <PanelList title="None" extraClass="none" list={this.state.none} item="issue"
+              listOptions={listOptions} />
           </div>
         </div>
         <br />

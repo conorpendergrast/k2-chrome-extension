@@ -24,7 +24,8 @@ module.exports = React.createClass({
     return (
       <div className={this.getPanelClass()}>
         <Title text={this.props.title} />
-        <List data={this.props.list} type={this.props.item} options={this.props.options} />
+        <List data={this.props.list} type={this.props.item} options={this.props.options}
+          {...this.props.listOptions} />
         {this.props.children}
       </div>
     );
