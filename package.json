@@ -5,6 +5,7 @@
   "main": "index.js",
   "author": "Tim Golen <tim@golen.net>",
   "dependencies": {
+    "alt": "^0.16.10",
     "browserify-shim": "^3.8.3",
     "browsernizr": "^1.0.2",
     "jquery": "^2.1.4",
