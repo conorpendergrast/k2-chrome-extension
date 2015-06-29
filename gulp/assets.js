@@ -2,7 +2,8 @@
 
 module.exports = {
   clientJs: [
-    __dirname + '/../lib/js/**/*.js'
+    __dirname + '/../lib/js/**/*.js',
+    '!' + __dirname + '/../lib/js/**/_*.js'
   ],
   clientJsx: [
     __dirname + '/../lib/js/**/*.jsx'

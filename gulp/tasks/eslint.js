@@ -10,7 +10,10 @@ module.exports = function(options) {
       .pipe(plumber({
         errorHandler: require('../error.beep')
       }))
-      .pipe(eslint())
+      .pipe(eslint({
+        useEslintrc: true,
+        configFile: '.eslintrc'
+      }))
       .pipe(eslint.format())
       .pipe(eslint.failOnError());
   };

@@ -8,9 +8,6 @@ var runSequence = require('run-sequence');
 // If the user ran a 'build' or 'package' task, then we do NOT want to watch them
 var watchFiles = tasks.indexOf('build') === -1 && tasks.indexOf('package') === -1;
 
-// If the user ran the 'package' task, then we can uglify the files
-var uglifyFiles = tasks.indexOf('package') > -1;
-
 var gulp = require('./gulp')([
   'browserify-events',
   'browserify-content',
@@ -34,6 +31,6 @@ gulp.task('build', [
 
 gulp.task('default', ['build', 'watch']);
 
-gulp.task('package', function() {
+gulp.task('package', function () {
   runSequence.use(gulp)('build', 'crx');
 });

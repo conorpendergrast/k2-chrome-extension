@@ -384,8 +384,6 @@ let baseUrl = 'https://api.github.com';
  *
  * @param {string} type 'assignee' or 'author'
  * @param {Function} cb [description]
- *
- * @return {array}
  */
 function getPullsByType(type, cb) {
   let query = '?q=';
@@ -413,7 +411,6 @@ function getPullsByType(type, cb) {
         cb(null, data.items);
       })
       .fail(function(err) {
-        console.error('fail', arguments);
         cb(err);
       });
   });
@@ -429,8 +426,6 @@ function getPullsByType(type, cb) {
  *
  * @param {string} label
  * @param {Function} cb [description]
- *
- * @return {array}
  */
 function getIssuesByLabel(label, cb) {
   let filterLabels = ['daily', 'weekly', 'monthly'];
@@ -470,7 +465,6 @@ function getIssuesByLabel(label, cb) {
         cb(null, data.items);
       })
       .fail(function(err) {
-        console.error('fail', arguments);
         cb(err);
       });
   });
@@ -484,11 +478,9 @@ function getIssuesByLabel(label, cb) {
  * @date 2015-06-05
  *
  * @param {Function} cb
- *
- * @return {array}
  */
 function getDailyIssues(cb) {
-  return getIssuesByLabel('daily', cb);
+  getIssuesByLabel('daily', cb);
 }
 
 /**
@@ -499,11 +491,9 @@ function getDailyIssues(cb) {
  * @date 2015-06-05
  *
  * @param {Function} cb
- *
- * @return {array}
  */
 function getWeeklyIssues(cb) {
-  return getIssuesByLabel('weekly', cb);
+  getIssuesByLabel('weekly', cb);
 }
 
 /**
@@ -514,11 +504,9 @@ function getWeeklyIssues(cb) {
  * @date 2015-06-05
  *
  * @param {Function} cb
- *
- * @return {array}
  */
 function getMonthlyIssues(cb) {
-  return getIssuesByLabel('monthly', cb);
+  getIssuesByLabel('monthly', cb);
 }
 
 /**
@@ -529,11 +517,9 @@ function getMonthlyIssues(cb) {
  * @date 2015-06-05
  *
  * @param {Function} cb
- *
- * @return {array}
  */
 function getNoneIssues(cb) {
-  return getIssuesByLabel('none', cb);
+  getIssuesByLabel('none', cb);
 }
 
 /**
@@ -544,8 +530,6 @@ function getNoneIssues(cb) {
  * @date 2015-06-07
  *
  * @param {Function} cb [description]
- *
- * @return {array}
  */
 function getPullsAssigned(cb) {
   getPullsByType('assignee', cb);
@@ -559,8 +543,6 @@ function getPullsAssigned(cb) {
  * @date 2015-06-07
  *
  * @param {Function} cb [description]
- *
- * @return {array}
  */
 function getPullsAuthored(cb) {
   getPullsByType('author', cb);
@@ -836,7 +818,7 @@ module.exports = function() {
 let $ = require('jquery');
 let Base = require('./_base');
 
-module.exports = function() {
+module.exports = function () {
   let PrPage = new Base();
 
   /**
