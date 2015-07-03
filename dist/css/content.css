@@ -56,10 +56,12 @@
   text-decoration: none;
 }
 
+.issue.hold,
 .issue.reviewing {
   color: #dddddd;
 }
 
+.issue.hold .octicon-check,
 .issue.reviewing .octicon-check {
   display: inline;
 }

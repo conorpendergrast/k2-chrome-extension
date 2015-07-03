@@ -535,6 +535,10 @@ module.exports = React.createClass({ displayName: 'exports',
       className += ' overdue';
     }
 
+    if (this.props.data.title.indexOf('[HOLD') > -1 || this.props.data.title.indexOf('[WIP') > -1) {
+      className += ' hold';
+    }
+
     return className;
   },
 
@@ -1396,7 +1400,7 @@ module.exports = React.createClass({ displayName: 'exports',
       listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listweeklyissues', title: 'Weekly', extraClass: 'weekly', action: WeeklyIssueActions, store: WeeklyIssueStore, item: 'issue',
       listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listmonthlyissues', title: 'Monthly', extraClass: 'monthly', action: MonthlyIssueActions, store: MonthlyIssueStore, item: 'issue',
       listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listnoneissues', title: 'None', extraClass: 'none', action: NoneIssueActions, store: NoneIssueStore, item: 'issue',
-      listOptions: listOptions }))), React.createElement('br', null));
+      listOptions: listOptions }))), React.createElement('br', null), React.createElement('div', null, React.createElement(PanelList, { ref: 'listassignedpulls', title: 'Pull Requests - Assigned to You', action: PullAssignedActions, store: PullAssignedStore, options: { showAssignee: false }, item: 'pull' })), React.createElement('br', null), React.createElement('div', null, React.createElement(PanelList, { ref: 'listauthoredpulls', title: 'Pull Requests - You Created', action: PullAuthoredActions, store: PullAuthoredStore, options: { showAssignee: true }, item: 'pull' })));
   }
 });
 

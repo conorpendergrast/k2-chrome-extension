@@ -59,6 +59,7 @@ $color-green: #D4E529;
   &:hover {
     text-decoration: none;
   }
+  &.hold,
   &.reviewing {
       color: $color-nuetral-light;
       // Only show the check icon if the item is in review
