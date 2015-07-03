@@ -882,23 +882,21 @@ exports.getPullsAuthored = getPullsAuthored;
 'use strict';
 /* global chrome */
 
-let listeners = {};
+var listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  let navEventList = [
-    'onHistoryStateUpdated'
-  ];
+  var navEventList = ['onHistoryStateUpdated'];
 
-  navEventList.forEach(function(e) {
-    chrome.webNavigation[e].addListener(function() {
+  navEventList.forEach(function (e) {
+    chrome.webNavigation[e].addListener(function () {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function(tabs) {
+      }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -927,8 +925,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (let i = 0; i < listeners[eventName].length; i++) {
-      let callback = listeners[eventName][i];
+    for (var i = 0; i < listeners[eventName].length; i++) {
+      var callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -939,7 +937,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function(request) {
+  chrome.runtime.onMessage.addListener(function (request) {
     trigger(request);
   });
 }
@@ -1345,7 +1343,6 @@ function showPasswordForm() {
 
 var React = require('react');
 var _ = require('underscore');
-var API = require('../../lib/api');
 var PanelList = require('../../component/panel/list');
 
 var DailyIssueStore = require('../../store/issue.daily');
@@ -1404,7 +1401,7 @@ module.exports = React.createClass({ displayName: 'exports',
   }
 });
 
-},{"../../action/issue.daily":2,"../../action/issue.monthly":3,"../../action/issue.none":4,"../../action/issue.weekly":5,"../../action/pull.assigned":7,"../../action/pull.authored":8,"../../component/panel/list":18,"../../lib/api":19,"../../store/issue.daily":30,"../../store/issue.monthly":31,"../../store/issue.none":32,"../../store/issue.weekly":33,"../../store/pull.assigned":34,"../../store/pull.authored":35,"react":208,"underscore":209}],29:[function(require,module,exports){
+},{"../../action/issue.daily":2,"../../action/issue.monthly":3,"../../action/issue.none":4,"../../action/issue.weekly":5,"../../action/pull.assigned":7,"../../action/pull.authored":8,"../../component/panel/list":18,"../../store/issue.daily":30,"../../store/issue.monthly":31,"../../store/issue.none":32,"../../store/issue.weekly":33,"../../store/pull.assigned":34,"../../store/pull.authored":35,"react":208,"underscore":209}],29:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();

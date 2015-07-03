@@ -1,3 +1,7 @@
+# 0.0.4
+- Refactored the React components to use Alt-Flux
+- Added loading and blank states to the lists
+
 # 0.0.3
 - Changes the page title to K2 when on the K2 dashboard
 
