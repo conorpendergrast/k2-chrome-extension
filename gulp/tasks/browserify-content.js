@@ -10,6 +10,8 @@ var transform = require('vinyl-transform');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
 var plumber = require('gulp-plumber');
+var babelify = require('babelify');
+var reactify = require('reactify');
 
 var clientJs = require('../assets').clientJs;
 var clientJsApps = require('../assets').clientJsApps;
@@ -32,6 +34,8 @@ module.exports = function(options) {
 
       // add the file to bundle
       bundler.add(clientJsApp);
+      bundler.transform(reactify)
+      bundler.transform(babelify)
       bundler.on('update', bundle); // on any dep update, runs the bundler
       bundler.on('log', gutil.log); // output build logs to terminal
     }

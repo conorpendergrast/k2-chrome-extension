@@ -17,8 +17,7 @@ var gulp = require('./gulp')([
   'imagecopy',
   'manifestcopy',
   'watch',
-  'crx',
-  'react'
+  'crx'
 ], {
   watchify: watchFiles,
   uglify: false
@@ -26,7 +25,7 @@ var gulp = require('./gulp')([
 
 gulp.task('build', [
   'eslint', 'sass', 'htmlcopy', 'imagecopy', 'manifestcopy',
-  'react', 'browserify-content', 'browserify-events'
+  'browserify-content', 'browserify-events'
 ]);
 
 gulp.task('default', ['build', 'watch']);
