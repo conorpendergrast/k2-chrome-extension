@@ -1386,13 +1386,16 @@ module.exports = React.createClass({ displayName: 'exports',
   componentWillUnmount: function componentWillUnmount() {
     clearInterval(this.interval);
   },
+
   render: function render() {
     var listOptions = {
-      emptyTitle: 'No Issues',
+      emptyTitle: 'No Issues Here',
       emptyText: 'You completed all issues'
     };
     return React.createElement('div', null, React.createElement('button', { onClick: this.loadData, className: 'btn right tooltipped tooltipped-sw', 'aria-label': 'Refresh Data' }, React.createElement('span', { className: 'octicon octicon-sync' })), React.createElement('div', { className: 'issue reviewing' }, React.createElement('span', { className: 'octicon octicon-check' }), ' Under Review'), React.createElement('div', { className: 'issue overdue' }, React.createElement('span', { className: 'octicon octicon-alert' }), ' Overdue'), React.createElement('br', null), React.createElement('div', { className: 'columns' }, React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listdailyissues', title: 'Daily', extraClass: 'daily', action: DailyIssueActions, store: DailyIssueStore, item: 'issue',
       listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listweeklyissues', title: 'Weekly', extraClass: 'weekly', action: WeeklyIssueActions, store: WeeklyIssueStore, item: 'issue',
+      listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listmonthlyissues', title: 'Monthly', extraClass: 'monthly', action: MonthlyIssueActions, store: MonthlyIssueStore, item: 'issue',
+      listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listnoneissues', title: 'None', extraClass: 'none', action: NoneIssueActions, store: NoneIssueStore, item: 'issue',
       listOptions: listOptions }))), React.createElement('br', null));
   }
 });
