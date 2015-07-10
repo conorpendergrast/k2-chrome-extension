@@ -12,10 +12,19 @@ npm install
 ```
 
 # Installing the Chrome Extension
+## Easy (auto-updating)
+1. Download the extension from [here](https://github.com/tgolen/k2-chrome-extension/blob/master/build/k2.crx)
+2. Go to `chrome://extensions`
+3. Drop the extension onto this window and let it install
+
+## From the Source Code (for development)
 1. Go to `chrome://extensions`
 2. Make sure you have _Developer Mode_ enabled at the top
 3. Click _Load Unpacked Extension_
 4. Navigate to the `dist` folder and select it
+
+## NOTE: It Requests Your GitHub Password
+Your github password is stored locally and securely. It is used to make basic auth calls to the GitHub API. This is so that we don't have to implement OAuth or a separate API and we can get around a lot of the rate limiting issues.
 
 # Gulp Taks
 There are three main gulp tasks to use with this project. All files are output to the `dist` folder.
