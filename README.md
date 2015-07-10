@@ -2,6 +2,7 @@ K2 Chrome Extension
 =============
 
 GitHub UI integration for K2 - Kernel Scheduling Method
+Read about the features in the [wiki](https://github.com/tgolen/k2-chrome-extension/wiki)
 
 # Installing the Chrome Extension
 ## Easy (auto-updating)
