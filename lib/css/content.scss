@@ -84,3 +84,37 @@ $color-green: #D4E529;
 .assignee {
   padding-left: ($gutter * 4);
 }
+
+
+/**
+ * Dark Style
+ */
+body.dark {
+  background-color: #000;
+  color: #eee;
+  .sunken-menu,
+  .header {
+    background-color: #333;
+  }
+  .sunken-menu {
+    background-color: #000;
+    background-image: none;
+  }
+  .panel,
+  .panel-item,
+  .pagehead,
+  .header {
+    border-color: #666 !important;
+  }
+  .header-logo-invertocat,
+  .header-nav-link {
+    color: #eee;
+  }
+  .panel-title {
+    color: #000;
+  }
+  .hold,
+  .reviewing {
+    color: #333;
+  }
+}

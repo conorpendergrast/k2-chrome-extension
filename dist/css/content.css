@@ -82,3 +82,44 @@
 .assignee {
   padding-left: 20px;
 }
+
+/**
+ * Dark Style
+ */
+
+body.dark {
+  background-color: #000;
+  color: #eee;
+}
+
+body.dark .sunken-menu,
+body.dark .header {
+  background-color: #333;
+}
+
+body.dark .sunken-menu {
+  background-color: #000;
+  background-image: none;
+}
+
+body.dark .panel,
+body.dark .panel-item,
+body.dark .pagehead,
+body.dark .header {
+  border-color: #666 !important;
+}
+
+body.dark .header-logo-invertocat,
+body.dark .header-nav-link {
+  color: #eee;
+}
+
+body.dark .panel-title,
+body.dark .panel-footer {
+  color: #000;
+}
+
+body.dark .hold,
+body.dark .reviewing {
+  color: #333;
+}
