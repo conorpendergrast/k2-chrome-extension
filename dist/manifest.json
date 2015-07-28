@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "K2 for GitHub (BETA)",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Manage your Kernel Scheduling from directly inside GitHub",
   "update_url": "https://dl.dropboxusercontent.com/u/22109785/extensions/k2/updates.xml",
 

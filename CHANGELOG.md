@@ -1,3 +1,7 @@
+# 0.0.6
+- Updated the styles for aa PR on hold to match the new GitHub changes
+- Refined the detection of a held PR to one that contains "[HOLD" or "[WIP" in the title
+
 # 0.0.5
 - Added a dark theme for GitHub but disabled it for now
 - Fixed a bug where authored pull requests weren't showing
