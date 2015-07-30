@@ -852,21 +852,23 @@ exports.getPullsAuthored = getPullsAuthored;
 'use strict';
 /* global chrome */
 
-var listeners = {};
+let listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  var navEventList = ['onHistoryStateUpdated'];
+  let navEventList = [
+    'onHistoryStateUpdated'
+  ];
 
-  navEventList.forEach(function (e) {
-    chrome.webNavigation[e].addListener(function () {
+  navEventList.forEach(function(e) {
+    chrome.webNavigation[e].addListener(function() {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function (tabs) {
+      }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -895,8 +897,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (var i = 0; i < listeners[eventName].length; i++) {
-      var callback = listeners[eventName][i];
+    for (let i = 0; i < listeners[eventName].length; i++) {
+      let callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -907,7 +909,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function (request) {
+  chrome.runtime.onMessage.addListener(function(request) {
     trigger(request);
   });
 }
@@ -1434,10 +1436,68 @@ module.exports = function () {
 
 var React = require('react');
 var BtnGroup = require('../../component/btngroup/index');
+var defaultBtnClass = 'btn btn-sm tooltipped tooltipped-n';
 
 module.exports = React.createClass({ displayName: 'exports',
+  getInitialState: function getInitialState() {
+    return {
+      hourly: defaultBtnClass + ' k2-hourly',
+      daily: defaultBtnClass + ' k2-daily',
+      weekly: defaultBtnClass + ' k2-weekly',
+      monthly: defaultBtnClass + ' k2-monthly'
+    };
+  },
+  setHourly: function setHourly() {
+    if (this.state.hourly.indexOf(' active') > -1) {
+      this.setState(this.getInitialState());
+      return;
+    }
+    this.setState({
+      hourly: defaultBtnClass + ' k2-hourly active',
+      daily: defaultBtnClass + ' k2-daily inactive',
+      weekly: defaultBtnClass + ' k2-weekly inactive',
+      monthly: defaultBtnClass + ' k2-monthly inactive'
+    });
+  },
+  setDaily: function setDaily() {
+    console.log(this.state.daily);
+    if (this.state.daily.indexOf(' active') > -1) {
+      this.setState(this.getInitialState());
+      return;
+    }
+    this.setState({
+      hourly: defaultBtnClass + ' k2-hourly inactive',
+      daily: defaultBtnClass + ' k2-daily active',
+      weekly: defaultBtnClass + ' k2-weekly inactive',
+      monthly: defaultBtnClass + ' k2-monthly inactive'
+    });
+  },
+  setWeekly: function setWeekly() {
+    if (this.state.weekly.indexOf(' active') > -1) {
+      this.setState(this.getInitialState());
+      return;
+    }
+    this.setState({
+      hourly: defaultBtnClass + ' k2-hourly inactive',
+      daily: defaultBtnClass + ' k2-daily inactive',
+      weekly: defaultBtnClass + ' k2-weekly active',
+      monthly: defaultBtnClass + ' k2-monthly inactive'
+    });
+  },
+  setMonthly: function setMonthly() {
+    if (this.state.monthly.indexOf(' active') > -1) {
+      this.setState(this.getInitialState());
+      return;
+    }
+    this.setState({
+      hourly: defaultBtnClass + ' k2-hourly inactive',
+      daily: defaultBtnClass + ' k2-daily inactive',
+      weekly: defaultBtnClass + ' k2-weekly inactive',
+      monthly: defaultBtnClass + ' k2-monthly active'
+    });
+  },
   render: function render() {
-    return React.createElement(BtnGroup, null, React.createElement('button', { className: 'btn btn-sm tooltipped tooltipped-n k2-hourly inactive', 'aria-label': 'Hourly' }, 'H'), React.createElement('button', { className: 'btn btn-sm tooltipped tooltipped-n k2-daily inactive', 'aria-label': 'Daily' }, 'D'), React.createElement('button', { className: 'btn btn-sm tooltipped tooltipped-n k2-weekly inactive', 'aria-label': 'Weekly' }, 'W'), React.createElement('button', { className: 'btn btn-sm tooltipped tooltipped-n k2-monthly active', 'aria-label': 'Monthly' }, 'M'));
+    return React.createElement(BtnGroup, null, React.createElement('button', { className: this.state.hourly, 'aria-label': 'Hourly', onClick: this.setHourly }, 'H'), React.createElement('button', { className: this.state.daily, 'aria-label': 'Daily', onClick: this.setDaily }, 'D'), React.createElement('button', { className: this.state.weekly, 'aria-label': 'Weekly', onClick: this.setWeekly }, 'W'), React.createElement('button', { className: this.state.monthly, 'aria-label': 'Monthly', onClick: this.setMonthly }, 'M'));
   }
 });
 
