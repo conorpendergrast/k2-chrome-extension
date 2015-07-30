@@ -1434,11 +1434,22 @@ module.exports = function () {
 'use strict';
 /*global console */
 
+var $ = require('jquery');
+var _ = require('underscore');
 var React = require('react');
 var BtnGroup = require('../../component/btngroup/index');
 var defaultBtnClass = 'btn btn-sm tooltipped tooltipped-n';
 
 module.exports = React.createClass({ displayName: 'exports',
+  /**
+   * Sets the initial class names for all of our buttons
+   *
+   * @author Tim Golen <tim@golen.net>
+   *
+   * @date 2015-07-30
+   *
+   * @return {Object}
+   */
   getInitialState: function getInitialState() {
     return {
       hourly: defaultBtnClass + ' k2-hourly',
@@ -1447,61 +1458,107 @@ module.exports = React.createClass({ displayName: 'exports',
       monthly: defaultBtnClass + ' k2-monthly'
     };
   },
+
+  /**
+   * When the component has renered, we need to see if there
+   * is an existing label, and if so, make that button enabled
+   *
+   * @author Tim Golen <tim@golen.net>
+   *
+   * @date 2015-07-30
+   */
+  componentDidMount: function componentDidMount() {
+    var _this = this;
+    $('.labels .label').each(function () {
+      switch ($(this).text().toLowerCase()) {
+        case 'hourly':
+          _this.setHourly();break;
+        case 'daily':
+          _this.setDaily();break;
+        case 'weekly':
+          _this.setWeekly();break;
+        case 'monthly':
+          _this.setMonthly();break;
+      }
+    });
+  },
+
+  /**
+   * Enable the hourly label
+   *
+   * @author Tim Golen <tim@golen.net>
+   *
+   * @date 2015-07-30
+   */
   setHourly: function setHourly() {
-    if (this.state.hourly.indexOf(' active') > -1) {
-      this.setState(this.getInitialState());
-      return;
-    }
-    this.setState({
-      hourly: defaultBtnClass + ' k2-hourly active',
-      daily: defaultBtnClass + ' k2-daily inactive',
-      weekly: defaultBtnClass + ' k2-weekly inactive',
-      monthly: defaultBtnClass + ' k2-monthly inactive'
-    });
+    this._setActiveLabel('hourly');
   },
+
+  /**
+   * Enable the daily label
+   *
+   * @author Tim Golen <tim@golen.net>
+   *
+   * @date 2015-07-30
+   */
   setDaily: function setDaily() {
-    console.log(this.state.daily);
-    if (this.state.daily.indexOf(' active') > -1) {
-      this.setState(this.getInitialState());
-      return;
-    }
-    this.setState({
-      hourly: defaultBtnClass + ' k2-hourly inactive',
-      daily: defaultBtnClass + ' k2-daily active',
-      weekly: defaultBtnClass + ' k2-weekly inactive',
-      monthly: defaultBtnClass + ' k2-monthly inactive'
-    });
+    this._setActiveLabel('daily');
   },
+
+  /**
+   * Enable the weekly label
+   *
+   * @author Tim Golen <tim@golen.net>
+   *
+   * @date 2015-07-30
+   */
   setWeekly: function setWeekly() {
-    if (this.state.weekly.indexOf(' active') > -1) {
-      this.setState(this.getInitialState());
-      return;
-    }
-    this.setState({
-      hourly: defaultBtnClass + ' k2-hourly inactive',
-      daily: defaultBtnClass + ' k2-daily inactive',
-      weekly: defaultBtnClass + ' k2-weekly active',
-      monthly: defaultBtnClass + ' k2-monthly inactive'
-    });
+    this._setActiveLabel('weekly');
   },
+
+  /**
+   * Enable the monthly label
+   *
+   * @author Tim Golen <tim@golen.net>
+   *
+   * @date 2015-07-30
+   */
   setMonthly: function setMonthly() {
-    if (this.state.monthly.indexOf(' active') > -1) {
-      this.setState(this.getInitialState());
+    this._setActiveLabel('monthly');
+  },
+
+  /**
+   * Sets a single label to be active (or if already active, then turns all of them off)
+   *
+   * @author Tim Golen <tim@golen.net>
+   *
+   * @date 2015-07-30
+   *
+   * @param {String} label
+   */
+  _setActiveLabel: function _setActiveLabel(label) {
+    var initialState = this.getInitialState();
+    var newState = {};
+
+    // If that label is already active, then set everything back
+    // to the default (which removes all labels)
+    if (this.state[label].indexOf(' active') > -1) {
+      this.setState(initialState);
       return;
     }
-    this.setState({
-      hourly: defaultBtnClass + ' k2-hourly inactive',
-      daily: defaultBtnClass + ' k2-daily inactive',
-      weekly: defaultBtnClass + ' k2-weekly inactive',
-      monthly: defaultBtnClass + ' k2-monthly active'
+
+    // Set all the proper active/inactive classes
+    newState = _(initialState).mapObject(function (val, key) {
+      return key === label ? defaultBtnClass + ' k2-' + key + ' active' : defaultBtnClass + ' k2-' + key + ' inactive';
     });
+    this.setState(newState);
   },
   render: function render() {
     return React.createElement(BtnGroup, null, React.createElement('button', { className: this.state.hourly, 'aria-label': 'Hourly', onClick: this.setHourly }, 'H'), React.createElement('button', { className: this.state.daily, 'aria-label': 'Daily', onClick: this.setDaily }, 'D'), React.createElement('button', { className: this.state.weekly, 'aria-label': 'Weekly', onClick: this.setWeekly }, 'W'), React.createElement('button', { className: this.state.monthly, 'aria-label': 'Monthly', onClick: this.setMonthly }, 'M'));
   }
 });
 
-},{"../../component/btngroup/index":11,"react":211}],32:[function(require,module,exports){
+},{"../../component/btngroup/index":11,"jquery":55,"react":211,"underscore":212}],32:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();

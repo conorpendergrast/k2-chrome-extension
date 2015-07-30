@@ -7,23 +7,35 @@
 }
 
 .k2-hourly {
-  background-color: #FF0000 !important;
   background-image: none !important;
+}
+
+.k2-hourly.active {
+  background-color: #FF0000 !important;
 }
 
 .k2-daily {
-  background-color: #F7A632 !important;
   background-image: none !important;
+}
+
+.k2-daily.active {
+  background-color: #F7A632 !important;
 }
 
 .k2-weekly {
-  background-color: #D4E529 !important;
   background-image: none !important;
 }
 
+.k2-weekly.active {
+  background-color: #D4E529 !important;
+}
+
 .k2-monthly {
-  background-color: #A85AD4 !important;
   background-image: none !important;
+}
+
+.k2-monthly.active {
+  background-color: #A85AD4 !important;
 }
 
 .panel {

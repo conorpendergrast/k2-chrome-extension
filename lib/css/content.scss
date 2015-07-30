@@ -19,23 +19,23 @@ $color-blue: #0000ff;
   opacity: 0.2;
 }
 .k2-hourly {
-  background-color: $color-red !important;
   background-image: none !important;
+  &.active { background-color: $color-red !important; }
   &.inactive { @extend .k2-inactive; }
 }
 .k2-daily {
-  background-color: $color-orange !important;
   background-image: none !important;
+  &.active { background-color: $color-orange !important; }
   &.inactive { @extend .k2-inactive; }
 }
 .k2-weekly {
-  background-color: $color-green !important;
   background-image: none !important;
+  &.active { background-color: $color-green !important; }
   &.inactive { @extend .k2-inactive; }
 }
 .k2-monthly {
-  background-color: $color-purple !important;
   background-image: none !important;
+  &.active { background-color: $color-purple !important; }
   &.inactive { @extend .k2-inactive; }
 }
 .panel {
