@@ -7,10 +7,37 @@ $color-nuetral-light: #dddddd;
 $color-nuetral: #999999;
 $color-alert: #D52354;
 
+$color-red: #FF0000;
 $color-purple: #A85AD4;
 $color-orange: #F7A632;
 $color-green: #D4E529;
+$color-black: #000000;
+$color-white: #ffffff;
+$color-blue: #0000ff;
 
+.k2-inactive {
+  opacity: 0.2;
+}
+.k2-hourly {
+  background-color: $color-red !important;
+  background-image: none !important;
+  &.inactive { @extend .k2-inactive; }
+}
+.k2-daily {
+  background-color: $color-orange !important;
+  background-image: none !important;
+  &.inactive { @extend .k2-inactive; }
+}
+.k2-weekly {
+  background-color: $color-green !important;
+  background-image: none !important;
+  &.inactive { @extend .k2-inactive; }
+}
+.k2-monthly {
+  background-color: $color-purple !important;
+  background-image: none !important;
+  &.inactive { @extend .k2-inactive; }
+}
 .panel {
   border: 1px solid $color-nuetral-light;
   border-radius: 3px;

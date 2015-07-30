@@ -1,3 +1,31 @@
+.k2-inactive,
+.k2-hourly.inactive,
+.k2-daily.inactive,
+.k2-weekly.inactive,
+.k2-monthly.inactive {
+  opacity: 0.2;
+}
+
+.k2-hourly {
+  background-color: #FF0000 !important;
+  background-image: none !important;
+}
+
+.k2-daily {
+  background-color: #F7A632 !important;
+  background-image: none !important;
+}
+
+.k2-weekly {
+  background-color: #D4E529 !important;
+  background-image: none !important;
+}
+
+.k2-monthly {
+  background-color: #A85AD4 !important;
+  background-image: none !important;
+}
+
 .panel {
   border: 1px solid #dddddd;
   border-radius: 3px;
