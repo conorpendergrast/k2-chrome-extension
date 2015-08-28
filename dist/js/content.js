@@ -547,6 +547,9 @@ var ListItemForm = require('../list-item/form');
 
 module.exports = React.createClass({ displayName: 'exports',
   getInitialState: function getInitialState() {
+    if (!this.props.store) {
+      return { data: this.props.data };
+    }
     return this.props.store.getState();
   },
 
@@ -556,17 +559,23 @@ module.exports = React.createClass({ displayName: 'exports',
 
   componentDidMount: function componentDidMount() {
     // Listen to our store
-    this.props.store.listen(this.onStoreChange);
+    if (this.props.store) {
+      this.props.store.listen(this.onStoreChange);
+    }
   },
 
   componentWillUnmount: function componentWillUnmount() {
-    // Stop listening to our store
-    this.props.store.unlisten(this.onStoreChange);
+    if (this.props.store) {
+      // Stop listening to our store
+      this.props.store.unlisten(this.onStoreChange);
+    }
   },
 
   onStoreChange: function onStoreChange() {
-    // Update our state when the store changes
-    this.setState(this.props.store.getState());
+    if (this.props.store) {
+      // Update our state when the store changes
+      this.setState(this.props.store.getState());
+    }
   },
 
   /**
@@ -658,7 +667,8 @@ module.exports = React.createClass({ displayName: 'exports',
   render: function render() {
     return React.createElement('div', { className: this.getPanelClass() }, React.createElement(Title, { text: this.props.title }), React.createElement(List, React.__spread({ ref: 'list', type: this.props.item, options: this.props.options,
       action: this.props.action,
-      store: this.props.store }, this.props.list, this.props.listOptions)), this.props.children);
+      store: this.props.store,
+      data: this.props.list }, this.props.listOptions)), this.props.children);
   }
 });
 
