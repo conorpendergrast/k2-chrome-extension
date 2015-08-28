@@ -1,3 +1,7 @@
+# 0.0.7
+- Fixed the merge button that was no longer being disabled
+- Fixed the password form
+
 # 0.0.6
 - Updated the styles for aa PR on hold to match the new GitHub changes
 - Refined the detection of a held PR to one that contains "[HOLD" or "[WIP" in the title
