@@ -1166,8 +1166,8 @@ module.exports = function () {
   PrPage.setup = function () {
     var prTitle = $('.js-issue-title').text();
     if (prTitle.toLowerCase().indexOf('[hold') > -1 || prTitle.toLowerCase().indexOf('[wip') > -1) {
-      $('.js-mergable-state').removeClass('branch-action-state-clean').addClass('branch-action-state-dirty');
-      $('.merge-message .js-details-container button').removeClass('btn-primary').attr('disabled', 'disabled');
+      $('.branch-action').removeClass('branch-action-state-clean').addClass('branch-action-state-dirty');
+      $('.merge-message button').removeClass('btn-primary').attr('disabled', 'disabled');
       $('.branch-action-item').last().find('.completeness-indicator').removeClass('completeness-indicator-success').addClass('completeness-indicator-problem').end().find('.status-heading').text('This pull request has a hold on it and cannot be merged').end().find('.status-meta').html('Remove the HOLD or WIP label from the title of the PR to make it mergable').end().find('.octicon').removeClass('octicon-check').addClass('octicon-alert');
     }
   };
