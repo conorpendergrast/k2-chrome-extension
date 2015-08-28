@@ -1086,7 +1086,7 @@ module.exports = function () {
   IssuePage.setup = function () {
     var k2picker = undefined;
 
-    if (!$('.k2picker-wrapper').length) {
+    if (false && !$('.k2picker-wrapper').length) {
       $('.sidebar-assignee').after('<div class="discussion-sidebar-item js-discussion-sidebar-item k2picker-wrapper"></div>');
       k2picker = new K2picker();
       k2picker.draw();
