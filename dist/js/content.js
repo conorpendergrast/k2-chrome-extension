@@ -779,6 +779,67 @@ function getIssuesByLabel(label, cb) {
 }
 
 /**
+ * Add labels to a github issue
+ * @param {String[]} labels
+ * @param {Function} cb
+ */
+function addLabels(labels, cb) {
+  var currentUser = $('.header-nav-link.name img').attr('alt').replace('@', '');
+  var repo = $('.entry-title .author .url > span').text();
+  var owner = $('.entry-title > strong a').text();
+  var issueNum = $('.gh-header-number').first().text().replace('#', '');
+  var url = baseUrl + '/repos/' + repo + '/' + owner + '/issues/' + issueNum + '/labels';
+  prefs.get('ghPassword', function (ghPassword) {
+    $.ajax({
+      url: url,
+      method: 'post',
+      data: JSON.stringify(labels),
+      headers: {
+        Authorization: 'Basic ' + btoa(currentUser + ':' + ghPassword)
+      }
+    }).done(function (data) {
+      if (cb) {
+        cb(null, data);
+      }
+    }).fail(function (err) {
+      if (cb) {
+        cb(err);
+      }
+    });
+  });
+}
+
+/**
+ * Remove a label from a github issue
+ * @param {String[]} label
+ * @param {Function} cb
+ */
+function removeLabel(label, cb) {
+  var currentUser = $('.header-nav-link.name img').attr('alt').replace('@', '');
+  var repo = $('.entry-title .author .url > span').text();
+  var owner = $('.entry-title > strong a').text();
+  var issueNum = $('.gh-header-number').first().text().replace('#', '');
+  var url = baseUrl + '/repos/' + repo + '/' + owner + '/issues/' + issueNum + '/labels/' + label;
+  prefs.get('ghPassword', function (ghPassword) {
+    $.ajax({
+      url: url,
+      method: 'delete',
+      headers: {
+        Authorization: 'Basic ' + btoa(currentUser + ':' + ghPassword)
+      }
+    }).done(function (data) {
+      if (cb) {
+        cb(null, data);
+      }
+    }).fail(function (err) {
+      if (cb) {
+        cb(err);
+      }
+    });
+  });
+}
+
+/**
  * Gets the issues that are labeled with daily
  *
  * @author Tim Golen <tim@golen.net>
@@ -862,6 +923,8 @@ exports.getMonthlyIssues = getMonthlyIssues;
 exports.getNoneIssues = getNoneIssues;
 exports.getPullsAssigned = getPullsAssigned;
 exports.getPullsAuthored = getPullsAuthored;
+exports.addLabels = addLabels;
+exports.removeLabel = removeLabel;
 
 },{"./prefs":26,"jquery":78,"underscore":212}],20:[function(require,module,exports){
 'use strict';
@@ -1459,6 +1522,7 @@ module.exports = function () {
 var $ = require('jquery');
 var _ = require('underscore');
 var React = require('react');
+var API = require('../../lib/api');
 var BtnGroup = require('../../component/btngroup/index');
 var defaultBtnClass = 'btn btn-sm tooltipped tooltipped-n';
 
@@ -1503,6 +1567,38 @@ module.exports = React.createClass({ displayName: "exports",
           _this.setMonthly();break;
       }
     });
+  },
+  _saveNewLabel: function _saveNewLabel(label) {
+    var previousLabel = null;
+    _(this.state).each(function (val, key) {
+      if (val.search('active') > -1 && val.search('inactive') === -1) {
+        previousLabel = key;
+      }
+    });
+    if (label !== previousLabel) {
+      API.addLabels([label]);
+      if (previousLabel) {
+        API.removeLabel(previousLabel);
+      }
+    } else {
+      API.removeLabel(label);
+    }
+  },
+  clickHourly: function clickHourly() {
+    this._saveNewLabel('hourly');
+    this.setHourly();
+  },
+  clickDaily: function clickDaily() {
+    this._saveNewLabel('daily');
+    this.setDaily();
+  },
+  clickWeekly: function clickWeekly() {
+    this._saveNewLabel('weekly');
+    this.setWeekly();
+  },
+  clickMonthly: function clickMonthly() {
+    this._saveNewLabel('monthly');
+    this.setMonthly();
   },
 
   /**
@@ -1576,11 +1672,11 @@ module.exports = React.createClass({ displayName: "exports",
     this.setState(newState);
   },
   render: function render() {
-    return React.createElement(BtnGroup, null, React.createElement("button", { className: this.state.hourly, "aria-label": "Hourly", onClick: this.setHourly }, "H"), React.createElement("button", { className: this.state.daily, "aria-label": "Daily", onClick: this.setDaily }, "D"), React.createElement("button", { className: this.state.weekly, "aria-label": "Weekly", onClick: this.setWeekly }, "W"), React.createElement("button", { className: this.state.monthly, "aria-label": "Monthly", onClick: this.setMonthly }, "M"));
+    return React.createElement(BtnGroup, null, React.createElement("button", { className: this.state.hourly, "aria-label": "Hourly", onClick: this.clickHourly }, "H"), React.createElement("button", { className: this.state.daily, "aria-label": "Daily", onClick: this.clickDaily }, "D"), React.createElement("button", { className: this.state.weekly, "aria-label": "Weekly", onClick: this.clickWeekly }, "W"), React.createElement("button", { className: this.state.monthly, "aria-label": "Monthly", onClick: this.clickMonthly }, "M"));
   }
 });
 
-},{"../../component/btngroup/index":10,"jquery":78,"react":210,"underscore":212}],32:[function(require,module,exports){
+},{"../../component/btngroup/index":10,"../../lib/api":19,"jquery":78,"react":210,"underscore":212}],32:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
