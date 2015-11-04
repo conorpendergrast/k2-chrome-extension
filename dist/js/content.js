@@ -1576,10 +1576,11 @@ module.exports = React.createClass({ displayName: "exports",
       }
     });
     if (label !== previousLabel) {
-      API.addLabels([label]);
-      if (previousLabel) {
-        API.removeLabel(previousLabel);
-      }
+      API.addLabels([label], function () {
+        if (previousLabel) {
+          API.removeLabel(previousLabel);
+        }
+      });
     } else {
       API.removeLabel(label);
     }
