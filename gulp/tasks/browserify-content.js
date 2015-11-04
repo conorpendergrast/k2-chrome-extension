@@ -35,7 +35,7 @@ module.exports = function(options) {
       // add the file to bundle
       bundler.add(clientJsApp);
       bundler.transform(reactify)
-      bundler.transform(babelify)
+      bundler.transform(babelify, {presets: ['es2015', 'react']})
       bundler.on('update', bundle); // on any dep update, runs the bundler
       bundler.on('log', gutil.log); // output build logs to terminal
     }
