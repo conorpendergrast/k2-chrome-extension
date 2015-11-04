@@ -341,16 +341,18 @@ module.exports = React.createClass({ displayName: "exports",
 
 ;
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 module.exports = React.createClass({ displayName: "exports",
   componentDidMount: function componentDidMount() {
     if (this.props.data.focus) {
-      this.getDOMNode().focus();
+      ReactDOM.findDOMNode(this).focus();
     }
   },
   render: function render() {
+    var type = this.props.type || 'text';
     return React.createElement("input", {
-      type: "text",
+      type: type,
       htmlId: this.props.data.id,
       name: this.props.data.id,
       required: this.props.data.required,
@@ -358,7 +360,7 @@ module.exports = React.createClass({ displayName: "exports",
   }
 });
 
-},{"react":210}],12:[function(require,module,exports){
+},{"react":210,"react-dom":81}],12:[function(require,module,exports){
 'use strict'
 
 /**
@@ -382,7 +384,7 @@ module.exports = React.createClass({ displayName: "exports",
 
     switch (this.props.data.type) {
       case 'password':
-        element = React.createElement(FormInput, { data: this.props.data });break;
+        element = React.createElement(FormInput, { data: this.props.data, type: "password" });break;
     }
 
     if (this.props.data.hint) {
@@ -1357,7 +1359,7 @@ module.exports = React.createClass({ displayName: "exports",
    * @param {Object} e React form submit event
    */
   submitForm: function submitForm(e) {
-    var formData = $(this.getDOMNode()).find('form').serializeArray();
+    var formData = $(this.refs.form).serializeArray();
     var passwordData = _(formData).findWhere({ name: 'password' });
     var _this = this;
 
@@ -1371,7 +1373,7 @@ module.exports = React.createClass({ displayName: "exports",
   },
 
   render: function render() {
-    return React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-third column centered" }, React.createElement("form", { onSubmit: this.submitForm }, React.createElement(PanelList, { title: "Enter Credentials", list: this.items, item: "form" }, React.createElement("footer", { className: "panel-footer form-actions" }, React.createElement("button", { className: "btn btn-primary" }, "Submit"))))));
+    return React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-third column centered" }, React.createElement("form", { ref: "form", onSubmit: this.submitForm }, React.createElement(PanelList, { title: "Enter Credentials", list: this.items, item: "form" }, React.createElement("footer", { className: "panel-footer form-actions" }, React.createElement("button", { className: "btn btn-primary" }, "Submit"))))));
   }
 });
 
@@ -1436,7 +1438,9 @@ module.exports = function () {
 ;
 var React = require('react');
 var _ = require('underscore');
+var prefs = require('../../lib/prefs');
 var PanelList = require('../../component/panel/list');
+var BtnGroup = require('../../component/btngroup/index');
 
 var DailyIssueStore = require('../../store/issue.daily');
 var WeeklyIssueStore = require('../../store/issue.weekly');
@@ -1471,6 +1475,14 @@ module.exports = React.createClass({ displayName: "exports",
       }
     });
   },
+
+  /**
+   * Sign out the user so they are prompted for their password again
+   */
+  signOut: function signOut() {
+    prefs.clear('ghPassword');
+    window.location.reload(true);
+  },
   componentDidMount: function componentDidMount() {
     this.loadData();
     this.interval = setInterval(this.loadData, this.props.pollInterval);
@@ -1483,7 +1495,7 @@ module.exports = React.createClass({ displayName: "exports",
       emptyTitle: 'No Issues Here',
       emptyText: 'You completed all issues'
     };
-    return React.createElement("div", null, React.createElement("button", { onClick: this.loadData, className: "btn right tooltipped tooltipped-sw", "aria-label": "Refresh Data" }, React.createElement("span", { className: "octicon octicon-sync" })), React.createElement("div", { className: "issue reviewing" }, React.createElement("span", { className: "octicon octicon-check" }), " Under Review"), React.createElement("div", { className: "issue overdue" }, React.createElement("span", { className: "octicon octicon-alert" }), " Overdue"), React.createElement("br", null), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listdailyissues", title: "Daily", extraClass: "daily", action: DailyIssueActions, store: DailyIssueStore, item: "issue",
+    return React.createElement("div", null, React.createElement("div", { className: "right" }, React.createElement(BtnGroup, null, React.createElement("button", { onClick: this.loadData, className: "btn tooltipped tooltipped-sw", "aria-label": "Refresh Data" }, React.createElement("span", { className: "octicon octicon-sync" })), React.createElement("button", { onClick: this.signOut, className: "btn tooltipped tooltipped-sw", "aria-label": "Sign Out" }, "Sign Out"))), React.createElement("div", { className: "issue reviewing" }, React.createElement("span", { className: "octicon octicon-check" }), " Under Review"), React.createElement("div", { className: "issue overdue" }, React.createElement("span", { className: "octicon octicon-alert" }), " Overdue"), React.createElement("br", null), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listdailyissues", title: "Daily", extraClass: "daily", action: DailyIssueActions, store: DailyIssueStore, item: "issue",
       listOptions: listOptions })), React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listweeklyissues", title: "Weekly", extraClass: "weekly", action: WeeklyIssueActions, store: WeeklyIssueStore, item: "issue",
       listOptions: listOptions })), React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listmonthlyissues", title: "Monthly", extraClass: "monthly", action: MonthlyIssueActions, store: MonthlyIssueStore, item: "issue",
       listOptions: listOptions })), React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listnoneissues", title: "None", extraClass: "none", action: NoneIssueActions, store: NoneIssueStore, item: "issue",
@@ -1491,7 +1503,7 @@ module.exports = React.createClass({ displayName: "exports",
   }
 });
 
-},{"../../action/issue.daily":1,"../../action/issue.monthly":2,"../../action/issue.none":3,"../../action/issue.weekly":4,"../../action/pull.assigned":5,"../../action/pull.authored":6,"../../component/panel/list":17,"../../store/issue.daily":33,"../../store/issue.monthly":34,"../../store/issue.none":35,"../../store/issue.weekly":36,"../../store/pull.assigned":37,"../../store/pull.authored":38,"react":210,"underscore":212}],30:[function(require,module,exports){
+},{"../../action/issue.daily":1,"../../action/issue.monthly":2,"../../action/issue.none":3,"../../action/issue.weekly":4,"../../action/pull.assigned":5,"../../action/pull.authored":6,"../../component/btngroup/index":10,"../../component/panel/list":17,"../../lib/prefs":26,"../../store/issue.daily":33,"../../store/issue.monthly":34,"../../store/issue.none":35,"../../store/issue.weekly":36,"../../store/pull.assigned":37,"../../store/pull.authored":38,"react":210,"underscore":212}],30:[function(require,module,exports){
 'use strict'
 
 /**
