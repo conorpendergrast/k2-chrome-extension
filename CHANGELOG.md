@@ -1,3 +1,7 @@
+# 0.0.8
+- Added the ability to quick select KSv2 labels
+- Updated all libraries and build tools
+
 # 0.0.7
 - Fixed the merge button that was no longer being disabled
 - Fixed the password form
