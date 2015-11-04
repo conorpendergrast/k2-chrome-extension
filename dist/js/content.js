@@ -1,338 +1,203 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var messenger = require('./lib/messenger');
-var pages = [require('./lib/pages/github/all')(), require('./lib/pages/github/pr')(), require('./lib/pages/github/issue')(), require('./lib/pages/github/main')()];
+let alt = require('../alt');
+let API = require('../lib/api');
 
-/**
- * Get all of our pages and call their init methods
- *
- * @returns {void}
- */
-function setupPages() {
-  for (var i = 0; i < pages.length; i++) {
-    pages[i].init();
+class Action {
+  update(data) {
+    this.dispatch(data);
+  }
+  failed(msg) {
+    this.dispatch(msg);
+  }
+  fetch() {
+    this.dispatch();
+
+    API.getDailyIssues((err, data) => {
+      if (err) {
+        return this.actions.failed(err);
+      }
+
+      this.actions.update(data);
+    });
   }
 }
 
-messenger.startMessageListener();
-messenger.on('nav', setupPages);
-setupPages();
+module.exports = alt.createActions(Action);
 
-},{"./lib/messenger":20,"./lib/pages/github/all":22,"./lib/pages/github/issue":23,"./lib/pages/github/main":24,"./lib/pages/github/pr":25}],2:[function(require,module,exports){
+},{"../alt":7,"../lib/api":19}],2:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+let alt = require('../alt');
+let API = require('../lib/api');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var alt = require('../alt');
-var API = require('../lib/api');
-
-var Action = (function () {
-  function Action() {
-    _classCallCheck(this, Action);
+class Action {
+  update(data) {
+    this.dispatch(data);
   }
+  failed(msg) {
+    this.dispatch(msg);
+  }
+  fetch() {
+    this.dispatch();
 
-  _createClass(Action, [{
-    key: 'update',
-    value: function update(data) {
-      this.dispatch(data);
-    }
-  }, {
-    key: 'failed',
-    value: function failed(msg) {
-      this.dispatch(msg);
-    }
-  }, {
-    key: 'fetch',
-    value: function fetch() {
-      var _this = this;
+    API.getMonthlyIssues((err, data) => {
+      if (err) {
+        return this.actions.failed(err);
+      }
 
-      this.dispatch();
-
-      API.getDailyIssues(function (err, data) {
-        if (err) {
-          return _this.actions.failed(err);
-        }
-
-        _this.actions.update(data);
-      });
-    }
-  }]);
-
-  return Action;
-})();
+      this.actions.update(data);
+    });
+  }
+}
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":8,"../lib/api":19}],3:[function(require,module,exports){
+},{"../alt":7,"../lib/api":19}],3:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+let alt = require('../alt');
+let API = require('../lib/api');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var alt = require('../alt');
-var API = require('../lib/api');
-
-var Action = (function () {
-  function Action() {
-    _classCallCheck(this, Action);
+class Action {
+  update(data) {
+    this.dispatch(data);
   }
+  failed(msg) {
+    this.dispatch(msg);
+  }
+  fetch() {
+    this.dispatch();
 
-  _createClass(Action, [{
-    key: 'update',
-    value: function update(data) {
-      this.dispatch(data);
-    }
-  }, {
-    key: 'failed',
-    value: function failed(msg) {
-      this.dispatch(msg);
-    }
-  }, {
-    key: 'fetch',
-    value: function fetch() {
-      var _this = this;
+    API.getNoneIssues((err, data) => {
+      if (err) {
+        return this.actions.failed(err);
+      }
 
-      this.dispatch();
-
-      API.getMonthlyIssues(function (err, data) {
-        if (err) {
-          return _this.actions.failed(err);
-        }
-
-        _this.actions.update(data);
-      });
-    }
-  }]);
-
-  return Action;
-})();
+      this.actions.update(data);
+    });
+  }
+}
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":8,"../lib/api":19}],4:[function(require,module,exports){
+},{"../alt":7,"../lib/api":19}],4:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+let alt = require('../alt');
+let API = require('../lib/api');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var alt = require('../alt');
-var API = require('../lib/api');
-
-var Action = (function () {
-  function Action() {
-    _classCallCheck(this, Action);
+class Action {
+  update(data) {
+    this.dispatch(data);
   }
+  failed(msg) {
+    this.dispatch(msg);
+  }
+  fetch() {
+    this.dispatch();
 
-  _createClass(Action, [{
-    key: 'update',
-    value: function update(data) {
-      this.dispatch(data);
-    }
-  }, {
-    key: 'failed',
-    value: function failed(msg) {
-      this.dispatch(msg);
-    }
-  }, {
-    key: 'fetch',
-    value: function fetch() {
-      var _this = this;
+    API.getWeeklyIssues((err, data) => {
+      if (err) {
+        return this.actions.failed(err);
+      }
 
-      this.dispatch();
-
-      API.getNoneIssues(function (err, data) {
-        if (err) {
-          return _this.actions.failed(err);
-        }
-
-        _this.actions.update(data);
-      });
-    }
-  }]);
-
-  return Action;
-})();
+      this.actions.update(data);
+    });
+  }
+}
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":8,"../lib/api":19}],5:[function(require,module,exports){
+},{"../alt":7,"../lib/api":19}],5:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+let alt = require('../alt');
+let API = require('../lib/api');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var alt = require('../alt');
-var API = require('../lib/api');
-
-var Action = (function () {
-  function Action() {
-    _classCallCheck(this, Action);
+class Action {
+  update(data) {
+    this.dispatch(data);
   }
+  failed(msg) {
+    this.dispatch(msg);
+  }
+  fetch() {
+    this.dispatch();
 
-  _createClass(Action, [{
-    key: 'update',
-    value: function update(data) {
-      this.dispatch(data);
-    }
-  }, {
-    key: 'failed',
-    value: function failed(msg) {
-      this.dispatch(msg);
-    }
-  }, {
-    key: 'fetch',
-    value: function fetch() {
-      var _this = this;
+    API.getPullsAssigned((err, data) => {
+      if (err) {
+        return this.actions.failed(err);
+      }
 
-      this.dispatch();
-
-      API.getWeeklyIssues(function (err, data) {
-        if (err) {
-          return _this.actions.failed(err);
-        }
-
-        _this.actions.update(data);
-      });
-    }
-  }]);
-
-  return Action;
-})();
+      this.actions.update(data);
+    });
+  }
+}
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":8,"../lib/api":19}],6:[function(require,module,exports){
+},{"../alt":7,"../lib/api":19}],6:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+let alt = require('../alt');
+let API = require('../lib/api');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var alt = require('../alt');
-var API = require('../lib/api');
-
-var Action = (function () {
-  function Action() {
-    _classCallCheck(this, Action);
+class Action {
+  update(data) {
+    this.dispatch(data);
   }
+  failed(msg) {
+    this.dispatch(msg);
+  }
+  fetch() {
+    this.dispatch();
 
-  _createClass(Action, [{
-    key: 'update',
-    value: function update(data) {
-      this.dispatch(data);
-    }
-  }, {
-    key: 'failed',
-    value: function failed(msg) {
-      this.dispatch(msg);
-    }
-  }, {
-    key: 'fetch',
-    value: function fetch() {
-      var _this = this;
+    API.getPullsAuthored((err, data) => {
+      if (err) {
+        return this.actions.failed(err);
+      }
 
-      this.dispatch();
-
-      API.getPullsAssigned(function (err, data) {
-        if (err) {
-          return _this.actions.failed(err);
-        }
-
-        _this.actions.update(data);
-      });
-    }
-  }]);
-
-  return Action;
-})();
+      this.actions.update(data);
+    });
+  }
+}
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":8,"../lib/api":19}],7:[function(require,module,exports){
+},{"../alt":7,"../lib/api":19}],7:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var alt = require('../alt');
-var API = require('../lib/api');
-
-var Action = (function () {
-  function Action() {
-    _classCallCheck(this, Action);
-  }
-
-  _createClass(Action, [{
-    key: 'update',
-    value: function update(data) {
-      this.dispatch(data);
-    }
-  }, {
-    key: 'failed',
-    value: function failed(msg) {
-      this.dispatch(msg);
-    }
-  }, {
-    key: 'fetch',
-    value: function fetch() {
-      var _this = this;
-
-      this.dispatch();
-
-      API.getPullsAuthored(function (err, data) {
-        if (err) {
-          return _this.actions.failed(err);
-        }
-
-        _this.actions.update(data);
-      });
-    }
-  }]);
-
-  return Action;
-})();
-
-module.exports = alt.createActions(Action);
-
-},{"../alt":8,"../lib/api":19}],8:[function(require,module,exports){
-'use strict';
-
-var Alt = require('alt');
-var alt = new Alt();
+let Alt = require('alt');
+let alt = new Alt();
 
 module.exports = alt;
 
-},{"alt":41}],9:[function(require,module,exports){
+},{"alt":41}],8:[function(require,module,exports){
 'use strict';
 
-var React = require('react');
+let React = require('react');
 
-module.exports = React.createClass({ displayName: 'exports',
-  render: function render() {
-    return React.createElement('a', { className: 'assignee', href: this.props.data.html_url, target: '_blank' }, React.createElement('span', { className: 'octicon octicon-person' }), this.props.data.login);
+module.exports = React.createClass({ displayName: "exports",
+  render: function () {
+    return React.createElement("a", { className: "assignee", href: this.props.data.html_url, target: "_blank" }, React.createElement("span", { className: "octicon octicon-person" }), this.props.data.login);
+  }
+});
+
+},{"react":211}],9:[function(require,module,exports){
+'use strict';
+
+let React = require('react');
+
+module.exports = React.createClass({ displayName: "exports",
+  render: function () {
+    return React.createElement("span", { className: "assignee" }, "(no one)");
   }
 });
 
 },{"react":211}],10:[function(require,module,exports){
-'use strict';
-
-var React = require('react');
-
-module.exports = React.createClass({ displayName: 'exports',
-  render: function render() {
-    return React.createElement('span', { className: 'assignee' }, '(no one)');
-  }
-});
-
-},{"react":211}],11:[function(require,module,exports){
-'use strict';
+'use strict'
 
 /**
  * Button Group
@@ -340,16 +205,17 @@ module.exports = React.createClass({ displayName: 'exports',
  * Displays a group of HTML buttons
  */
 
-var React = require('react');
+;
+let React = require('react');
 
-module.exports = React.createClass({ displayName: 'exports',
-  render: function render() {
-    return React.createElement('div', { className: 'btn-group' }, this.props.children);
+module.exports = React.createClass({ displayName: "exports",
+  render: function () {
+    return React.createElement("div", { className: "btn-group" }, this.props.children);
   }
 });
 
-},{"react":211}],12:[function(require,module,exports){
-'use strict';
+},{"react":211}],11:[function(require,module,exports){
+'use strict'
 
 /**
  * Form Element - Input
@@ -359,17 +225,18 @@ module.exports = React.createClass({ displayName: 'exports',
  * @param {object} data about the element being shown
  */
 
-var React = require('react');
+;
+let React = require('react');
 
-module.exports = React.createClass({ displayName: 'exports',
-  componentDidMount: function componentDidMount() {
+module.exports = React.createClass({ displayName: "exports",
+  componentDidMount: function () {
     if (this.props.data.focus) {
       this.getDOMNode().focus();
     }
   },
-  render: function render() {
-    return React.createElement('input', {
-      type: 'text',
+  render: function () {
+    return React.createElement("input", {
+      type: "text",
       htmlId: this.props.data.id,
       name: this.props.data.id,
       required: this.props.data.required,
@@ -377,8 +244,8 @@ module.exports = React.createClass({ displayName: 'exports',
   }
 });
 
-},{"react":211}],13:[function(require,module,exports){
-'use strict';
+},{"react":211}],12:[function(require,module,exports){
+'use strict'
 
 /**
  * List Item - Form Element variant
@@ -389,14 +256,15 @@ module.exports = React.createClass({ displayName: 'exports',
  * @param {object} options
  */
 
-var React = require('react');
-var FormInput = require('../form/input');
+;
+let React = require('react');
+let FormInput = require('../form/input');
 
-module.exports = React.createClass({ displayName: 'exports',
+module.exports = React.createClass({ displayName: "exports",
 
-  render: function render() {
-    var element = undefined;
-    var hint = undefined;
+  render: function () {
+    let element;
+    let hint;
 
     switch (this.props.data.type) {
       case 'password':
@@ -404,15 +272,15 @@ module.exports = React.createClass({ displayName: 'exports',
     }
 
     if (this.props.data.hint) {
-      hint = React.createElement('p', null, this.props.data.hint);
+      hint = React.createElement("p", null, this.props.data.hint);
     }
 
-    return React.createElement('div', { className: 'panel-item' }, React.createElement('label', { htmlFor: this.props.data.id }, this.props.data.label), element, hint);
+    return React.createElement("div", { className: "panel-item" }, React.createElement("label", { htmlFor: this.props.data.id }, this.props.data.label), element, hint);
   }
 });
 
-},{"../form/input":12,"react":211}],14:[function(require,module,exports){
-'use strict';
+},{"../form/input":11,"react":211}],13:[function(require,module,exports){
+'use strict'
 
 /**
  * List Item - Issue variant
@@ -423,22 +291,23 @@ module.exports = React.createClass({ displayName: 'exports',
  * @param {string} data.type daily|weekly|monthly|none identifies the type of issue
  */
 
-var React = require('react');
-var _ = require('underscore');
-var moment = require('moment');
-var daysLookup = {
+;
+let React = require('react');
+let _ = require('underscore');
+let moment = require('moment');
+let daysLookup = {
   daily: 1,
   weekly: 7,
   monthly: 30
 };
 
-module.exports = React.createClass({ displayName: 'exports',
-  getClassName: function getClassName() {
-    var className = 'panel-item issue';
-    var today = moment();
-    var days = daysLookup[this.props.data.type];
-    var isUnderReview = undefined;
-    var isOverdue = undefined;
+module.exports = React.createClass({ displayName: "exports",
+  getClassName: function () {
+    let className = 'panel-item issue';
+    let today = moment();
+    let days = daysLookup[this.props.data.type];
+    let isUnderReview;
+    let isOverdue;
 
     // See if it's under review
     isUnderReview = _(this.props.data.labels).find(function (label) {
@@ -458,13 +327,13 @@ module.exports = React.createClass({ displayName: 'exports',
 
     return className;
   },
-  render: function render() {
-    return React.createElement('a', { href: this.props.data.html_url, className: this.getClassName(), target: '_blank' }, React.createElement('span', { className: 'octicon octicon-check' }), React.createElement('span', { className: 'octicon octicon-alert' }), this.props.data.title);
+  render: function () {
+    return React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-check" }), React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title);
   }
 });
 
-},{"moment":56,"react":211,"underscore":212}],15:[function(require,module,exports){
-'use strict';
+},{"moment":55,"react":211,"underscore":212}],14:[function(require,module,exports){
+'use strict'
 
 /**
  * List Item - Pull Request variant
@@ -476,12 +345,13 @@ module.exports = React.createClass({ displayName: 'exports',
  * @param {boolean} options.showAssignee whether or not to show the assignee
  */
 
-var React = require('react');
-var moment = require('moment');
-var Assignee = require('../assignee/index');
-var NotAssigned = require('../assignee/none');
+;
+let React = require('react');
+let moment = require('moment');
+let Assignee = require('../assignee/index');
+let NotAssigned = require('../assignee/none');
 
-module.exports = React.createClass({ displayName: 'exports',
+module.exports = React.createClass({ displayName: "exports",
 
   /**
    * Gets the class name for the item
@@ -492,11 +362,11 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @return {string}
    */
-  getClassName: function getClassName() {
-    var className = 'issue';
-    var today = moment();
-    var days = 7;
-    var isOverdue = undefined;
+  getClassName: function () {
+    let className = 'issue';
+    let today = moment();
+    let days = 7;
+    let isOverdue;
 
     // See if it's overdue
     isOverdue = moment(this.props.data.updated_at).isBefore(today.subtract(days, 'days'), 'day');
@@ -512,8 +382,8 @@ module.exports = React.createClass({ displayName: 'exports',
     return className;
   },
 
-  render: function render() {
-    var person = '';
+  render: function () {
+    let person = '';
 
     // If we are showing the assignee, we need to figure which template to display
     if (this.props.options.showAssignee) {
@@ -524,12 +394,12 @@ module.exports = React.createClass({ displayName: 'exports',
       }
     }
 
-    return React.createElement('div', { className: 'panel-item' }, React.createElement('a', { href: this.props.data.html_url, className: this.getClassName(), target: '_blank' }, React.createElement('span', { className: 'octicon octicon-alert' }), this.props.data.title), React.createElement('span', { className: 'panel-item-meta' }, person, React.createElement('span', { className: 'age' }, moment(this.props.data.updated_at).fromNow()), React.createElement('span', { className: 'comments' }, React.createElement('span', { className: 'octicon octicon-comment' }), this.props.data.comments)));
+    return React.createElement("div", { className: "panel-item" }, React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title), React.createElement("span", { className: "panel-item-meta" }, person, React.createElement("span", { className: "age" }, moment(this.props.data.updated_at).fromNow()), React.createElement("span", { className: "comments" }, React.createElement("span", { className: "octicon octicon-comment" }), this.props.data.comments)));
   }
 });
 
-},{"../assignee/index":9,"../assignee/none":10,"moment":56,"react":211}],16:[function(require,module,exports){
-'use strict';
+},{"../assignee/index":8,"../assignee/none":9,"moment":55,"react":211}],15:[function(require,module,exports){
+'use strict'
 
 /**
  * List
@@ -540,38 +410,39 @@ module.exports = React.createClass({ displayName: 'exports',
  * @param {object} options
  */
 
-var React = require('react');
-var ListItemIssue = require('../list-item/issue');
-var ListItemPull = require('../list-item/pull');
-var ListItemForm = require('../list-item/form');
+;
+let React = require('react');
+let ListItemIssue = require('../list-item/issue');
+let ListItemPull = require('../list-item/pull');
+let ListItemForm = require('../list-item/form');
 
-module.exports = React.createClass({ displayName: 'exports',
-  getInitialState: function getInitialState() {
+module.exports = React.createClass({ displayName: "exports",
+  getInitialState() {
     if (!this.props.store) {
       return { data: this.props.data };
     }
     return this.props.store.getState();
   },
 
-  fetch: function fetch() {
+  fetch() {
     this.props.action.fetch();
   },
 
-  componentDidMount: function componentDidMount() {
+  componentDidMount() {
     // Listen to our store
     if (this.props.store) {
       this.props.store.listen(this.onStoreChange);
     }
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount() {
     if (this.props.store) {
       // Stop listening to our store
       this.props.store.unlisten(this.onStoreChange);
     }
   },
 
-  onStoreChange: function onStoreChange() {
+  onStoreChange() {
     if (this.props.store) {
       // Update our state when the store changes
       this.setState(this.props.store.getState());
@@ -588,12 +459,12 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @return {array}
    */
-  _getItems: function _getItems() {
-    var type = this.props.type;
-    var options = this.props.options;
+  _getItems: function () {
+    let type = this.props.type;
+    let options = this.props.options;
 
     return this.state.data.map(function (item) {
-      var result = undefined;
+      let result;
       switch (type) {
         case 'issue':
           result = React.createElement(ListItemIssue, { key: item.id, data: item, options: options });break;
@@ -606,21 +477,21 @@ module.exports = React.createClass({ displayName: 'exports',
     });
   },
 
-  render: function render() {
+  render: function () {
     if (this.state.loading) {
-      return React.createElement('div', null, 'Loading...');
+      return React.createElement("div", null, "Loading...");
     }
 
     if (!this.state.data.length) {
-      return React.createElement('div', { className: 'blankslate capped clean-background' }, React.createElement('span', { className: 'mega-octicon octicon-thumbsup' }), React.createElement('h3', null, this.props.emptyTitle), React.createElement('p', null, this.props.emptyText));
+      return React.createElement("div", { className: "blankslate capped clean-background" }, React.createElement("span", { className: "mega-octicon octicon-thumbsup" }), React.createElement("h3", null, this.props.emptyTitle), React.createElement("p", null, this.props.emptyText));
     }
 
-    return React.createElement('div', null, this._getItems());
+    return React.createElement("div", null, this._getItems());
   }
 });
 
-},{"../list-item/form":13,"../list-item/issue":14,"../list-item/pull":15,"react":211}],17:[function(require,module,exports){
-'use strict';
+},{"../list-item/form":12,"../list-item/issue":13,"../list-item/pull":14,"react":211}],16:[function(require,module,exports){
+'use strict'
 
 /**
  * Panel Title
@@ -630,16 +501,17 @@ module.exports = React.createClass({ displayName: 'exports',
  * @param {string} text to display in the title
  */
 
-var React = require('react');
+;
+let React = require('react');
 
-module.exports = React.createClass({ displayName: 'exports',
-  render: function render() {
-    return React.createElement('h3', { className: 'panel-title' }, this.props.text);
+module.exports = React.createClass({ displayName: "exports",
+  render: function () {
+    return React.createElement("h3", { className: "panel-title" }, this.props.text);
   }
 });
 
-},{"react":211}],18:[function(require,module,exports){
-'use strict';
+},{"react":211}],17:[function(require,module,exports){
+'use strict'
 
 /**
  * Panel - List variant
@@ -653,32 +525,54 @@ module.exports = React.createClass({ displayName: 'exports',
  * @param {string} extraClass gets appended to the panels class for styling purposes
  */
 
-var React = require('react');
-var Title = require('../panel-title/index');
-var List = require('../list/index');
+;
+let React = require('react');
+let Title = require('../panel-title/index');
+let List = require('../list/index');
 
-module.exports = React.createClass({ displayName: 'exports',
-  fetch: function fetch() {
+module.exports = React.createClass({ displayName: "exports",
+  fetch() {
     this.refs.list.fetch();
   },
-  getPanelClass: function getPanelClass() {
+  getPanelClass: function () {
     return 'panel ' + this.props.extraClass;
   },
-  render: function render() {
-    return React.createElement('div', { className: this.getPanelClass() }, React.createElement(Title, { text: this.props.title }), React.createElement(List, React.__spread({ ref: 'list', type: this.props.item, options: this.props.options,
+  render: function () {
+    return React.createElement("div", { className: this.getPanelClass() }, React.createElement(Title, { text: this.props.title }), React.createElement(List, React.__spread({ ref: "list", type: this.props.item, options: this.props.options,
       action: this.props.action,
       store: this.props.store,
       data: this.props.list }, this.props.listOptions)), this.props.children);
   }
 });
 
-},{"../list/index":16,"../panel-title/index":17,"react":211}],19:[function(require,module,exports){
+},{"../list/index":15,"../panel-title/index":16,"react":211}],18:[function(require,module,exports){
 'use strict';
 
-var $ = require('jquery');
-var _ = require('underscore');
-var prefs = require('./prefs');
-var baseUrl = 'https://api.github.com';
+let messenger = require('./lib/messenger');
+let pages = [require('./lib/pages/github/all')(), require('./lib/pages/github/pr')(), require('./lib/pages/github/issue')(), require('./lib/pages/github/main')()];
+
+/**
+ * Get all of our pages and call their init methods
+ *
+ * @returns {void}
+ */
+function setupPages() {
+  for (let i = 0; i < pages.length; i++) {
+    pages[i].init();
+  }
+}
+
+messenger.startMessageListener();
+messenger.on('nav', setupPages);
+setupPages();
+
+},{"./lib/messenger":20,"./lib/pages/github/all":22,"./lib/pages/github/issue":23,"./lib/pages/github/main":24,"./lib/pages/github/pr":25}],19:[function(require,module,exports){
+'use strict';
+
+let $ = require('jquery');
+let _ = require('underscore');
+let prefs = require('./prefs');
+let baseUrl = 'https://api.github.com';
 
 /**
  * Get all the pull requests where the current user is either assigned
@@ -693,9 +587,9 @@ var baseUrl = 'https://api.github.com';
  * @param {Function} cb [description]
  */
 function getPullsByType(type, cb) {
-  var query = '?q=';
-  var currentUser = $('.header-nav-link.name img').attr('alt').replace('@', '');
-  var url = undefined;
+  let query = '?q=';
+  let currentUser = $('.header-nav-link.name img').attr('alt').replace('@', '');
+  let url;
 
   // Get the PRs assigned to me
   query += '+state:open';
@@ -733,10 +627,10 @@ function getPullsByType(type, cb) {
  * @param {Function} cb [description]
  */
 function getIssuesByLabel(label, cb) {
-  var filterLabels = ['daily', 'weekly', 'monthly'];
-  var query = '?q=';
-  var currentUser = $('.header-nav-link.name img').attr('alt').replace('@', '');
-  var url = undefined;
+  let filterLabels = ['daily', 'weekly', 'monthly'];
+  let query = '?q=';
+  let currentUser = $('.header-nav-link.name img').attr('alt').replace('@', '');
+  let url;
 
   // Get the PRs assigned to me
   query += '+state:open';
@@ -747,7 +641,7 @@ function getIssuesByLabel(label, cb) {
   // We need to exclude our other filter labels if we are searching
   // for no priority
   if (label === 'none') {
-    for (var i = filterLabels.length - 1; i >= 0; i--) {
+    for (let i = filterLabels.length - 1; i >= 0; i--) {
       query += '+-label:' + filterLabels[i];
     }
   } else {
@@ -858,25 +752,27 @@ exports.getNoneIssues = getNoneIssues;
 exports.getPullsAssigned = getPullsAssigned;
 exports.getPullsAuthored = getPullsAuthored;
 
-},{"./prefs":26,"jquery":55,"underscore":212}],20:[function(require,module,exports){
+},{"./prefs":26,"jquery":54,"underscore":212}],20:[function(require,module,exports){
 'use strict';
 /* global chrome */
 
-var listeners = {};
+let listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  var navEventList = ['onHistoryStateUpdated'];
+  let navEventList = [
+    'onHistoryStateUpdated'
+  ];
 
-  navEventList.forEach(function (e) {
-    chrome.webNavigation[e].addListener(function () {
+  navEventList.forEach(function(e) {
+    chrome.webNavigation[e].addListener(function() {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function (tabs) {
+      }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -905,8 +801,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (var i = 0; i < listeners[eventName].length; i++) {
-      var callback = listeners[eventName][i];
+    for (let i = 0; i < listeners[eventName].length; i++) {
+      let callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -917,7 +813,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function (request) {
+  chrome.runtime.onMessage.addListener(function(request) {
     trigger(request);
   });
 }
@@ -930,16 +826,17 @@ exports.startMessageListener = startMessageListener;
 exports.on = on;
 
 },{}],21:[function(require,module,exports){
-'use strict';
+'use strict'
 
 /**
  * This class is to be extended by each of the pages that we want to do things on.
  */
 
-var $ = require('jquery');
+;
+let $ = require('jquery');
 
 module.exports = function () {
-  var Page = {};
+  let Page = {};
 
   /**
    * A uniqeu identifier for each page
@@ -967,7 +864,7 @@ module.exports = function () {
     }
 
     // Check if this page matches our URL path
-    var regex = new RegExp(this.urlPath);
+    let regex = new RegExp(this.urlPath);
 
     /*//console.log(window.location.pathname, this.urlPath, regex);//*/
 
@@ -1006,19 +903,20 @@ module.exports = function () {
   return Page;
 };
 
-},{"jquery":55}],22:[function(require,module,exports){
-'use strict';
+},{"jquery":54}],22:[function(require,module,exports){
+'use strict'
 
 /**
  * This pages manages the branch pages
  */
 
-var $ = require('jquery');
-var Base = require('./_base');
-var tplButton = require('../../../template/button.github.all.html');
+;
+let $ = require('jquery');
+let Base = require('./_base');
+let tplButton = require('../../../template/button.github.all.html');
 
 module.exports = function () {
-  var AllPages = new Base();
+  let AllPages = new Base();
 
   AllPages.init = function () {
     this.setup();
@@ -1028,7 +926,7 @@ module.exports = function () {
    * Add buttons to the page and setup the event handler
    */
   AllPages.setup = function () {
-    var button = undefined;
+    let button;
 
     // Insert the kernel button right after the code button in the navigation
     // if it's there
@@ -1038,7 +936,7 @@ module.exports = function () {
         url: '#'
       });
       $('.sunken-menu-group li[aria-label="Wiki"]').after(button).end().find('li.k2-extension a').click(function (e) {
-        var url = $('.entry-title strong a').first().attr('href');
+        let url = $('.entry-title strong a').first().attr('href');
         // When the link is clicked, we need to take them to the homepage
         // of the repo with something in the hash.
         e.preventDefault();
@@ -1059,19 +957,20 @@ module.exports = function () {
   return AllPages;
 };
 
-},{"../../../template/button.github.all.html":39,"./_base":21,"jquery":55}],23:[function(require,module,exports){
-'use strict';
+},{"../../../template/button.github.all.html":39,"./_base":21,"jquery":54}],23:[function(require,module,exports){
+'use strict'
 
 /**
  * This pages manages the issue page
  */
 
-var $ = require('jquery');
-var Base = require('./_base');
-var K2picker = require('../../../module/k2picker/index');
+;
+const $ = require('jquery');
+const Base = require('./_base');
+const K2picker = require('../../../module/k2picker/index');
 
 module.exports = function () {
-  var IssuePage = new Base();
+  const IssuePage = new Base();
 
   /**
    * Add buttons to the page and setup the event handler
@@ -1082,7 +981,7 @@ module.exports = function () {
    * Add buttons to the page and setup the event handler
    */
   IssuePage.setup = function () {
-    var k2picker = undefined;
+    let k2picker;
 
     if (false && !$('.k2picker-wrapper').length) {
       $('.sidebar-assignee').after('<div class="discussion-sidebar-item js-discussion-sidebar-item k2picker-wrapper"></div>');
@@ -1094,19 +993,20 @@ module.exports = function () {
   return IssuePage;
 };
 
-},{"../../../module/k2picker/index":30,"./_base":21,"jquery":55}],24:[function(require,module,exports){
-'use strict';
+},{"../../../module/k2picker/index":30,"./_base":21,"jquery":54}],24:[function(require,module,exports){
+'use strict'
 
 /**
  * This pages manages the pull requests page
  */
 
-var $ = require('jquery');
-var Base = require('./_base');
-var Dashboard = require('../../../module/dashboard/index');
+;
+let $ = require('jquery');
+let Base = require('./_base');
+let Dashboard = require('../../../module/dashboard/index');
 
 module.exports = function () {
-  var MainPage = new Base();
+  let MainPage = new Base();
 
   /**
    * Add buttons to the page and setup the event handler
@@ -1119,7 +1019,7 @@ module.exports = function () {
   MainPage.setup = function () {
     // Only do stuff if we are on the kernal page
     if (window.location.hash === '#k2') {
-      var issues = new Dashboard();
+      let issues = new Dashboard();
       // $('body').addClass('dark');
 
       // Deselect the code button
@@ -1140,18 +1040,19 @@ module.exports = function () {
   return MainPage;
 };
 
-},{"../../../module/dashboard/index":28,"./_base":21,"jquery":55}],25:[function(require,module,exports){
-'use strict';
+},{"../../../module/dashboard/index":28,"./_base":21,"jquery":54}],25:[function(require,module,exports){
+'use strict'
 
 /**
  * This pages manages the pull requests page
  */
 
-var $ = require('jquery');
-var Base = require('./_base');
+;
+let $ = require('jquery');
+let Base = require('./_base');
 
 module.exports = function () {
-  var PrPage = new Base();
+  let PrPage = new Base();
 
   /**
    * Add buttons to the page and setup the event handler
@@ -1162,7 +1063,7 @@ module.exports = function () {
    * Add buttons to the page and setup the event handler
    */
   PrPage.setup = function () {
-    var prTitle = $('.js-issue-title').text();
+    let prTitle = $('.js-issue-title').text();
     if (prTitle.toLowerCase().indexOf('[hold') > -1 || prTitle.toLowerCase().indexOf('[wip') > -1) {
       $('.branch-action').removeClass('branch-action-state-clean').addClass('branch-action-state-dirty');
       $('.merge-message button').removeClass('btn-primary').attr('disabled', 'disabled');
@@ -1173,8 +1074,8 @@ module.exports = function () {
   return PrPage;
 };
 
-},{"./_base":21,"jquery":55}],26:[function(require,module,exports){
-'use strict';
+},{"./_base":21,"jquery":54}],26:[function(require,module,exports){
+'use strict'
 /* global chrome */
 
 /**
@@ -1193,8 +1094,9 @@ module.exports = function () {
  * @param {mixed} value
  * @param {function} cb called when process has completed
  */
+;
 function set(name, value, cb) {
-  var params = {};
+  let params = {};
   params[name] = value;
   chrome.storage.sync.set(params, cb);
 }
@@ -1240,7 +1142,7 @@ exports.get = get;
 exports.clear = clear;
 
 },{}],27:[function(require,module,exports){
-'use strict';
+'use strict'
 
 /**
  * FORM - Password
@@ -1250,13 +1152,14 @@ exports.clear = clear;
  * @param {Function} onFinished called when the form is done
  */
 
-var $ = require('jquery');
-var _ = require('underscore');
-var React = require('react');
-var prefs = require('../../lib/prefs');
-var PanelList = require('../../component/panel/list');
+;
+let $ = require('jquery');
+let _ = require('underscore');
+let React = require('react');
+let prefs = require('../../lib/prefs');
+let PanelList = require('../../component/panel/list');
 
-module.exports = React.createClass({ displayName: 'exports',
+module.exports = React.createClass({ displayName: "exports",
 
   /**
    * The items which will be displayed in our form
@@ -1282,10 +1185,10 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @param {Object} e React form submit event
    */
-  submitForm: function submitForm(e) {
-    var formData = $(this.getDOMNode()).find('form').serializeArray();
-    var passwordData = _(formData).findWhere({ name: 'password' });
-    var _this = this;
+  submitForm: function (e) {
+    let formData = $(this.getDOMNode()).find('form').serializeArray();
+    let passwordData = _(formData).findWhere({ name: 'password' });
+    let _this = this;
 
     prefs.set('ghPassword', passwordData.value, function () {
       if (_this.props.onFinished) {
@@ -1296,13 +1199,13 @@ module.exports = React.createClass({ displayName: 'exports',
     e.preventDefault();
   },
 
-  render: function render() {
-    return React.createElement('div', { className: 'columns' }, React.createElement('div', { className: 'one-third column centered' }, React.createElement('form', { onSubmit: this.submitForm }, React.createElement(PanelList, { title: 'Enter Credentials', list: this.items, item: 'form' }, React.createElement('footer', { className: 'panel-footer form-actions' }, React.createElement('button', { className: 'btn btn-primary' }, 'Submit'))))));
+  render: function () {
+    return React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-third column centered" }, React.createElement("form", { onSubmit: this.submitForm }, React.createElement(PanelList, { title: "Enter Credentials", list: this.items, item: "form" }, React.createElement("footer", { className: "panel-footer form-actions" }, React.createElement("button", { className: "btn btn-primary" }, "Submit"))))));
   }
 });
 
-},{"../../component/panel/list":18,"../../lib/prefs":26,"jquery":55,"react":211,"underscore":212}],28:[function(require,module,exports){
-'use strict';
+},{"../../component/panel/list":17,"../../lib/prefs":26,"jquery":54,"react":211,"underscore":212}],28:[function(require,module,exports){
+'use strict'
 
 /**
  * Dashboard
@@ -1310,26 +1213,12 @@ module.exports = React.createClass({ displayName: 'exports',
  * Displays our home page with the list of issues and pull requests
  */
 
-var $ = require('jquery');
-var prefs = require('../../lib/prefs');
-var React = require('react');
-var ListIssues = require('./list.issues');
-var FormPassword = require('./form.password');
-
-module.exports = function () {
-  return {
-    draw: function draw() {
-      // Make sure they have entered their password
-      prefs.get('ghPassword', function (ghPassword) {
-        if (ghPassword) {
-          showDashboard();
-        } else {
-          showPasswordForm();
-        }
-      });
-    }
-  };
-};
+;
+let $ = require('jquery');
+let prefs = require('../../lib/prefs');
+let React = require('react');
+let ListIssues = require('./list.issues');
+let FormPassword = require('./form.password');
 
 /**
  * Display our dashboard with the list of issues
@@ -1353,29 +1242,45 @@ function showPasswordForm() {
   React.render(React.createElement(FormPassword, { onFinished: showDashboard }), $('#js-repo-pjax-container')[0]);
 }
 
-},{"../../lib/prefs":26,"./form.password":27,"./list.issues":29,"jquery":55,"react":211}],29:[function(require,module,exports){
-'use strict';
-/*global console */
+module.exports = function () {
+  return {
+    draw: function () {
+      // Make sure they have entered their password
+      prefs.get('ghPassword', function (ghPassword) {
+        if (ghPassword) {
+          showDashboard();
+        } else {
+          showPasswordForm();
+        }
+      });
+    }
+  };
+};
 
-var React = require('react');
-var _ = require('underscore');
-var PanelList = require('../../component/panel/list');
+},{"../../lib/prefs":26,"./form.password":27,"./list.issues":29,"jquery":54,"react":211}],29:[function(require,module,exports){
+'use strict'
+/* global console */
 
-var DailyIssueStore = require('../../store/issue.daily');
-var WeeklyIssueStore = require('../../store/issue.weekly');
-var MonthlyIssueStore = require('../../store/issue.monthly');
-var NoneIssueStore = require('../../store/issue.none');
-var PullAssignedStore = require('../../store/pull.assigned');
-var PullAuthoredStore = require('../../store/pull.authored');
+;
+let React = require('react');
+let _ = require('underscore');
+let PanelList = require('../../component/panel/list');
 
-var DailyIssueActions = require('../../action/issue.daily');
-var WeeklyIssueActions = require('../../action/issue.weekly');
-var MonthlyIssueActions = require('../../action/issue.monthly');
-var NoneIssueActions = require('../../action/issue.none');
-var PullAssignedActions = require('../../action/pull.assigned');
-var PullAuthoredActions = require('../../action/pull.authored');
+let DailyIssueStore = require('../../store/issue.daily');
+let WeeklyIssueStore = require('../../store/issue.weekly');
+let MonthlyIssueStore = require('../../store/issue.monthly');
+let NoneIssueStore = require('../../store/issue.none');
+let PullAssignedStore = require('../../store/pull.assigned');
+let PullAuthoredStore = require('../../store/pull.authored');
 
-module.exports = React.createClass({ displayName: 'exports',
+let DailyIssueActions = require('../../action/issue.daily');
+let WeeklyIssueActions = require('../../action/issue.weekly');
+let MonthlyIssueActions = require('../../action/issue.monthly');
+let NoneIssueActions = require('../../action/issue.none');
+let PullAssignedActions = require('../../action/pull.assigned');
+let PullAuthoredActions = require('../../action/pull.authored');
+
+module.exports = React.createClass({ displayName: "exports",
   propTypes: {
     pollInterval: React.PropTypes.number
   },
@@ -1387,38 +1292,38 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @date 2015-07-03
    */
-  loadData: function loadData() {
-    _(this.refs).each(function (ref) {
+  loadData() {
+    _(this.refs).each(ref => {
       if (_.isFunction(ref.fetch)) {
         ref.fetch();
       }
     });
   },
 
-  componentDidMount: function componentDidMount() {
+  componentDidMount() {
     this.loadData();
     this.interval = setInterval(this.loadData, this.props.pollInterval);
   },
 
-  componentWillUnmount: function componentWillUnmount() {
+  componentWillUnmount() {
     clearInterval(this.interval);
   },
 
-  render: function render() {
-    var listOptions = {
+  render() {
+    let listOptions = {
       emptyTitle: 'No Issues Here',
       emptyText: 'You completed all issues'
     };
-    return React.createElement('div', null, React.createElement('button', { onClick: this.loadData, className: 'btn right tooltipped tooltipped-sw', 'aria-label': 'Refresh Data' }, React.createElement('span', { className: 'octicon octicon-sync' })), React.createElement('div', { className: 'issue reviewing' }, React.createElement('span', { className: 'octicon octicon-check' }), ' Under Review'), React.createElement('div', { className: 'issue overdue' }, React.createElement('span', { className: 'octicon octicon-alert' }), ' Overdue'), React.createElement('br', null), React.createElement('div', { className: 'columns' }, React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listdailyissues', title: 'Daily', extraClass: 'daily', action: DailyIssueActions, store: DailyIssueStore, item: 'issue',
-      listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listweeklyissues', title: 'Weekly', extraClass: 'weekly', action: WeeklyIssueActions, store: WeeklyIssueStore, item: 'issue',
-      listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listmonthlyissues', title: 'Monthly', extraClass: 'monthly', action: MonthlyIssueActions, store: MonthlyIssueStore, item: 'issue',
-      listOptions: listOptions })), React.createElement('div', { className: 'one-fourth column' }, React.createElement(PanelList, { ref: 'listnoneissues', title: 'None', extraClass: 'none', action: NoneIssueActions, store: NoneIssueStore, item: 'issue',
-      listOptions: listOptions }))), React.createElement('br', null), React.createElement('div', null, React.createElement(PanelList, { ref: 'listassignedpulls', title: 'Pull Requests - Assigned to You', action: PullAssignedActions, store: PullAssignedStore, options: { showAssignee: false }, item: 'pull' })), React.createElement('br', null), React.createElement('div', null, React.createElement(PanelList, { ref: 'listauthoredpulls', title: 'Pull Requests - You Created', action: PullAuthoredActions, store: PullAuthoredStore, options: { showAssignee: true }, item: 'pull' })));
+    return React.createElement("div", null, React.createElement("button", { onClick: this.loadData, className: "btn right tooltipped tooltipped-sw", "aria-label": "Refresh Data" }, React.createElement("span", { className: "octicon octicon-sync" })), React.createElement("div", { className: "issue reviewing" }, React.createElement("span", { className: "octicon octicon-check" }), " Under Review"), React.createElement("div", { className: "issue overdue" }, React.createElement("span", { className: "octicon octicon-alert" }), " Overdue"), React.createElement("br", null), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listdailyissues", title: "Daily", extraClass: "daily", action: DailyIssueActions, store: DailyIssueStore, item: "issue",
+      listOptions: listOptions })), React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listweeklyissues", title: "Weekly", extraClass: "weekly", action: WeeklyIssueActions, store: WeeklyIssueStore, item: "issue",
+      listOptions: listOptions })), React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listmonthlyissues", title: "Monthly", extraClass: "monthly", action: MonthlyIssueActions, store: MonthlyIssueStore, item: "issue",
+      listOptions: listOptions })), React.createElement("div", { className: "one-fourth column" }, React.createElement(PanelList, { ref: "listnoneissues", title: "None", extraClass: "none", action: NoneIssueActions, store: NoneIssueStore, item: "issue",
+      listOptions: listOptions }))), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { ref: "listassignedpulls", title: "Pull Requests - Assigned to You", action: PullAssignedActions, store: PullAssignedStore, options: { showAssignee: false }, item: "pull" })), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { ref: "listauthoredpulls", title: "Pull Requests - You Created", action: PullAuthoredActions, store: PullAuthoredStore, options: { showAssignee: true }, item: "pull" })));
   }
 });
 
-},{"../../action/issue.daily":2,"../../action/issue.monthly":3,"../../action/issue.none":4,"../../action/issue.weekly":5,"../../action/pull.assigned":6,"../../action/pull.authored":7,"../../component/panel/list":18,"../../store/issue.daily":33,"../../store/issue.monthly":34,"../../store/issue.none":35,"../../store/issue.weekly":36,"../../store/pull.assigned":37,"../../store/pull.authored":38,"react":211,"underscore":212}],30:[function(require,module,exports){
-'use strict';
+},{"../../action/issue.daily":1,"../../action/issue.monthly":2,"../../action/issue.none":3,"../../action/issue.weekly":4,"../../action/pull.assigned":5,"../../action/pull.authored":6,"../../component/panel/list":17,"../../store/issue.daily":33,"../../store/issue.monthly":34,"../../store/issue.none":35,"../../store/issue.weekly":36,"../../store/pull.assigned":37,"../../store/pull.authored":38,"react":211,"underscore":212}],30:[function(require,module,exports){
+'use strict'
 
 /**
  * Dashboard
@@ -1426,29 +1331,31 @@ module.exports = React.createClass({ displayName: 'exports',
  * Displays our home page with the list of issues and pull requests
  */
 
-var $ = require('jquery');
-var React = require('react');
-var Picker = require('./picker');
+;
+const $ = require('jquery');
+const React = require('react');
+const Picker = require('./picker');
 
 module.exports = function () {
   return {
-    draw: function draw() {
+    draw: function () {
       React.render(React.createElement(Picker, null), $('.k2picker-wrapper')[0]);
     }
   };
 };
 
-},{"./picker":31,"jquery":55,"react":211}],31:[function(require,module,exports){
-'use strict';
-/*global console */
+},{"./picker":31,"jquery":54,"react":211}],31:[function(require,module,exports){
+'use strict'
+/* global console */
 
-var $ = require('jquery');
-var _ = require('underscore');
-var React = require('react');
-var BtnGroup = require('../../component/btngroup/index');
-var defaultBtnClass = 'btn btn-sm tooltipped tooltipped-n';
+;
+const $ = require('jquery');
+const _ = require('underscore');
+const React = require('react');
+const BtnGroup = require('../../component/btngroup/index');
+const defaultBtnClass = 'btn btn-sm tooltipped tooltipped-n';
 
-module.exports = React.createClass({ displayName: 'exports',
+module.exports = React.createClass({ displayName: "exports",
   /**
    * Sets the initial class names for all of our buttons
    *
@@ -1458,7 +1365,7 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @return {Object}
    */
-  getInitialState: function getInitialState() {
+  getInitialState() {
     return {
       hourly: defaultBtnClass + ' k2-hourly',
       daily: defaultBtnClass + ' k2-daily',
@@ -1475,8 +1382,8 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @date 2015-07-30
    */
-  componentDidMount: function componentDidMount() {
-    var _this = this;
+  componentDidMount() {
+    let _this = this;
     $('.labels .label').each(function () {
       switch ($(this).text().toLowerCase()) {
         case 'hourly':
@@ -1498,7 +1405,7 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @date 2015-07-30
    */
-  setHourly: function setHourly() {
+  setHourly() {
     this._setActiveLabel('hourly');
   },
 
@@ -1509,7 +1416,7 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @date 2015-07-30
    */
-  setDaily: function setDaily() {
+  setDaily() {
     this._setActiveLabel('daily');
   },
 
@@ -1520,7 +1427,7 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @date 2015-07-30
    */
-  setWeekly: function setWeekly() {
+  setWeekly() {
     this._setActiveLabel('weekly');
   },
 
@@ -1531,7 +1438,7 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @date 2015-07-30
    */
-  setMonthly: function setMonthly() {
+  setMonthly() {
     this._setActiveLabel('monthly');
   },
 
@@ -1544,9 +1451,9 @@ module.exports = React.createClass({ displayName: 'exports',
    *
    * @param {String} label
    */
-  _setActiveLabel: function _setActiveLabel(label) {
-    var initialState = this.getInitialState();
-    var newState = {};
+  _setActiveLabel(label) {
+    const initialState = this.getInitialState();
+    let newState = {};
 
     // If that label is already active, then set everything back
     // to the default (which removes all labels)
@@ -1556,75 +1463,51 @@ module.exports = React.createClass({ displayName: 'exports',
     }
 
     // Set all the proper active/inactive classes
-    newState = _(initialState).mapObject(function (val, key) {
+    newState = _(initialState).mapObject((val, key) => {
       return key === label ? defaultBtnClass + ' k2-' + key + ' active' : defaultBtnClass + ' k2-' + key + ' inactive';
     });
     this.setState(newState);
   },
-  render: function render() {
-    return React.createElement(BtnGroup, null, React.createElement('button', { className: this.state.hourly, 'aria-label': 'Hourly', onClick: this.setHourly }, 'H'), React.createElement('button', { className: this.state.daily, 'aria-label': 'Daily', onClick: this.setDaily }, 'D'), React.createElement('button', { className: this.state.weekly, 'aria-label': 'Weekly', onClick: this.setWeekly }, 'W'), React.createElement('button', { className: this.state.monthly, 'aria-label': 'Monthly', onClick: this.setMonthly }, 'M'));
+  render() {
+    return React.createElement(BtnGroup, null, React.createElement("button", { className: this.state.hourly, "aria-label": "Hourly", onClick: this.setHourly }, "H"), React.createElement("button", { className: this.state.daily, "aria-label": "Daily", onClick: this.setDaily }, "D"), React.createElement("button", { className: this.state.weekly, "aria-label": "Weekly", onClick: this.setWeekly }, "W"), React.createElement("button", { className: this.state.monthly, "aria-label": "Monthly", onClick: this.setMonthly }, "M"));
   }
 });
 
-},{"../../component/btngroup/index":11,"jquery":55,"react":211,"underscore":212}],32:[function(require,module,exports){
+},{"../../component/btngroup/index":10,"jquery":54,"react":211,"underscore":212}],32:[function(require,module,exports){
 'use strict';
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var BaseStore = (function () {
-  function BaseStore() {
-    _classCallCheck(this, BaseStore);
-
+class BaseStore {
+  constructor() {
     this.loading = false;
     this.data = [];
     this.errorMessage = null;
   }
-
-  _createClass(BaseStore, [{
-    key: 'handleFetch',
-    value: function handleFetch() {
-      this.loading = true;
-      this.data = [];
-    }
-  }, {
-    key: 'handleUpdate',
-    value: function handleUpdate(data) {
-      this.loading = false;
-      this.data = data;
-    }
-  }, {
-    key: 'handleFailed',
-    value: function handleFailed(msg) {
-      this.loading = false;
-      this.errorMessage = msg;
-    }
-  }]);
-
-  return BaseStore;
-})();
+  handleFetch() {
+    this.loading = true;
+    this.data = [];
+  }
+  handleUpdate(data) {
+    this.loading = false;
+    this.data = data;
+  }
+  handleFailed(msg) {
+    this.loading = false;
+    this.errorMessage = msg;
+  }
+}
 
 module.exports = BaseStore;
 
 },{}],33:[function(require,module,exports){
 'use strict';
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+let alt = require('../alt');
+let IssueAction = require('../action/issue.daily');
+let BaseIssueStore = require('./_issue');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-var alt = require('../alt');
-var IssueAction = require('../action/issue.daily');
-var BaseIssueStore = require('./_issue');
-
-var Store = (function (_BaseIssueStore) {
-  function Store() {
-    _classCallCheck(this, Store);
-
-    _get(Object.getPrototypeOf(Store.prototype), 'constructor', this).call(this);
+class Store extends BaseIssueStore {
+  constructor() {
+    super();
 
     this.bindListeners({
       handleUpdate: IssueAction.UPDATE,
@@ -1632,32 +1515,20 @@ var Store = (function (_BaseIssueStore) {
       handleFailed: IssueAction.FAILED
     });
   }
-
-  _inherits(Store, _BaseIssueStore);
-
-  return Store;
-})(BaseIssueStore);
+}
 
 module.exports = alt.createStore(Store, 'IssueStoreDaily');
 
-},{"../action/issue.daily":2,"../alt":8,"./_issue":32}],34:[function(require,module,exports){
+},{"../action/issue.daily":1,"../alt":7,"./_issue":32}],34:[function(require,module,exports){
 'use strict';
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+let alt = require('../alt');
+let IssueAction = require('../action/issue.monthly');
+let BaseIssueStore = require('./_issue');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-var alt = require('../alt');
-var IssueAction = require('../action/issue.monthly');
-var BaseIssueStore = require('./_issue');
-
-var Store = (function (_BaseIssueStore) {
-  function Store() {
-    _classCallCheck(this, Store);
-
-    _get(Object.getPrototypeOf(Store.prototype), 'constructor', this).call(this);
+class Store extends BaseIssueStore {
+  constructor() {
+    super();
 
     this.bindListeners({
       handleUpdate: IssueAction.UPDATE,
@@ -1665,32 +1536,20 @@ var Store = (function (_BaseIssueStore) {
       handleFailed: IssueAction.FAILED
     });
   }
-
-  _inherits(Store, _BaseIssueStore);
-
-  return Store;
-})(BaseIssueStore);
+}
 
 module.exports = alt.createStore(Store, 'IssueStoreMonthly');
 
-},{"../action/issue.monthly":3,"../alt":8,"./_issue":32}],35:[function(require,module,exports){
+},{"../action/issue.monthly":2,"../alt":7,"./_issue":32}],35:[function(require,module,exports){
 'use strict';
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+let alt = require('../alt');
+let IssueAction = require('../action/issue.none');
+let BaseIssueStore = require('./_issue');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-var alt = require('../alt');
-var IssueAction = require('../action/issue.none');
-var BaseIssueStore = require('./_issue');
-
-var Store = (function (_BaseIssueStore) {
-  function Store() {
-    _classCallCheck(this, Store);
-
-    _get(Object.getPrototypeOf(Store.prototype), 'constructor', this).call(this);
+class Store extends BaseIssueStore {
+  constructor() {
+    super();
 
     this.bindListeners({
       handleUpdate: IssueAction.UPDATE,
@@ -1698,32 +1557,20 @@ var Store = (function (_BaseIssueStore) {
       handleFailed: IssueAction.FAILED
     });
   }
-
-  _inherits(Store, _BaseIssueStore);
-
-  return Store;
-})(BaseIssueStore);
+}
 
 module.exports = alt.createStore(Store, 'IssueStoreNone');
 
-},{"../action/issue.none":4,"../alt":8,"./_issue":32}],36:[function(require,module,exports){
+},{"../action/issue.none":3,"../alt":7,"./_issue":32}],36:[function(require,module,exports){
 'use strict';
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+let alt = require('../alt');
+let IssueAction = require('../action/issue.weekly');
+let BaseIssueStore = require('./_issue');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-var alt = require('../alt');
-var IssueAction = require('../action/issue.weekly');
-var BaseIssueStore = require('./_issue');
-
-var Store = (function (_BaseIssueStore) {
-  function Store() {
-    _classCallCheck(this, Store);
-
-    _get(Object.getPrototypeOf(Store.prototype), 'constructor', this).call(this);
+class Store extends BaseIssueStore {
+  constructor() {
+    super();
 
     this.bindListeners({
       handleUpdate: IssueAction.UPDATE,
@@ -1731,32 +1578,20 @@ var Store = (function (_BaseIssueStore) {
       handleFailed: IssueAction.FAILED
     });
   }
-
-  _inherits(Store, _BaseIssueStore);
-
-  return Store;
-})(BaseIssueStore);
+}
 
 module.exports = alt.createStore(Store, 'IssueStoreWeekly');
 
-},{"../action/issue.weekly":5,"../alt":8,"./_issue":32}],37:[function(require,module,exports){
+},{"../action/issue.weekly":4,"../alt":7,"./_issue":32}],37:[function(require,module,exports){
 'use strict';
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+let alt = require('../alt');
+let IssueAction = require('../action/pull.assigned');
+let BaseIssueStore = require('./_issue');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-var alt = require('../alt');
-var IssueAction = require('../action/pull.assigned');
-var BaseIssueStore = require('./_issue');
-
-var Store = (function (_BaseIssueStore) {
-  function Store() {
-    _classCallCheck(this, Store);
-
-    _get(Object.getPrototypeOf(Store.prototype), 'constructor', this).call(this);
+class Store extends BaseIssueStore {
+  constructor() {
+    super();
 
     this.bindListeners({
       handleUpdate: IssueAction.UPDATE,
@@ -1764,32 +1599,20 @@ var Store = (function (_BaseIssueStore) {
       handleFailed: IssueAction.FAILED
     });
   }
-
-  _inherits(Store, _BaseIssueStore);
-
-  return Store;
-})(BaseIssueStore);
+}
 
 module.exports = alt.createStore(Store, 'PullStoreAssigned');
 
-},{"../action/pull.assigned":6,"../alt":8,"./_issue":32}],38:[function(require,module,exports){
+},{"../action/pull.assigned":5,"../alt":7,"./_issue":32}],38:[function(require,module,exports){
 'use strict';
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+let alt = require('../alt');
+let IssueAction = require('../action/pull.authored');
+let BaseIssueStore = require('./_issue');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-
-var alt = require('../alt');
-var IssueAction = require('../action/pull.authored');
-var BaseIssueStore = require('./_issue');
-
-var Store = (function (_BaseIssueStore) {
-  function Store() {
-    _classCallCheck(this, Store);
-
-    _get(Object.getPrototypeOf(Store.prototype), 'constructor', this).call(this);
+class Store extends BaseIssueStore {
+  constructor() {
+    super();
 
     this.bindListeners({
       handleUpdate: IssueAction.UPDATE,
@@ -1797,15 +1620,11 @@ var Store = (function (_BaseIssueStore) {
       handleFailed: IssueAction.FAILED
     });
   }
-
-  _inherits(Store, _BaseIssueStore);
-
-  return Store;
-})(BaseIssueStore);
+}
 
 module.exports = alt.createStore(Store, 'PullStoreAuthored');
 
-},{"../action/pull.authored":7,"../alt":8,"./_issue":32}],39:[function(require,module,exports){
+},{"../action/pull.authored":6,"../alt":7,"./_issue":32}],39:[function(require,module,exports){
 var _ = require("underscore");
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
@@ -1906,7 +1725,7 @@ function makeAction(alt, namespace, name, implementation, obj) {
 }
 
 module.exports = exports['default'];
-},{"../symbols/symbols":45,"../utils/AltUtils":46,"es-symbol":48}],41:[function(require,module,exports){
+},{"../symbols/symbols":45,"../utils/AltUtils":46,"es-symbol":49}],41:[function(require,module,exports){
 /*global window*/
 'use strict';
 
@@ -2217,7 +2036,7 @@ var Alt = (function () {
 
 exports['default'] = Alt;
 module.exports = exports['default'];
-},{"../utils/functions":53,"./actions":40,"./store":44,"./symbols/symbols":45,"./utils/AltUtils":46,"./utils/StateFunctions":47,"flux":50}],42:[function(require,module,exports){
+},{"../utils/functions":48,"./actions":40,"./store":44,"./symbols/symbols":45,"./utils/AltUtils":46,"./utils/StateFunctions":47,"flux":51}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2352,7 +2171,7 @@ var AltStore = (function () {
 
 exports['default'] = AltStore;
 module.exports = exports['default'];
-},{"../../utils/functions":53,"../symbols/symbols":45,"es-symbol":48,"eventemitter3":49}],43:[function(require,module,exports){
+},{"../../utils/functions":48,"../symbols/symbols":45,"es-symbol":49,"eventemitter3":50}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2558,7 +2377,7 @@ var StoreMixin = {
 
 exports['default'] = StoreMixin;
 module.exports = exports['default'];
-},{"../../utils/functions":53,"../symbols/symbols":45,"es-symbol":48}],44:[function(require,module,exports){
+},{"../../utils/functions":48,"../symbols/symbols":45,"es-symbol":49}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2734,7 +2553,7 @@ function createStoreFromClass(alt, StoreModel, key) {
 
   return storeInstance;
 }
-},{"../../utils/functions":53,"../symbols/symbols":45,"../utils/AltUtils":46,"./AltStore":42,"./StoreMixin":43,"eventemitter3":49}],45:[function(require,module,exports){
+},{"../../utils/functions":48,"../symbols/symbols":45,"../utils/AltUtils":46,"./AltStore":42,"./StoreMixin":43,"eventemitter3":50}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2794,7 +2613,7 @@ exports.PUBLIC_METHODS = PUBLIC_METHODS;
 // contains all state
 var STATE_CONTAINER = (0, _esSymbol2['default'])();
 exports.STATE_CONTAINER = STATE_CONTAINER;
-},{"es-symbol":48}],46:[function(require,module,exports){
+},{"es-symbol":49}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -2922,7 +2741,39 @@ function filterSnapshots(instance, state, stores) {
     return obj;
   }, {});
 }
-},{"../../utils/functions":53,"../symbols/symbols":45}],48:[function(require,module,exports){
+},{"../../utils/functions":48,"../symbols/symbols":45}],48:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.eachObject = eachObject;
+exports.assign = assign;
+var isFunction = function isFunction(x) {
+  return typeof x === 'function';
+};
+
+exports.isFunction = isFunction;
+
+function eachObject(f, o) {
+  o.forEach(function (from) {
+    Object.keys(Object(from)).forEach(function (key) {
+      f(key, from[key]);
+    });
+  });
+}
+
+function assign(target) {
+  for (var _len = arguments.length, source = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    source[_key - 1] = arguments[_key];
+  }
+
+  eachObject(function (key, value) {
+    return target[key] = value;
+  }, source);
+  return target;
+}
+},{}],49:[function(require,module,exports){
 "use strict";
 
 var globalSymbolRegistryList = {};
@@ -3074,7 +2925,7 @@ if (supportsAccessors) {
 module.exports = typeof Symbol === "function" ? Symbol : xSymbol;
 
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 /**
@@ -3305,7 +3156,7 @@ EventEmitter.EventEmitter3 = EventEmitter;
 //
 module.exports = EventEmitter;
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /**
  * Copyright (c) 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -3317,7 +3168,7 @@ module.exports = EventEmitter;
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":51}],51:[function(require,module,exports){
+},{"./lib/Dispatcher":52}],52:[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -3569,7 +3420,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":52}],52:[function(require,module,exports){
+},{"./invariant":53}],53:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -3624,99 +3475,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],53:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-exports.eachObject = eachObject;
-exports.assign = assign;
-var isFunction = function isFunction(x) {
-  return typeof x === 'function';
-};
-
-exports.isFunction = isFunction;
-
-function eachObject(f, o) {
-  o.forEach(function (from) {
-    Object.keys(Object(from)).forEach(function (key) {
-      f(key, from[key]);
-    });
-  });
-}
-
-function assign(target) {
-  for (var _len = arguments.length, source = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    source[_key - 1] = arguments[_key];
-  }
-
-  eachObject(function (key, value) {
-    return target[key] = value;
-  }, source);
-  return target;
-}
 },{}],54:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-var queue = [];
-var draining = false;
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    draining = true;
-    var currentQueue;
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        var i = -1;
-        while (++i < len) {
-            currentQueue[i]();
-        }
-        len = queue.length;
-    }
-    draining = false;
-}
-process.nextTick = function (fun) {
-    queue.push(fun);
-    if (!draining) {
-        setTimeout(drainQueue, 0);
-    }
-};
-
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-// TODO(shtylman)
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],55:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
@@ -12928,9 +12687,9 @@ return jQuery;
 
 }));
 
-},{}],56:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 //! moment.js
-//! version : 2.10.3
+//! version : 2.10.6
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -13025,6 +12784,7 @@ return jQuery;
                 flags.overflow < 0 &&
                 !flags.empty &&
                 !flags.invalidMonth &&
+                !flags.invalidWeekday &&
                 !flags.nullInput &&
                 !flags.invalidFormat &&
                 !flags.userInvalidated;
@@ -13105,7 +12865,7 @@ return jQuery;
     // Moment prototype object
     function Moment(config) {
         copyConfig(this, config);
-        this._d = new Date(+config._d);
+        this._d = new Date(config._d != null ? config._d.getTime() : NaN);
         // Prevent infinite loop in case updateOffset creates new moment
         // objects.
         if (updateInProgress === false) {
@@ -13119,16 +12879,20 @@ return jQuery;
         return obj instanceof Moment || (obj != null && obj._isAMomentObject != null);
     }
 
+    function absFloor (number) {
+        if (number < 0) {
+            return Math.ceil(number);
+        } else {
+            return Math.floor(number);
+        }
+    }
+
     function toInt(argumentForCoercion) {
         var coercedNumber = +argumentForCoercion,
             value = 0;
 
         if (coercedNumber !== 0 && isFinite(coercedNumber)) {
-            if (coercedNumber >= 0) {
-                value = Math.floor(coercedNumber);
-            } else {
-                value = Math.ceil(coercedNumber);
-            }
+            value = absFloor(coercedNumber);
         }
 
         return value;
@@ -13226,9 +12990,7 @@ return jQuery;
     function defineLocale (name, values) {
         if (values !== null) {
             values.abbr = name;
-            if (!locales[name]) {
-                locales[name] = new Locale();
-            }
+            locales[name] = locales[name] || new Locale();
             locales[name].set(values);
 
             // backwards compat for now: also set the locale
@@ -13332,16 +13094,14 @@ return jQuery;
     }
 
     function zeroFill(number, targetLength, forceSign) {
-        var output = '' + Math.abs(number),
+        var absNumber = '' + Math.abs(number),
+            zerosToFill = targetLength - absNumber.length,
             sign = number >= 0;
-
-        while (output.length < targetLength) {
-            output = '0' + output;
-        }
-        return (sign ? (forceSign ? '+' : '') : '-') + output;
+        return (sign ? (forceSign ? '+' : '') : '-') +
+            Math.pow(10, Math.max(0, zerosToFill)).toString().substr(1) + absNumber;
     }
 
-    var formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,4}|x|X|zz?|ZZ?|.)/g;
+    var formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|Q|YYYYYY|YYYYY|YYYY|YY|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
 
     var localFormattingTokens = /(\[[^\[]*\])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g;
 
@@ -13409,10 +13169,7 @@ return jQuery;
         }
 
         format = expandFormat(format, m.localeData());
-
-        if (!formatFunctions[format]) {
-            formatFunctions[format] = makeFormatFunction(format);
-        }
+        formatFunctions[format] = formatFunctions[format] || makeFormatFunction(format);
 
         return formatFunctions[format](m);
     }
@@ -13456,8 +13213,15 @@ return jQuery;
 
     var regexes = {};
 
+    function isFunction (sth) {
+        // https://github.com/moment/moment/issues/2325
+        return typeof sth === 'function' &&
+            Object.prototype.toString.call(sth) === '[object Function]';
+    }
+
+
     function addRegexToken (token, regex, strictRegex) {
-        regexes[token] = typeof regex === 'function' ? regex : function (isStrict) {
+        regexes[token] = isFunction(regex) ? regex : function (isStrict) {
             return (isStrict && strictRegex) ? strictRegex : regex;
         };
     }
@@ -13665,12 +13429,11 @@ return jQuery;
     }
 
     function deprecate(msg, fn) {
-        var firstTime = true,
-            msgWithStack = msg + '\n' + (new Error()).stack;
+        var firstTime = true;
 
         return extend(function () {
             if (firstTime) {
-                warn(msgWithStack);
+                warn(msg + '\n' + (new Error()).stack);
                 firstTime = false;
             }
             return fn.apply(this, arguments);
@@ -13718,14 +13481,14 @@ return jQuery;
             getParsingFlags(config).iso = true;
             for (i = 0, l = isoDates.length; i < l; i++) {
                 if (isoDates[i][1].exec(string)) {
-                    // match[5] should be 'T' or undefined
-                    config._f = isoDates[i][0] + (match[6] || ' ');
+                    config._f = isoDates[i][0];
                     break;
                 }
             }
             for (i = 0, l = isoTimes.length; i < l; i++) {
                 if (isoTimes[i][1].exec(string)) {
-                    config._f += isoTimes[i][0];
+                    // match[6] should be 'T' or space
+                    config._f += (match[6] || ' ') + isoTimes[i][0];
                     break;
                 }
             }
@@ -13804,7 +13567,10 @@ return jQuery;
     addRegexToken('YYYYY',  match1to6, match6);
     addRegexToken('YYYYYY', match1to6, match6);
 
-    addParseToken(['YYYY', 'YYYYY', 'YYYYYY'], YEAR);
+    addParseToken(['YYYYY', 'YYYYYY'], YEAR);
+    addParseToken('YYYY', function (input, array) {
+        array[YEAR] = input.length === 2 ? utils_hooks__hooks.parseTwoDigitYear(input) : toInt(input);
+    });
     addParseToken('YY', function (input, array) {
         array[YEAR] = utils_hooks__hooks.parseTwoDigitYear(input);
     });
@@ -13931,18 +13697,18 @@ return jQuery;
 
     //http://en.wikipedia.org/wiki/ISO_week_date#Calculating_a_date_given_the_year.2C_week_number_and_weekday
     function dayOfYearFromWeeks(year, week, weekday, firstDayOfWeekOfYear, firstDayOfWeek) {
-        var d = createUTCDate(year, 0, 1).getUTCDay();
-        var daysToAdd;
-        var dayOfYear;
+        var week1Jan = 6 + firstDayOfWeek - firstDayOfWeekOfYear, janX = createUTCDate(year, 0, 1 + week1Jan), d = janX.getUTCDay(), dayOfYear;
+        if (d < firstDayOfWeek) {
+            d += 7;
+        }
 
-        d = d === 0 ? 7 : d;
-        weekday = weekday != null ? weekday : firstDayOfWeek;
-        daysToAdd = firstDayOfWeek - d + (d > firstDayOfWeekOfYear ? 7 : 0) - (d < firstDayOfWeek ? 7 : 0);
-        dayOfYear = 7 * (week - 1) + (weekday - firstDayOfWeek) + daysToAdd + 1;
+        weekday = weekday != null ? 1 * weekday : firstDayOfWeek;
+
+        dayOfYear = 1 + week1Jan + 7 * (week - 1) - d + weekday;
 
         return {
-            year      : dayOfYear > 0 ? year      : year - 1,
-            dayOfYear : dayOfYear > 0 ? dayOfYear : daysInYear(year - 1) + dayOfYear
+            year: dayOfYear > 0 ? year : year - 1,
+            dayOfYear: dayOfYear > 0 ?  dayOfYear : daysInYear(year - 1) + dayOfYear
         };
     }
 
@@ -14228,9 +13994,19 @@ return jQuery;
     }
 
     function createFromConfig (config) {
+        var res = new Moment(checkOverflow(prepareConfig(config)));
+        if (res._nextDay) {
+            // Adding is smart enough around DST
+            res.add(1, 'd');
+            res._nextDay = undefined;
+        }
+
+        return res;
+    }
+
+    function prepareConfig (config) {
         var input = config._i,
-            format = config._f,
-            res;
+            format = config._f;
 
         config._locale = config._locale || locale_locales__getLocale(config._l);
 
@@ -14254,14 +14030,7 @@ return jQuery;
             configFromInput(config);
         }
 
-        res = new Moment(checkOverflow(config));
-        if (res._nextDay) {
-            // Adding is smart enough around DST
-            res.add(1, 'd');
-            res._nextDay = undefined;
-        }
-
-        return res;
+        return config;
     }
 
     function configFromInput(config) {
@@ -14341,7 +14110,7 @@ return jQuery;
         }
         res = moments[0];
         for (i = 1; i < moments.length; ++i) {
-            if (moments[i][fn](res)) {
+            if (!moments[i].isValid() || moments[i][fn](res)) {
                 res = moments[i];
             }
         }
@@ -14453,7 +14222,6 @@ return jQuery;
         } else {
             return local__createLocal(input).local();
         }
-        return model._isUTC ? local__createLocal(input).zone(model._offset || 0) : local__createLocal(input).local();
     }
 
     function getDateOffset (m) {
@@ -14553,12 +14321,7 @@ return jQuery;
     }
 
     function hasAlignedHourOffset (input) {
-        if (!input) {
-            input = 0;
-        }
-        else {
-            input = local__createLocal(input).utcOffset();
-        }
+        input = input ? local__createLocal(input).utcOffset() : 0;
 
         return (this.utcOffset() - input) % 60 === 0;
     }
@@ -14571,12 +14334,24 @@ return jQuery;
     }
 
     function isDaylightSavingTimeShifted () {
-        if (this._a) {
-            var other = this._isUTC ? create_utc__createUTC(this._a) : local__createLocal(this._a);
-            return this.isValid() && compareArrays(this._a, other.toArray()) > 0;
+        if (typeof this._isDSTShifted !== 'undefined') {
+            return this._isDSTShifted;
         }
 
-        return false;
+        var c = {};
+
+        copyConfig(c, this);
+        c = prepareConfig(c);
+
+        if (c._a) {
+            var other = c._isUTC ? create_utc__createUTC(c._a) : local__createLocal(c._a);
+            this._isDSTShifted = this.isValid() &&
+                compareArrays(c._a, other.toArray()) > 0;
+        } else {
+            this._isDSTShifted = false;
+        }
+
+        return this._isDSTShifted;
     }
 
     function isLocal () {
@@ -14736,7 +14511,7 @@ return jQuery;
     var add_subtract__add      = createAdder(1, 'add');
     var add_subtract__subtract = createAdder(-1, 'subtract');
 
-    function moment_calendar__calendar (time) {
+    function moment_calendar__calendar (time, formats) {
         // We want to compare the start of today, vs this.
         // Getting start-of-today depends on whether we're local/utc/offset or not.
         var now = time || local__createLocal(),
@@ -14748,7 +14523,7 @@ return jQuery;
                 diff < 1 ? 'sameDay' :
                 diff < 2 ? 'nextDay' :
                 diff < 7 ? 'nextWeek' : 'sameElse';
-        return this.format(this.localeData().calendar(format, this, local__createLocal(now)));
+        return this.format(formats && formats[format] || this.localeData().calendar(format, this, local__createLocal(now)));
     }
 
     function clone () {
@@ -14792,14 +14567,6 @@ return jQuery;
         } else {
             inputMs = +local__createLocal(input);
             return +(this.clone().startOf(units)) <= inputMs && inputMs <= +(this.clone().endOf(units));
-        }
-    }
-
-    function absFloor (number) {
-        if (number < 0) {
-            return Math.ceil(number);
-        } else {
-            return Math.floor(number);
         }
     }
 
@@ -14993,6 +14760,19 @@ return jQuery;
         return [m.year(), m.month(), m.date(), m.hour(), m.minute(), m.second(), m.millisecond()];
     }
 
+    function toObject () {
+        var m = this;
+        return {
+            years: m.year(),
+            months: m.month(),
+            date: m.date(),
+            hours: m.hours(),
+            minutes: m.minutes(),
+            seconds: m.seconds(),
+            milliseconds: m.milliseconds()
+        };
+    }
+
     function moment_valid__isValid () {
         return valid__isValid(this);
     }
@@ -15164,18 +14944,20 @@ return jQuery;
     // HELPERS
 
     function parseWeekday(input, locale) {
-        if (typeof input === 'string') {
-            if (!isNaN(input)) {
-                input = parseInt(input, 10);
-            }
-            else {
-                input = locale.weekdaysParse(input);
-                if (typeof input !== 'number') {
-                    return null;
-                }
-            }
+        if (typeof input !== 'string') {
+            return input;
         }
-        return input;
+
+        if (!isNaN(input)) {
+            return parseInt(input, 10);
+        }
+
+        input = locale.weekdaysParse(input);
+        if (typeof input === 'number') {
+            return input;
+        }
+
+        return null;
     }
 
     // LOCALES
@@ -15198,9 +14980,7 @@ return jQuery;
     function localeWeekdaysParse (weekdayName) {
         var i, mom, regex;
 
-        if (!this._weekdaysParse) {
-            this._weekdaysParse = [];
-        }
+        this._weekdaysParse = this._weekdaysParse || [];
 
         for (i = 0; i < 7; i++) {
             // make the regex if we don't have it already
@@ -15347,12 +15127,26 @@ return jQuery;
         return ~~(this.millisecond() / 10);
     });
 
-    function millisecond__milliseconds (token) {
-        addFormatToken(0, [token, 3], 0, 'millisecond');
-    }
+    addFormatToken(0, ['SSS', 3], 0, 'millisecond');
+    addFormatToken(0, ['SSSS', 4], 0, function () {
+        return this.millisecond() * 10;
+    });
+    addFormatToken(0, ['SSSSS', 5], 0, function () {
+        return this.millisecond() * 100;
+    });
+    addFormatToken(0, ['SSSSSS', 6], 0, function () {
+        return this.millisecond() * 1000;
+    });
+    addFormatToken(0, ['SSSSSSS', 7], 0, function () {
+        return this.millisecond() * 10000;
+    });
+    addFormatToken(0, ['SSSSSSSS', 8], 0, function () {
+        return this.millisecond() * 100000;
+    });
+    addFormatToken(0, ['SSSSSSSSS', 9], 0, function () {
+        return this.millisecond() * 1000000;
+    });
 
-    millisecond__milliseconds('SSS');
-    millisecond__milliseconds('SSSS');
 
     // ALIASES
 
@@ -15363,11 +15157,19 @@ return jQuery;
     addRegexToken('S',    match1to3, match1);
     addRegexToken('SS',   match1to3, match2);
     addRegexToken('SSS',  match1to3, match3);
-    addRegexToken('SSSS', matchUnsigned);
-    addParseToken(['S', 'SS', 'SSS', 'SSSS'], function (input, array) {
-        array[MILLISECOND] = toInt(('0.' + input) * 1000);
-    });
 
+    var token;
+    for (token = 'SSSS'; token.length <= 9; token += 'S') {
+        addRegexToken(token, matchUnsigned);
+    }
+
+    function parseMs(input, array) {
+        array[MILLISECOND] = toInt(('0.' + input) * 1000);
+    }
+
+    for (token = 'S'; token.length <= 9; token += 'S') {
+        addParseToken(token, parseMs);
+    }
     // MOMENTS
 
     var getSetMillisecond = makeGetSet('Milliseconds', false);
@@ -15414,6 +15216,7 @@ return jQuery;
     momentPrototype__proto.startOf      = startOf;
     momentPrototype__proto.subtract     = add_subtract__subtract;
     momentPrototype__proto.toArray      = toArray;
+    momentPrototype__proto.toObject     = toObject;
     momentPrototype__proto.toDate       = toDate;
     momentPrototype__proto.toISOString  = moment_format__toISOString;
     momentPrototype__proto.toJSON       = moment_format__toISOString;
@@ -15513,19 +15316,23 @@ return jQuery;
         LT   : 'h:mm A',
         L    : 'MM/DD/YYYY',
         LL   : 'MMMM D, YYYY',
-        LLL  : 'MMMM D, YYYY LT',
-        LLLL : 'dddd, MMMM D, YYYY LT'
+        LLL  : 'MMMM D, YYYY h:mm A',
+        LLLL : 'dddd, MMMM D, YYYY h:mm A'
     };
 
     function longDateFormat (key) {
-        var output = this._longDateFormat[key];
-        if (!output && this._longDateFormat[key.toUpperCase()]) {
-            output = this._longDateFormat[key.toUpperCase()].replace(/MMMM|MM|DD|dddd/g, function (val) {
-                return val.slice(1);
-            });
-            this._longDateFormat[key] = output;
+        var format = this._longDateFormat[key],
+            formatUpper = this._longDateFormat[key.toUpperCase()];
+
+        if (format || !formatUpper) {
+            return format;
         }
-        return output;
+
+        this._longDateFormat[key] = formatUpper.replace(/MMMM|MM|DD|dddd/g, function (val) {
+            return val.slice(1);
+        });
+
+        return this._longDateFormat[key];
     }
 
     var defaultInvalidDate = 'Invalid date';
@@ -15734,12 +15541,29 @@ return jQuery;
         return duration_add_subtract__addSubtract(this, input, value, -1);
     }
 
+    function absCeil (number) {
+        if (number < 0) {
+            return Math.floor(number);
+        } else {
+            return Math.ceil(number);
+        }
+    }
+
     function bubble () {
         var milliseconds = this._milliseconds;
         var days         = this._days;
         var months       = this._months;
         var data         = this._data;
-        var seconds, minutes, hours, years = 0;
+        var seconds, minutes, hours, years, monthsFromDays;
+
+        // if we have a mix of positive and negative values, bubble down first
+        // check: https://github.com/moment/moment/issues/2166
+        if (!((milliseconds >= 0 && days >= 0 && months >= 0) ||
+                (milliseconds <= 0 && days <= 0 && months <= 0))) {
+            milliseconds += absCeil(monthsToDays(months) + days) * 864e5;
+            days = 0;
+            months = 0;
+        }
 
         // The following code bubbles up values, see the tests for
         // examples of what that means.
@@ -15756,17 +15580,13 @@ return jQuery;
 
         days += absFloor(hours / 24);
 
-        // Accurately convert days to years, assume start from year 0.
-        years = absFloor(daysToYears(days));
-        days -= absFloor(yearsToDays(years));
-
-        // 30 days to a month
-        // TODO (iskren): Use anchor date (like 1st Jan) to compute this.
-        months += absFloor(days / 30);
-        days   %= 30;
+        // convert days to months
+        monthsFromDays = absFloor(daysToMonths(days));
+        months += monthsFromDays;
+        days -= absCeil(monthsToDays(monthsFromDays));
 
         // 12 months -> 1 year
-        years  += absFloor(months / 12);
+        years = absFloor(months / 12);
         months %= 12;
 
         data.days   = days;
@@ -15776,15 +15596,15 @@ return jQuery;
         return this;
     }
 
-    function daysToYears (days) {
+    function daysToMonths (days) {
         // 400 years have 146097 days (taking into account leap year rules)
-        return days * 400 / 146097;
+        // 400 years have 12 months === 4800
+        return days * 4800 / 146097;
     }
 
-    function yearsToDays (years) {
-        // years * 365 + absFloor(years / 4) -
-        //     absFloor(years / 100) + absFloor(years / 400);
-        return years * 146097 / 400;
+    function monthsToDays (months) {
+        // the reverse of daysToMonths
+        return months * 146097 / 4800;
     }
 
     function as (units) {
@@ -15796,11 +15616,11 @@ return jQuery;
 
         if (units === 'month' || units === 'year') {
             days   = this._days   + milliseconds / 864e5;
-            months = this._months + daysToYears(days) * 12;
+            months = this._months + daysToMonths(days);
             return units === 'month' ? months : months / 12;
         } else {
             // handle milliseconds separately because of floating point math errors (issue #1867)
-            days = this._days + Math.round(yearsToDays(this._months / 12));
+            days = this._days + Math.round(monthsToDays(this._months));
             switch (units) {
                 case 'week'   : return days / 7     + milliseconds / 6048e5;
                 case 'day'    : return days         + milliseconds / 864e5;
@@ -15850,7 +15670,7 @@ return jQuery;
         };
     }
 
-    var duration_get__milliseconds = makeGetter('milliseconds');
+    var milliseconds = makeGetter('milliseconds');
     var seconds      = makeGetter('seconds');
     var minutes      = makeGetter('minutes');
     var hours        = makeGetter('hours');
@@ -15928,13 +15748,36 @@ return jQuery;
     var iso_string__abs = Math.abs;
 
     function iso_string__toISOString() {
+        // for ISO strings we do not use the normal bubbling rules:
+        //  * milliseconds bubble up until they become hours
+        //  * days do not bubble at all
+        //  * months bubble up until they become years
+        // This is because there is no context-free conversion between hours and days
+        // (think of clock changes)
+        // and also not between days and months (28-31 days per month)
+        var seconds = iso_string__abs(this._milliseconds) / 1000;
+        var days         = iso_string__abs(this._days);
+        var months       = iso_string__abs(this._months);
+        var minutes, hours, years;
+
+        // 3600 seconds -> 60 minutes -> 1 hour
+        minutes           = absFloor(seconds / 60);
+        hours             = absFloor(minutes / 60);
+        seconds %= 60;
+        minutes %= 60;
+
+        // 12 months -> 1 year
+        years  = absFloor(months / 12);
+        months %= 12;
+
+
         // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
-        var Y = iso_string__abs(this.years());
-        var M = iso_string__abs(this.months());
-        var D = iso_string__abs(this.days());
-        var h = iso_string__abs(this.hours());
-        var m = iso_string__abs(this.minutes());
-        var s = iso_string__abs(this.seconds() + this.milliseconds() / 1000);
+        var Y = years;
+        var M = months;
+        var D = days;
+        var h = hours;
+        var m = minutes;
+        var s = seconds;
         var total = this.asSeconds();
 
         if (!total) {
@@ -15971,7 +15814,7 @@ return jQuery;
     duration_prototype__proto.valueOf        = duration_as__valueOf;
     duration_prototype__proto._bubble        = bubble;
     duration_prototype__proto.get            = duration_get__get;
-    duration_prototype__proto.milliseconds   = duration_get__milliseconds;
+    duration_prototype__proto.milliseconds   = milliseconds;
     duration_prototype__proto.seconds        = seconds;
     duration_prototype__proto.minutes        = minutes;
     duration_prototype__proto.hours          = hours;
@@ -16009,7 +15852,7 @@ return jQuery;
     // Side effect imports
 
 
-    utils_hooks__hooks.version = '2.10.3';
+    utils_hooks__hooks.version = '2.10.6';
 
     setHookCallback(local__createLocal);
 
@@ -16040,6 +15883,99 @@ return jQuery;
     return _moment;
 
 }));
+},{}],56:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = setTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    clearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        setTimeout(drainQueue, 0);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
 },{}],57:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16869,7 +16805,7 @@ var CSSPropertyOperations = {
 module.exports = CSSPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./CSSProperty":59,"./ExecutionEnvironment":76,"./camelizeStyleName":164,"./dangerousStyleValue":169,"./hyphenateStyleName":189,"./memoizeStringOnly":199,"./warning":210,"_process":54}],61:[function(require,module,exports){
+},{"./CSSProperty":59,"./ExecutionEnvironment":76,"./camelizeStyleName":164,"./dangerousStyleValue":169,"./hyphenateStyleName":189,"./memoizeStringOnly":199,"./warning":210,"_process":56}],61:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -16969,7 +16905,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 module.exports = CallbackQueue;
 
 }).call(this,require('_process'))
-},{"./Object.assign":82,"./PooledClass":83,"./invariant":191,"_process":54}],62:[function(require,module,exports){
+},{"./Object.assign":82,"./PooledClass":83,"./invariant":191,"_process":56}],62:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -17514,7 +17450,7 @@ var DOMChildrenOperations = {
 module.exports = DOMChildrenOperations;
 
 }).call(this,require('_process'))
-},{"./Danger":67,"./ReactMultiChildUpdateTypes":128,"./invariant":191,"./setTextContent":205,"_process":54}],65:[function(require,module,exports){
+},{"./Danger":67,"./ReactMultiChildUpdateTypes":128,"./invariant":191,"./setTextContent":205,"_process":56}],65:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -17813,7 +17749,7 @@ var DOMProperty = {
 module.exports = DOMProperty;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],66:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],66:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18005,7 +17941,7 @@ var DOMPropertyOperations = {
 module.exports = DOMPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":65,"./quoteAttributeValueForBrowser":203,"./warning":210,"_process":54}],67:[function(require,module,exports){
+},{"./DOMProperty":65,"./quoteAttributeValueForBrowser":203,"./warning":210,"_process":56}],67:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18192,7 +18128,7 @@ var Danger = {
 module.exports = Danger;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":76,"./createNodesFromMarkup":168,"./emptyFunction":170,"./getMarkupWrap":183,"./invariant":191,"_process":54}],68:[function(require,module,exports){
+},{"./ExecutionEnvironment":76,"./createNodesFromMarkup":168,"./emptyFunction":170,"./getMarkupWrap":183,"./invariant":191,"_process":56}],68:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -18533,7 +18469,7 @@ var EventListener = {
 module.exports = EventListener;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":170,"_process":54}],72:[function(require,module,exports){
+},{"./emptyFunction":170,"_process":56}],72:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -18811,7 +18747,7 @@ var EventPluginHub = {
 module.exports = EventPluginHub;
 
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":73,"./EventPluginUtils":74,"./accumulateInto":161,"./forEachAccumulated":176,"./invariant":191,"_process":54}],73:[function(require,module,exports){
+},{"./EventPluginRegistry":73,"./EventPluginUtils":74,"./accumulateInto":161,"./forEachAccumulated":176,"./invariant":191,"_process":56}],73:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19091,7 +19027,7 @@ var EventPluginRegistry = {
 module.exports = EventPluginRegistry;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],74:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],74:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19312,7 +19248,7 @@ var EventPluginUtils = {
 module.exports = EventPluginUtils;
 
 }).call(this,require('_process'))
-},{"./EventConstants":70,"./invariant":191,"_process":54}],75:[function(require,module,exports){
+},{"./EventConstants":70,"./invariant":191,"_process":56}],75:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -19454,7 +19390,7 @@ var EventPropagators = {
 module.exports = EventPropagators;
 
 }).call(this,require('_process'))
-},{"./EventConstants":70,"./EventPluginHub":72,"./accumulateInto":161,"./forEachAccumulated":176,"_process":54}],76:[function(require,module,exports){
+},{"./EventConstants":70,"./EventPluginHub":72,"./accumulateInto":161,"./forEachAccumulated":176,"_process":56}],76:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -19956,7 +19892,7 @@ var LinkedValueUtils = {
 module.exports = LinkedValueUtils;
 
 }).call(this,require('_process'))
-},{"./ReactPropTypes":134,"./invariant":191,"_process":54}],80:[function(require,module,exports){
+},{"./ReactPropTypes":134,"./invariant":191,"_process":56}],80:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -20013,7 +19949,7 @@ var LocalEventTrapMixin = {
 module.exports = LocalEventTrapMixin;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserEventEmitter":86,"./accumulateInto":161,"./forEachAccumulated":176,"./invariant":191,"_process":54}],81:[function(require,module,exports){
+},{"./ReactBrowserEventEmitter":86,"./accumulateInto":161,"./forEachAccumulated":176,"./invariant":191,"_process":56}],81:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -20236,7 +20172,7 @@ var PooledClass = {
 module.exports = PooledClass;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],84:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],84:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -20388,7 +20324,7 @@ React.version = '0.13.3';
 module.exports = React;
 
 }).call(this,require('_process'))
-},{"./EventPluginUtils":74,"./ExecutionEnvironment":76,"./Object.assign":82,"./ReactChildren":88,"./ReactClass":89,"./ReactComponent":90,"./ReactContext":94,"./ReactCurrentOwner":95,"./ReactDOM":96,"./ReactDOMTextComponent":107,"./ReactDefaultInjection":110,"./ReactElement":113,"./ReactElementValidator":114,"./ReactInstanceHandles":122,"./ReactMount":126,"./ReactPerf":131,"./ReactPropTypes":134,"./ReactReconciler":137,"./ReactServerRendering":140,"./findDOMNode":173,"./onlyChild":200,"_process":54}],85:[function(require,module,exports){
+},{"./EventPluginUtils":74,"./ExecutionEnvironment":76,"./Object.assign":82,"./ReactChildren":88,"./ReactClass":89,"./ReactComponent":90,"./ReactContext":94,"./ReactCurrentOwner":95,"./ReactDOM":96,"./ReactDOMTextComponent":107,"./ReactDefaultInjection":110,"./ReactElement":113,"./ReactElementValidator":114,"./ReactInstanceHandles":122,"./ReactMount":126,"./ReactPerf":131,"./ReactPropTypes":134,"./ReactReconciler":137,"./ReactServerRendering":140,"./findDOMNode":173,"./onlyChild":200,"_process":56}],85:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -21052,7 +20988,7 @@ var ReactChildren = {
 module.exports = ReactChildren;
 
 }).call(this,require('_process'))
-},{"./PooledClass":83,"./ReactFragment":119,"./traverseAllChildren":209,"./warning":210,"_process":54}],89:[function(require,module,exports){
+},{"./PooledClass":83,"./ReactFragment":119,"./traverseAllChildren":209,"./warning":210,"_process":56}],89:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -21998,7 +21934,7 @@ var ReactClass = {
 module.exports = ReactClass;
 
 }).call(this,require('_process'))
-},{"./Object.assign":82,"./ReactComponent":90,"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactErrorUtils":116,"./ReactInstanceMap":123,"./ReactLifeCycle":124,"./ReactPropTypeLocationNames":132,"./ReactPropTypeLocations":133,"./ReactUpdateQueue":142,"./invariant":191,"./keyMirror":196,"./keyOf":197,"./warning":210,"_process":54}],90:[function(require,module,exports){
+},{"./Object.assign":82,"./ReactComponent":90,"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactErrorUtils":116,"./ReactInstanceMap":123,"./ReactLifeCycle":124,"./ReactPropTypeLocationNames":132,"./ReactPropTypeLocations":133,"./ReactUpdateQueue":142,"./invariant":191,"./keyMirror":196,"./keyOf":197,"./warning":210,"_process":56}],90:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -22152,7 +22088,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = ReactComponent;
 
 }).call(this,require('_process'))
-},{"./ReactUpdateQueue":142,"./invariant":191,"./warning":210,"_process":54}],91:[function(require,module,exports){
+},{"./ReactUpdateQueue":142,"./invariant":191,"./warning":210,"_process":56}],91:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -22260,7 +22196,7 @@ var ReactComponentEnvironment = {
 module.exports = ReactComponentEnvironment;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],93:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],93:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23173,7 +23109,7 @@ var ReactCompositeComponent = {
 module.exports = ReactCompositeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":82,"./ReactComponentEnvironment":92,"./ReactContext":94,"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactElementValidator":114,"./ReactInstanceMap":123,"./ReactLifeCycle":124,"./ReactNativeComponent":129,"./ReactPerf":131,"./ReactPropTypeLocationNames":132,"./ReactPropTypeLocations":133,"./ReactReconciler":137,"./ReactUpdates":143,"./emptyObject":171,"./invariant":191,"./shouldUpdateReactComponent":207,"./warning":210,"_process":54}],94:[function(require,module,exports){
+},{"./Object.assign":82,"./ReactComponentEnvironment":92,"./ReactContext":94,"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactElementValidator":114,"./ReactInstanceMap":123,"./ReactLifeCycle":124,"./ReactNativeComponent":129,"./ReactPerf":131,"./ReactPropTypeLocationNames":132,"./ReactPropTypeLocations":133,"./ReactReconciler":137,"./ReactUpdates":143,"./emptyObject":171,"./invariant":191,"./shouldUpdateReactComponent":207,"./warning":210,"_process":56}],94:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -23251,7 +23187,7 @@ var ReactContext = {
 module.exports = ReactContext;
 
 }).call(this,require('_process'))
-},{"./Object.assign":82,"./emptyObject":171,"./warning":210,"_process":54}],95:[function(require,module,exports){
+},{"./Object.assign":82,"./emptyObject":171,"./warning":210,"_process":56}],95:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -23464,7 +23400,7 @@ var ReactDOM = mapObject({
 module.exports = ReactDOM;
 
 }).call(this,require('_process'))
-},{"./ReactElement":113,"./ReactElementValidator":114,"./mapObject":198,"_process":54}],97:[function(require,module,exports){
+},{"./ReactElement":113,"./ReactElementValidator":114,"./mapObject":198,"_process":56}],97:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24038,7 +23974,7 @@ ReactDOMComponent.injection = {
 module.exports = ReactDOMComponent;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":60,"./DOMProperty":65,"./DOMPropertyOperations":66,"./Object.assign":82,"./ReactBrowserEventEmitter":86,"./ReactComponentBrowserEnvironment":91,"./ReactMount":126,"./ReactMultiChild":127,"./ReactPerf":131,"./escapeTextContentForBrowser":172,"./invariant":191,"./isEventSupported":192,"./keyOf":197,"./warning":210,"_process":54}],99:[function(require,module,exports){
+},{"./CSSPropertyOperations":60,"./DOMProperty":65,"./DOMPropertyOperations":66,"./Object.assign":82,"./ReactBrowserEventEmitter":86,"./ReactComponentBrowserEnvironment":91,"./ReactMount":126,"./ReactMultiChild":127,"./ReactPerf":131,"./escapeTextContentForBrowser":172,"./invariant":191,"./isEventSupported":192,"./keyOf":197,"./warning":210,"_process":56}],99:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24255,7 +24191,7 @@ ReactPerf.measureMethods(ReactDOMIDOperations, 'ReactDOMIDOperations', {
 module.exports = ReactDOMIDOperations;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":60,"./DOMChildrenOperations":64,"./DOMPropertyOperations":66,"./ReactMount":126,"./ReactPerf":131,"./invariant":191,"./setInnerHTML":204,"_process":54}],101:[function(require,module,exports){
+},{"./CSSPropertyOperations":60,"./DOMChildrenOperations":64,"./DOMPropertyOperations":66,"./ReactMount":126,"./ReactPerf":131,"./invariant":191,"./setInnerHTML":204,"_process":56}],101:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -24523,7 +24459,7 @@ var ReactDOMInput = ReactClass.createClass({
 module.exports = ReactDOMInput;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":57,"./DOMPropertyOperations":66,"./LinkedValueUtils":79,"./Object.assign":82,"./ReactBrowserComponentMixin":85,"./ReactClass":89,"./ReactElement":113,"./ReactMount":126,"./ReactUpdates":143,"./invariant":191,"_process":54}],104:[function(require,module,exports){
+},{"./AutoFocusMixin":57,"./DOMPropertyOperations":66,"./LinkedValueUtils":79,"./Object.assign":82,"./ReactBrowserComponentMixin":85,"./ReactClass":89,"./ReactElement":113,"./ReactMount":126,"./ReactUpdates":143,"./invariant":191,"_process":56}],104:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -24575,7 +24511,7 @@ var ReactDOMOption = ReactClass.createClass({
 module.exports = ReactDOMOption;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserComponentMixin":85,"./ReactClass":89,"./ReactElement":113,"./warning":210,"_process":54}],105:[function(require,module,exports){
+},{"./ReactBrowserComponentMixin":85,"./ReactClass":89,"./ReactElement":113,"./warning":210,"_process":56}],105:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25223,7 +25159,7 @@ var ReactDOMTextarea = ReactClass.createClass({
 module.exports = ReactDOMTextarea;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":57,"./DOMPropertyOperations":66,"./LinkedValueUtils":79,"./Object.assign":82,"./ReactBrowserComponentMixin":85,"./ReactClass":89,"./ReactElement":113,"./ReactUpdates":143,"./invariant":191,"./warning":210,"_process":54}],109:[function(require,module,exports){
+},{"./AutoFocusMixin":57,"./DOMPropertyOperations":66,"./LinkedValueUtils":79,"./Object.assign":82,"./ReactBrowserComponentMixin":85,"./ReactClass":89,"./ReactElement":113,"./ReactUpdates":143,"./invariant":191,"./warning":210,"_process":56}],109:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -25455,7 +25391,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":58,"./ChangeEventPlugin":62,"./ClientReactRootIndex":63,"./DefaultEventPluginOrder":68,"./EnterLeaveEventPlugin":69,"./ExecutionEnvironment":76,"./HTMLDOMPropertyConfig":78,"./MobileSafariClickEventPlugin":81,"./ReactBrowserComponentMixin":85,"./ReactClass":89,"./ReactComponentBrowserEnvironment":91,"./ReactDOMButton":97,"./ReactDOMComponent":98,"./ReactDOMForm":99,"./ReactDOMIDOperations":100,"./ReactDOMIframe":101,"./ReactDOMImg":102,"./ReactDOMInput":103,"./ReactDOMOption":104,"./ReactDOMSelect":105,"./ReactDOMTextComponent":107,"./ReactDOMTextarea":108,"./ReactDefaultBatchingStrategy":109,"./ReactDefaultPerf":111,"./ReactElement":113,"./ReactEventListener":118,"./ReactInjection":120,"./ReactInstanceHandles":122,"./ReactMount":126,"./ReactReconcileTransaction":136,"./SVGDOMPropertyConfig":144,"./SelectEventPlugin":145,"./ServerReactRootIndex":146,"./SimpleEventPlugin":147,"./createFullPageComponent":167,"_process":54}],111:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":58,"./ChangeEventPlugin":62,"./ClientReactRootIndex":63,"./DefaultEventPluginOrder":68,"./EnterLeaveEventPlugin":69,"./ExecutionEnvironment":76,"./HTMLDOMPropertyConfig":78,"./MobileSafariClickEventPlugin":81,"./ReactBrowserComponentMixin":85,"./ReactClass":89,"./ReactComponentBrowserEnvironment":91,"./ReactDOMButton":97,"./ReactDOMComponent":98,"./ReactDOMForm":99,"./ReactDOMIDOperations":100,"./ReactDOMIframe":101,"./ReactDOMImg":102,"./ReactDOMInput":103,"./ReactDOMOption":104,"./ReactDOMSelect":105,"./ReactDOMTextComponent":107,"./ReactDOMTextarea":108,"./ReactDefaultBatchingStrategy":109,"./ReactDefaultPerf":111,"./ReactElement":113,"./ReactEventListener":118,"./ReactInjection":120,"./ReactInstanceHandles":122,"./ReactMount":126,"./ReactReconcileTransaction":136,"./SVGDOMPropertyConfig":144,"./SelectEventPlugin":145,"./ServerReactRootIndex":146,"./SimpleEventPlugin":147,"./createFullPageComponent":167,"_process":56}],111:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -26235,7 +26171,7 @@ ReactElement.isValidElement = function(object) {
 module.exports = ReactElement;
 
 }).call(this,require('_process'))
-},{"./Object.assign":82,"./ReactContext":94,"./ReactCurrentOwner":95,"./warning":210,"_process":54}],114:[function(require,module,exports){
+},{"./Object.assign":82,"./ReactContext":94,"./ReactCurrentOwner":95,"./warning":210,"_process":56}],114:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -26700,7 +26636,7 @@ var ReactElementValidator = {
 module.exports = ReactElementValidator;
 
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactFragment":119,"./ReactNativeComponent":129,"./ReactPropTypeLocationNames":132,"./ReactPropTypeLocations":133,"./getIteratorFn":182,"./invariant":191,"./warning":210,"_process":54}],115:[function(require,module,exports){
+},{"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactFragment":119,"./ReactNativeComponent":129,"./ReactPropTypeLocationNames":132,"./ReactPropTypeLocations":133,"./getIteratorFn":182,"./invariant":191,"./warning":210,"_process":56}],115:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -26795,7 +26731,7 @@ var ReactEmptyComponent = {
 module.exports = ReactEmptyComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":113,"./ReactInstanceMap":123,"./invariant":191,"_process":54}],116:[function(require,module,exports){
+},{"./ReactElement":113,"./ReactInstanceMap":123,"./invariant":191,"_process":56}],116:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27245,7 +27181,7 @@ var ReactFragment = {
 module.exports = ReactFragment;
 
 }).call(this,require('_process'))
-},{"./ReactElement":113,"./warning":210,"_process":54}],120:[function(require,module,exports){
+},{"./ReactElement":113,"./warning":210,"_process":56}],120:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -27758,7 +27694,7 @@ var ReactInstanceHandles = {
 module.exports = ReactInstanceHandles;
 
 }).call(this,require('_process'))
-},{"./ReactRootIndex":139,"./invariant":191,"_process":54}],123:[function(require,module,exports){
+},{"./ReactRootIndex":139,"./invariant":191,"_process":56}],123:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -28783,7 +28719,7 @@ ReactPerf.measureMethods(ReactMount, 'ReactMount', {
 module.exports = ReactMount;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":65,"./ReactBrowserEventEmitter":86,"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactElementValidator":114,"./ReactEmptyComponent":115,"./ReactInstanceHandles":122,"./ReactInstanceMap":123,"./ReactMarkupChecksum":125,"./ReactPerf":131,"./ReactReconciler":137,"./ReactUpdateQueue":142,"./ReactUpdates":143,"./containsNode":165,"./emptyObject":171,"./getReactRootElementInContainer":185,"./instantiateReactComponent":190,"./invariant":191,"./setInnerHTML":204,"./shouldUpdateReactComponent":207,"./warning":210,"_process":54}],127:[function(require,module,exports){
+},{"./DOMProperty":65,"./ReactBrowserEventEmitter":86,"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactElementValidator":114,"./ReactEmptyComponent":115,"./ReactInstanceHandles":122,"./ReactInstanceMap":123,"./ReactMarkupChecksum":125,"./ReactPerf":131,"./ReactReconciler":137,"./ReactUpdateQueue":142,"./ReactUpdates":143,"./containsNode":165,"./emptyObject":171,"./getReactRootElementInContainer":185,"./instantiateReactComponent":190,"./invariant":191,"./setInnerHTML":204,"./shouldUpdateReactComponent":207,"./warning":210,"_process":56}],127:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -29353,7 +29289,7 @@ var ReactNativeComponent = {
 module.exports = ReactNativeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":82,"./invariant":191,"_process":54}],130:[function(require,module,exports){
+},{"./Object.assign":82,"./invariant":191,"_process":56}],130:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29465,7 +29401,7 @@ var ReactOwner = {
 module.exports = ReactOwner;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],131:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],131:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29569,7 +29505,7 @@ function _noMeasure(objName, fnName, func) {
 module.exports = ReactPerf;
 
 }).call(this,require('_process'))
-},{"_process":54}],132:[function(require,module,exports){
+},{"_process":56}],132:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -29597,7 +29533,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = ReactPropTypeLocationNames;
 
 }).call(this,require('_process'))
-},{"_process":54}],133:[function(require,module,exports){
+},{"_process":56}],133:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30326,7 +30262,7 @@ var ReactReconciler = {
 module.exports = ReactReconciler;
 
 }).call(this,require('_process'))
-},{"./ReactElementValidator":114,"./ReactRef":138,"_process":54}],138:[function(require,module,exports){
+},{"./ReactElementValidator":114,"./ReactRef":138,"_process":56}],138:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -30510,7 +30446,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./ReactElement":113,"./ReactInstanceHandles":122,"./ReactMarkupChecksum":125,"./ReactServerRenderingTransaction":141,"./emptyObject":171,"./instantiateReactComponent":190,"./invariant":191,"_process":54}],141:[function(require,module,exports){
+},{"./ReactElement":113,"./ReactInstanceHandles":122,"./ReactMarkupChecksum":125,"./ReactServerRenderingTransaction":141,"./emptyObject":171,"./instantiateReactComponent":190,"./invariant":191,"_process":56}],141:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -30922,7 +30858,7 @@ var ReactUpdateQueue = {
 module.exports = ReactUpdateQueue;
 
 }).call(this,require('_process'))
-},{"./Object.assign":82,"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactInstanceMap":123,"./ReactLifeCycle":124,"./ReactUpdates":143,"./invariant":191,"./warning":210,"_process":54}],143:[function(require,module,exports){
+},{"./Object.assign":82,"./ReactCurrentOwner":95,"./ReactElement":113,"./ReactInstanceMap":123,"./ReactLifeCycle":124,"./ReactUpdates":143,"./invariant":191,"./warning":210,"_process":56}],143:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -31204,7 +31140,7 @@ var ReactUpdates = {
 module.exports = ReactUpdates;
 
 }).call(this,require('_process'))
-},{"./CallbackQueue":61,"./Object.assign":82,"./PooledClass":83,"./ReactCurrentOwner":95,"./ReactPerf":131,"./ReactReconciler":137,"./Transaction":159,"./invariant":191,"./warning":210,"_process":54}],144:[function(require,module,exports){
+},{"./CallbackQueue":61,"./Object.assign":82,"./PooledClass":83,"./ReactCurrentOwner":95,"./ReactPerf":131,"./ReactReconciler":137,"./Transaction":159,"./invariant":191,"./warning":210,"_process":56}],144:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -31952,7 +31888,7 @@ var SimpleEventPlugin = {
 module.exports = SimpleEventPlugin;
 
 }).call(this,require('_process'))
-},{"./EventConstants":70,"./EventPluginUtils":74,"./EventPropagators":75,"./SyntheticClipboardEvent":148,"./SyntheticDragEvent":150,"./SyntheticEvent":151,"./SyntheticFocusEvent":152,"./SyntheticKeyboardEvent":154,"./SyntheticMouseEvent":155,"./SyntheticTouchEvent":156,"./SyntheticUIEvent":157,"./SyntheticWheelEvent":158,"./getEventCharCode":178,"./invariant":191,"./keyOf":197,"./warning":210,"_process":54}],148:[function(require,module,exports){
+},{"./EventConstants":70,"./EventPluginUtils":74,"./EventPropagators":75,"./SyntheticClipboardEvent":148,"./SyntheticDragEvent":150,"./SyntheticEvent":151,"./SyntheticFocusEvent":152,"./SyntheticKeyboardEvent":154,"./SyntheticMouseEvent":155,"./SyntheticTouchEvent":156,"./SyntheticUIEvent":157,"./SyntheticWheelEvent":158,"./getEventCharCode":178,"./invariant":191,"./keyOf":197,"./warning":210,"_process":56}],148:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -32912,7 +32848,7 @@ var Transaction = {
 module.exports = Transaction;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],160:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],160:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33007,7 +32943,7 @@ function accumulateInto(current, next) {
 module.exports = accumulateInto;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],162:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],162:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33307,7 +33243,7 @@ function createFullPageComponent(tag) {
 module.exports = createFullPageComponent;
 
 }).call(this,require('_process'))
-},{"./ReactClass":89,"./ReactElement":113,"./invariant":191,"_process":54}],168:[function(require,module,exports){
+},{"./ReactClass":89,"./ReactElement":113,"./invariant":191,"_process":56}],168:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33397,7 +33333,7 @@ function createNodesFromMarkup(markup, handleScript) {
 module.exports = createNodesFromMarkup;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":76,"./createArrayFromMixed":166,"./getMarkupWrap":183,"./invariant":191,"_process":54}],169:[function(require,module,exports){
+},{"./ExecutionEnvironment":76,"./createArrayFromMixed":166,"./getMarkupWrap":183,"./invariant":191,"_process":56}],169:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33513,7 +33449,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = emptyObject;
 
 }).call(this,require('_process'))
-},{"_process":54}],172:[function(require,module,exports){
+},{"_process":56}],172:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -33626,7 +33562,7 @@ function findDOMNode(componentOrElement) {
 module.exports = findDOMNode;
 
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":95,"./ReactInstanceMap":123,"./ReactMount":126,"./invariant":191,"./isNode":193,"./warning":210,"_process":54}],174:[function(require,module,exports){
+},{"./ReactCurrentOwner":95,"./ReactInstanceMap":123,"./ReactMount":126,"./invariant":191,"./isNode":193,"./warning":210,"_process":56}],174:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -33684,7 +33620,7 @@ function flattenChildren(children) {
 module.exports = flattenChildren;
 
 }).call(this,require('_process'))
-},{"./traverseAllChildren":209,"./warning":210,"_process":54}],175:[function(require,module,exports){
+},{"./traverseAllChildren":209,"./warning":210,"_process":56}],175:[function(require,module,exports){
 /**
  * Copyright 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -34171,7 +34107,7 @@ function getMarkupWrap(nodeName) {
 module.exports = getMarkupWrap;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":76,"./invariant":191,"_process":54}],184:[function(require,module,exports){
+},{"./ExecutionEnvironment":76,"./invariant":191,"_process":56}],184:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34570,7 +34506,7 @@ function instantiateReactComponent(node, parentCompositeType) {
 module.exports = instantiateReactComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":82,"./ReactCompositeComponent":93,"./ReactEmptyComponent":115,"./ReactNativeComponent":129,"./invariant":191,"./warning":210,"_process":54}],191:[function(require,module,exports){
+},{"./Object.assign":82,"./ReactCompositeComponent":93,"./ReactEmptyComponent":115,"./ReactNativeComponent":129,"./invariant":191,"./warning":210,"_process":56}],191:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -34627,7 +34563,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":54}],192:[function(require,module,exports){
+},{"_process":56}],192:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -34842,7 +34778,7 @@ var keyMirror = function(obj) {
 module.exports = keyMirror;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],197:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],197:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35004,7 +34940,7 @@ function onlyChild(children) {
 module.exports = onlyChild;
 
 }).call(this,require('_process'))
-},{"./ReactElement":113,"./invariant":191,"_process":54}],201:[function(require,module,exports){
+},{"./ReactElement":113,"./invariant":191,"_process":56}],201:[function(require,module,exports){
 /**
  * Copyright 2013-2015, Facebook, Inc.
  * All rights reserved.
@@ -35367,7 +35303,7 @@ function shouldUpdateReactComponent(prevElement, nextElement) {
 module.exports = shouldUpdateReactComponent;
 
 }).call(this,require('_process'))
-},{"./warning":210,"_process":54}],208:[function(require,module,exports){
+},{"./warning":210,"_process":56}],208:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -35439,7 +35375,7 @@ function toArray(obj) {
 module.exports = toArray;
 
 }).call(this,require('_process'))
-},{"./invariant":191,"_process":54}],209:[function(require,module,exports){
+},{"./invariant":191,"_process":56}],209:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -35692,7 +35628,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 module.exports = traverseAllChildren;
 
 }).call(this,require('_process'))
-},{"./ReactElement":113,"./ReactFragment":119,"./ReactInstanceHandles":122,"./getIteratorFn":182,"./invariant":191,"./warning":210,"_process":54}],210:[function(require,module,exports){
+},{"./ReactElement":113,"./ReactFragment":119,"./ReactInstanceHandles":122,"./getIteratorFn":182,"./invariant":191,"./warning":210,"_process":56}],210:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -35755,7 +35691,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":170,"_process":54}],211:[function(require,module,exports){
+},{"./emptyFunction":170,"_process":56}],211:[function(require,module,exports){
 module.exports = require('./lib/React');
 
 },{"./lib/React":84}],212:[function(require,module,exports){
@@ -37308,4 +37244,4 @@ module.exports = require('./lib/React');
   }
 }.call(this));
 
-},{}]},{},[1]);
+},{}]},{},[18]);
