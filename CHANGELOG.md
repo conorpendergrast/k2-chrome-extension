@@ -1,3 +1,6 @@
+# 0.0.9
+- Made some of the page components redraw on an interval
+
 # 0.0.8
 - Added the ability to quick select KSv2 labels
 - Updated all libraries and build tools
