@@ -1,3 +1,6 @@
+# 0.0.10
+- Updated the extension to work with the new GH repo layout
+
 # 0.0.9
 - Made some of the page components redraw on an interval
 
