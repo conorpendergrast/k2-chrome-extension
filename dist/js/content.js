@@ -1107,11 +1107,11 @@ module.exports = function () {
     // Insert the kernel button right after the code button in the navigation
     // if it's there
     // We also make sure to not show it multiple times
-    if (!$('.sunken-menu-group li[aria-label="Kernel Scheduling"]').length) {
+    if (!$('.js-repo-nav .k2-extension').length) {
       button = tplButton({
         url: '#'
       });
-      $('.sunken-menu-group li[aria-label="Wiki"]').after(button).end().find('li.k2-extension a').click(function (e) {
+      $('.js-repo-nav [data-hotkey="g w"]').after(button).end().find('.js-repo-nav .k2-extension').click(function (e) {
         var url = $('.entry-title strong a').first().attr('href');
         // When the link is clicked, we need to take them to the homepage
         // of the repo with something in the hash.
@@ -1147,7 +1147,7 @@ var K2picker = require('../../../module/k2picker/index');
 
 var refreshPicker = function refreshPicker() {
   if (!$('.k2picker-wrapper').length) {
-    $('.sidebar-assignee').after('<div class="discussion-sidebar-item js-discussion-sidebar-item k2picker-wrapper"></div>');
+    $('.sidebar-labels').after('<div class="discussion-sidebar-item js-discussion-sidebar-item k2picker-wrapper"></div>');
     new K2picker().draw();
   }
 };
@@ -1200,13 +1200,10 @@ module.exports = function () {
       // $('body').addClass('dark');
 
       // Deselect the code button
-      $('.sunken-menu-group li[aria-label="Code"] a').removeClass('selected');
+      $('.js-repo-nav [data-hotkey="g c"]').removeClass('selected');
 
       // Select our k2 button
-      $('.sunken-menu-group .k2-extension a').addClass('selected');
-
-      // make a skinny sidebar
-      $('.repository-with-sidebar').removeClass('with-full-navigation');
+      $('.js-repo-nav .k2-extension').addClass('selected');
 
       document.title = 'K2';
 
@@ -1410,7 +1407,7 @@ var FormPassword = require('./form.password');
  * @date 2015-06-14
  */
 function showDashboard() {
-  ReactDOM.render(React.createElement(ListIssues, { pollInterval: 60000 }), $('#js-repo-pjax-container')[0]);
+  ReactDOM.render(React.createElement(ListIssues, { pollInterval: 60000 }), $('.repository-content')[0]);
 }
 
 /**
@@ -1947,9 +1944,9 @@ var _ = require("underscore");
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<li class="tooltipped tooltipped-w k2-extension" aria-label="Kernel Scheduling">\n  <a href="'+
+__p+='<a href="'+
 ((__t=( url ))==null?'':__t)+
-'" aria-label="Kernel Scheduling" class="js-selected-navigation-item sunken-menu-item">\n    <span class="octicon octicon-calendar"></span> <span class="full-word">Kernel Scheduling</span>\n  </a>\n</li>\n';
+'" class="js-selected-navigation-item reponav-item k2-extension">\n    <span class="octicon octicon-calendar"></span>\n    Kernel Scheduling\n</a>\n';
 }
 return __p;
 };
