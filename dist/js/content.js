@@ -937,13 +937,6 @@ module.exports = React.createClass({ displayName: "exports",
       this.setActive('web');
     }
   },
-  componentDidUpdate: function componentDidUpdate() {
-    // If the component updated, then we need to fetch our content
-    if (this.refs.content) {
-      console.log('fetch');
-      this.refs.content.fetch();
-    }
-  },
 
   /**
    * Set a tab to active
@@ -960,19 +953,17 @@ module.exports = React.createClass({ displayName: "exports",
   render: function render() {
     var _this2 = this;
 
-    var content = null;
-
-    _(this.state.items).each(function (i) {
-      if (i.selected === 'selected') {
-        content = React.createElement(i.content.component, React.__spread({ ref: "content" }, i.content.properties));
-      }
-    });
+    var selectedItem = _(this.state.items).findWhere({ selected: 'selected' });
+    var selectedId = selectedItem ? selectedItem.id : null;
 
     return React.createElement("div", null, React.createElement("nav", { className: "reponav js-repo-nav js-sidenav-container-pjax js-octicon-loaders", role: "navigation", "data-pjax": "#js-repo-pjax-container" }, _(this.state.items).map(function (i) {
       return React.createElement("a", { key: i.id, href: '#k2-' + i.id, className: 'reponav-item ' + i.selected, onClick: function onClick() {
           return _this2.setActive(i.id);
         } }, React.createElement("span", { "aria-hidden": "true", className: 'octicon ' + i.icon }), ' ', i.title);
-    })), content);
+    })), _(this.props.children).map(function (c) {
+      var displayClass = c.props.id === selectedId ? '' : 'hide';
+      return React.createElement("div", { key: c.props.id, className: displayClass }, c);
+    }));
   }
 });
 
@@ -1115,6 +1106,7 @@ function getIssuesByArea(area, cb) {
   query += '+is:issue';
   query += '+user:expensify';
   query += '+label:' + area;
+  query += '+no:assignee';
 
   url = baseUrl + '/search/issues' + query;
   prefs.get('ghPassword', function (ghPassword) {
@@ -1125,9 +1117,11 @@ function getIssuesByArea(area, cb) {
       }
     }).done(function (data) {
       // Set the type of the item to be the label we are looking for
-      _(data.items).map(function (item) {
-        item.type = area;
-      });
+      _.chain(data.items).each(function (i) {
+        i.type = area;
+      }).sortBy(function (i) {
+        console.log(i);
+      }).value();
       cb(null, data.items);
     }).fail(function (err) {
       cb(err);
@@ -1281,7 +1275,7 @@ function getCoreIssues(cb) {
  * @param {Function} cb
  */
 function getIntegrationsIssues(cb) {
-  getIssuesByArea('integration+server', cb);
+  getIssuesByArea('"integration+server"', cb);
 }
 
 /**
@@ -1290,7 +1284,7 @@ function getIntegrationsIssues(cb) {
  * @param {Function} cb
  */
 function getScrapersIssues(cb) {
-  getIssuesByArea('scrapers', cb);
+  getIssuesByArea('scraper', cb);
 }
 
 /**
@@ -1903,60 +1897,21 @@ module.exports = React.createClass({ displayName: "exports",
       items: [{
         title: 'Web',
         icon: 'octicon-globe',
-        id: 'web',
-        content: {
-          component: PanelList,
-          properties: {
-            title: 'Web Issues to Work On',
-            action: ActionsIssueWeb,
-            store: StoreIssueWeb,
-            item: 'issue',
-            pollInterval: this.props.pollInterval
-          }
-        }
+        id: 'web'
       }, {
         title: 'Core',
         icon: 'octicon-circuit-board',
-        id: 'core',
-        content: {
-          component: PanelList,
-          properties: {
-            title: 'Core Issues to Work On',
-            action: ActionsIssueCore,
-            store: StoreIssueCore,
-            item: 'issue',
-            pollInterval: this.props.pollInterval
-          }
-        }
+        id: 'core'
       }, {
         title: 'Integrations',
-        icon: 'octicon-plug',
-        id: 'integrations',
-        content: {
-          component: PanelList,
-          properties: {
-            title: 'Integration Issues to Work On',
-            action: ActionsIssueIntegrations,
-            store: StoreIssueIntegrations,
-            item: 'issue',
-            pollInterval: this.props.pollInterval
-          }
-        }
+        icon: 'octicon-credit-card',
+        id: 'integrations'
       }, {
         title: 'Scrapers',
         icon: 'octicon-credit-card',
-        id: 'scrapers',
-        content: {
-          component: PanelList,
-          properties: {
-            title: 'Scraper Issues to Work On',
-            action: ActionsIssueScrapers,
-            store: StoreIssueScrapers,
-            item: 'issue',
-            pollInterval: this.props.pollInterval
-          }
-        }
-      }] })));
+        id: 'scrapers'
+      }]
+    }, React.createElement(PanelList, { id: "web", title: "Things to Work On", action: ActionsIssueWeb, store: StoreIssueWeb, item: "issue", pollInterval: this.props.pollInterval }), React.createElement(PanelList, { id: "core", title: "Things to Work On", action: ActionsIssueCore, store: StoreIssueCore, item: "issue", pollInterval: this.props.pollInterval }), React.createElement(PanelList, { id: "integrations", title: "Things to Work On", action: ActionsIssueIntegrations, store: StoreIssueIntegrations, item: "issue", pollInterval: this.props.pollInterval }), React.createElement(PanelList, { id: "scrapers", title: "Things to Work On", action: ActionsIssueScrapers, store: StoreIssueScrapers, item: "issue", pollInterval: this.props.pollInterval }))));
   }
 });
 

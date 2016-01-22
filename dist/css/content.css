@@ -169,3 +169,7 @@ body.dark .hold,
 body.dark .reviewing {
   color: #333;
 }
+
+.hide {
+  display: none;
+}
