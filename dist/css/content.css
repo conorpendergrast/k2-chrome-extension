@@ -43,6 +43,12 @@
   border-radius: 3px;
 }
 
+.panel.hourly .panel-title,
+.panel.hourly .panel-footer {
+  background-color: #FF0000;
+  color: #ffffff;
+}
+
 .panel.daily .panel-title,
 .panel.daily .panel-footer {
   background-color: #F7A632;

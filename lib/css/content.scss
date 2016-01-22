@@ -41,6 +41,10 @@ $color-blue: #0000ff;
 .panel {
   border: 1px solid $color-nuetral-light;
   border-radius: 3px;
+  &.hourly .panel-title {
+    background-color: $color-red;
+    color: $color-white;
+  }
   &.daily .panel-title {
     background-color: $color-orange;
   }
