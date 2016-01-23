@@ -43,10 +43,18 @@
   border-radius: 3px;
 }
 
+.panel.hourly .label {
+  display: none;
+}
+
 .panel.hourly .panel-title,
 .panel.hourly .panel-footer {
   background-color: #FF0000;
   color: #ffffff;
+}
+
+.panel.daily .label {
+  display: none;
 }
 
 .panel.daily .panel-title,
@@ -54,13 +62,41 @@
   background-color: #F7A632;
 }
 
+.panel.weekly .label {
+  display: none;
+}
+
 .panel.weekly .panel-title,
 .panel.weekly .panel-footer {
   background-color: #D4E529;
 }
 
+.panel.monthly .label {
+  display: none;
+}
+
 .panel.monthly .panel-title,
 .panel.monthly .panel-footer {
+  background-color: #A85AD4;
+}
+
+.label {
+  margin-right: 5px;
+}
+
+.label.hourly {
+  background-color: #FF0000;
+}
+
+.label.daily {
+  background-color: #F7A632;
+}
+
+.label.weekly {
+  background-color: #D4E529;
+}
+
+.label.monthly {
   background-color: #A85AD4;
 }
 
@@ -178,4 +214,16 @@ body.dark .reviewing {
 
 .hide {
   display: none;
+}
+
+.issueList {
+  position: relative;
+}
+
+.issueList .legend {
+  position: absolute;
+  top: 0;
+  left: -210px;
+  width: 200px;
+  text-align: right;
 }

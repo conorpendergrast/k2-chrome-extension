@@ -41,17 +41,56 @@ $color-blue: #0000ff;
 .panel {
   border: 1px solid $color-nuetral-light;
   border-radius: 3px;
-  &.hourly .panel-title {
-    background-color: $color-red;
-    color: $color-white;
+  &.hourly {
+    .label {
+      display: none;
+    }
+
+    .panel-title {
+      background-color: $color-red;
+      color: $color-white;
+    }
   }
-  &.daily .panel-title {
+  &.daily {
+    .label {
+      display: none;
+    }
+
+    .panel-title {
+      background-color: $color-orange;
+    }
+  }
+  &.weekly {
+    .label {
+      display: none;
+    }
+
+    .panel-title {
+      background-color: $color-green;
+    }
+  }
+  &.monthly {
+    .label {
+      display: none;
+    }
+
+    .panel-title {
+      background-color: $color-purple;
+    }
+  }
+}
+.label {
+  margin-right: $gutter;
+  &.hourly {
+    background-color: $color-red;
+  }
+  &.daily {
     background-color: $color-orange;
   }
-  &.weekly .panel-title {
+  &.weekly {
     background-color: $color-green;
   }
-  &.monthly .panel-title {
+  &.monthly {
     background-color: $color-purple;
   }
 }
@@ -157,4 +196,16 @@ body.dark {
 
 .hide {
   display: none;
+}
+
+.issueList {
+  position: relative;
+
+  .legend {
+    position: absolute;
+    top: 0;
+    left: -210px;
+    width: 200px;
+    text-align: right;
+  }
 }
