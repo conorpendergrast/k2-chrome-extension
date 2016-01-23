@@ -679,7 +679,15 @@ module.exports = React.createClass({ displayName: "exports",
     return className;
   },
   render: function render() {
-    return React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-check" }), React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title);
+    var isBug = _(this.props.data.labels).findWhere({ name: 'Bug' }) ? React.createElement("span", { className: "octicon octicon-bug" }) : '';
+    var isTask = _(this.props.data.labels).findWhere({ name: 'Task' }) ? React.createElement("span", { className: "octicon octicon-checklist" }) : '';
+    var isFeature = _(this.props.data.labels).findWhere({ name: 'Feature' }) ? React.createElement("span", { className: "octicon octicon-gift" }) : '';
+    var isHourly = _(this.props.data.labels).findWhere({ name: 'Hourly' }) ? 'hourly' : '';
+    var isDaily = _(this.props.data.labels).findWhere({ name: 'Daily' }) ? 'daily' : '';
+    var isWeekly = _(this.props.data.labels).findWhere({ name: 'Weekly' }) ? 'weekly' : '';
+    var isMonthly = _(this.props.data.labels).findWhere({ name: 'Feature' }) ? 'feature' : '';
+
+    return React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-check" }), React.createElement("span", { className: "octicon octicon-alert" }), isBug, isTask, isFeature, isHourly, isDaily, isWeekly, isMonthly, this.props.data.title);
   }
 });
 
@@ -993,6 +1001,7 @@ setupPages();
 
 var $ = require('jquery');
 var _ = require('underscore');
+var moment = require('moment');
 var prefs = require('./prefs');
 var baseUrl = 'https://api.github.com';
 
@@ -1117,12 +1126,37 @@ function getIssuesByArea(area, cb) {
       }
     }).done(function (data) {
       // Set the type of the item to be the label we are looking for
-      _.chain(data.items).each(function (i) {
+      var sortedData = _.chain(data.items).each(function (i) {
         i.type = area;
-      }).sortBy(function (i) {
-        console.log(i);
-      }).value();
-      cb(null, data.items);
+
+        var age = moment().diff(i.created_at, 'days');
+        var isBug = _(i.labels).findWhere({ name: 'Bug' });
+        var isTask = _(i.labels).findWhere({ name: 'Task' });
+        var isFeature = _(i.labels).findWhere({ name: 'Feature' });
+        var isHourly = _(i.labels).findWhere({ name: 'Hourly' });
+        var isDaily = _(i.labels).findWhere({ name: 'Daily' });
+        var isWeekly = _(i.labels).findWhere({ name: 'Weekly' });
+        var isMonthly = _(i.labels).findWhere({ name: 'Feature' });
+        var score = 0;
+
+        // All bugs are at the top, followed by tasks, followed by features
+        score += isBug ? 1000000 : 0;
+        score += isTask ? 100000 : 0;
+        score += isFeature ? 10000 : 0;
+
+        // Sort by K2
+        score += isHourly ? 1000 : 0;
+        score += isDaily ? 990 : 0;
+        score += isWeekly ? 980 : 0;
+        score += isMonthly ? 970 : 0;
+
+        // Sort by age too
+        score += age;
+
+        i.score = score;
+        i.age = age;
+      }).sortBy('score').value();
+      cb(null, sortedData.reverse());
     }).fail(function (err) {
       cb(err);
     });
@@ -1327,7 +1361,7 @@ exports.getPullsAuthored = getPullsAuthored;
 exports.addLabels = addLabels;
 exports.removeLabel = removeLabel;
 
-},{"./prefs":32,"jquery":89,"underscore":223}],26:[function(require,module,exports){
+},{"./prefs":32,"jquery":89,"moment":90,"underscore":223}],26:[function(require,module,exports){
 'use strict';
 /* global chrome */
 
@@ -1888,7 +1922,7 @@ module.exports = React.createClass({ displayName: "exports",
       emptyTitle: 'No Issues Here',
       emptyText: 'You completed all issues'
     };
-    return React.createElement("div", null, React.createElement("div", { className: "right" }, React.createElement(BtnGroup, null, React.createElement("button", { onClick: this.loadData, className: "btn tooltipped tooltipped-sw", "aria-label": "Refresh Data" }, React.createElement("span", { className: "octicon octicon-sync" })), React.createElement("button", { onClick: this.signOut, className: "btn tooltipped tooltipped-sw", "aria-label": "Sign Out" }, "Sign Out"))), React.createElement("div", { className: "issue reviewing" }, React.createElement("span", { className: "octicon octicon-check" }), " Under Review"), React.createElement("div", { className: "issue overdue" }, React.createElement("span", { className: "octicon octicon-alert" }), " Overdue"), React.createElement("br", null), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Hourly", extraClass: "hourly", action: ActionsIssueHourly, store: StoreIssueHourly, item: "issue",
+    return React.createElement("div", null, React.createElement("div", { className: "right" }, React.createElement(BtnGroup, null, React.createElement("button", { onClick: this.loadData, className: "btn tooltipped tooltipped-sw", "aria-label": "Refresh Data" }, React.createElement("span", { className: "octicon octicon-sync" })), React.createElement("button", { onClick: this.signOut, className: "btn tooltipped tooltipped-sw", "aria-label": "Sign Out" }, "Sign Out"))), React.createElement("div", { className: "issue reviewing" }, React.createElement("span", { className: "octicon octicon-check" }), " Under Review"), React.createElement("div", { className: "issue overdue" }, React.createElement("span", { className: "octicon octicon-alert" }), " Overdue"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-bug" }), " Bug"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-checklist" }), " Task"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-gift" }), " Feature"), React.createElement("br", null), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Hourly", extraClass: "hourly", action: ActionsIssueHourly, store: StoreIssueHourly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Daily", extraClass: "daily", action: ActionsIssueDaily, store: StoreIssueDaily, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Weekly", extraClass: "weekly", action: ActionsIssueWeekly, store: StoreIssueWeekly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Monthly", extraClass: "monthly", action: ActionsIssueMonthly, store: StoreIssueMonthly, item: "issue",

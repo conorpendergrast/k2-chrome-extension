@@ -109,6 +109,11 @@ $color-blue: #0000ff;
   .octicon {
     padding-right: $gutter;
     display: none;
+    &.octicon-bug,
+    &.octicon-gift,
+    &.octicon-checklist {
+      display: inline;
+    }
   }
 }
 

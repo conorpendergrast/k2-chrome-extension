@@ -125,6 +125,12 @@
   display: none;
 }
 
+.issue .octicon.octicon-bug,
+.issue .octicon.octicon-gift,
+.issue .octicon.octicon-checklist {
+  display: inline;
+}
+
 .assignee {
   padding-left: 20px;
 }
