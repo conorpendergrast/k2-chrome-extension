@@ -1,3 +1,8 @@
+# 0.1.0
+- Fixed a bug causing the re-syncing of data to break the page
+- Added an 'hourly' column of things assigned to you
+- Added a table of 'issues to work on' for the different areas
+
 # 0.0.10
 - Updated the extension to work with the new GH repo layout
 

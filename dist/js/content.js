@@ -1362,26 +1362,25 @@ exports.addLabels = addLabels;
 exports.removeLabel = removeLabel;
 
 },{"./prefs":32,"jquery":89,"moment":90,"underscore":223}],26:[function(require,module,exports){
-'use strict';
+'use strict'
 /* global chrome */
 
-let listeners = {};
+;
+var listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  let navEventList = [
-    'onHistoryStateUpdated'
-  ];
+  var navEventList = ['onHistoryStateUpdated'];
 
-  navEventList.forEach(function(e) {
-    chrome.webNavigation[e].addListener(function() {
+  navEventList.forEach(function (e) {
+    chrome.webNavigation[e].addListener(function () {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function(tabs) {
+      }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1410,8 +1409,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (let i = 0; i < listeners[eventName].length; i++) {
-      let callback = listeners[eventName][i];
+    for (var i = 0; i < listeners[eventName].length; i++) {
+      var callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1422,7 +1421,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function(request) {
+  chrome.runtime.onMessage.addListener(function (request) {
     trigger(request);
   });
 }
@@ -1879,7 +1878,6 @@ var React = require('react');
 var prefs = require('../../lib/prefs');
 var Tabs = require('../../component/tabs/tabs');
 var PanelList = require('../../component/panel/list');
-var BtnGroup = require('../../component/btngroup/index');
 
 var StoreIssueHourly = require('../../store/issue.hourly');
 var StoreIssueDaily = require('../../store/issue.daily');
@@ -1922,7 +1920,7 @@ module.exports = React.createClass({ displayName: "exports",
       emptyTitle: 'No Issues Here',
       emptyText: 'You completed all issues'
     };
-    return React.createElement("div", { className: "issueList" }, React.createElement("div", { className: "legend" }, React.createElement(BtnGroup, null, React.createElement("button", { onClick: this.loadData, className: "btn tooltipped tooltipped-sw", "aria-label": "Refresh Data" }, React.createElement("span", { className: "octicon octicon-sync" })), React.createElement("button", { onClick: this.signOut, className: "btn tooltipped tooltipped-sw", "aria-label": "Sign Out" }, "Sign Out")), React.createElement("br", null), React.createElement("div", { className: "issue reviewing" }, React.createElement("span", { className: "octicon octicon-check" }), " Under Review"), React.createElement("div", { className: "issue overdue" }, React.createElement("span", { className: "octicon octicon-alert" }), " Overdue"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-bug" }), " Bug"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-checklist" }), " Task"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-gift" }), " Feature")), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Hourly", extraClass: "hourly", action: ActionsIssueHourly, store: StoreIssueHourly, item: "issue",
+    return React.createElement("div", { className: "issueList" }, React.createElement("div", { className: "legend" }, React.createElement("button", { onClick: this.signOut, className: "btn tooltipped tooltipped-sw", "aria-label": "Sign Out" }, "Sign Out"), React.createElement("br", null), React.createElement("div", { className: "issue reviewing" }, React.createElement("span", { className: "octicon octicon-check" }), " Under Review"), React.createElement("div", { className: "issue overdue" }, React.createElement("span", { className: "octicon octicon-alert" }), " Overdue"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-bug" }), " Bug"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-checklist" }), " Task"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-gift" }), " Feature")), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Hourly", extraClass: "hourly", action: ActionsIssueHourly, store: StoreIssueHourly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Daily", extraClass: "daily", action: ActionsIssueDaily, store: StoreIssueDaily, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Weekly", extraClass: "weekly", action: ActionsIssueWeekly, store: StoreIssueWeekly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Monthly", extraClass: "monthly", action: ActionsIssueMonthly, store: StoreIssueMonthly, item: "issue",
@@ -1949,7 +1947,7 @@ module.exports = React.createClass({ displayName: "exports",
   }
 });
 
-},{"../../action/issue.core":1,"../../action/issue.daily":2,"../../action/issue.hourly":3,"../../action/issue.integrations":4,"../../action/issue.monthly":5,"../../action/issue.none":6,"../../action/issue.scrapers":7,"../../action/issue.web":8,"../../action/issue.weekly":9,"../../action/pull.assigned":10,"../../action/pull.authored":11,"../../component/btngroup/index":15,"../../component/panel/list":22,"../../component/tabs/tabs":23,"../../lib/prefs":32,"../../store/issue.core":39,"../../store/issue.daily":40,"../../store/issue.hourly":41,"../../store/issue.integrations":42,"../../store/issue.monthly":43,"../../store/issue.none":44,"../../store/issue.scrapers":45,"../../store/issue.web":46,"../../store/issue.weekly":47,"../../store/pull.assigned":48,"../../store/pull.authored":49,"react":221}],36:[function(require,module,exports){
+},{"../../action/issue.core":1,"../../action/issue.daily":2,"../../action/issue.hourly":3,"../../action/issue.integrations":4,"../../action/issue.monthly":5,"../../action/issue.none":6,"../../action/issue.scrapers":7,"../../action/issue.web":8,"../../action/issue.weekly":9,"../../action/pull.assigned":10,"../../action/pull.authored":11,"../../component/panel/list":22,"../../component/tabs/tabs":23,"../../lib/prefs":32,"../../store/issue.core":39,"../../store/issue.daily":40,"../../store/issue.hourly":41,"../../store/issue.integrations":42,"../../store/issue.monthly":43,"../../store/issue.none":44,"../../store/issue.scrapers":45,"../../store/issue.web":46,"../../store/issue.weekly":47,"../../store/pull.assigned":48,"../../store/pull.authored":49,"react":221}],36:[function(require,module,exports){
 'use strict'
 
 /**
