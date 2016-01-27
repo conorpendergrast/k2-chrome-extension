@@ -1,3 +1,6 @@
+# 0.1.1
+- Fixed a bug that wouldn't allow you to log in
+
 # 0.1.0
 - Fixed a bug causing the re-syncing of data to break the page
 - Added an 'hourly' column of things assigned to you
