@@ -783,7 +783,9 @@ module.exports = React.createClass({ displayName: "exports",
     return this.props.store.getState();
   },
   fetch: function fetch() {
-    this.props.action.fetch();
+    if (this.props.action) {
+      this.props.action.fetch();
+    }
   },
   componentDidMount: function componentDidMount() {
     // Listen to our store
@@ -1362,25 +1364,26 @@ exports.addLabels = addLabels;
 exports.removeLabel = removeLabel;
 
 },{"./prefs":32,"jquery":89,"moment":90,"underscore":223}],26:[function(require,module,exports){
-'use strict'
+'use strict';
 /* global chrome */
 
-;
-var listeners = {};
+let listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  var navEventList = ['onHistoryStateUpdated'];
+  let navEventList = [
+    'onHistoryStateUpdated'
+  ];
 
-  navEventList.forEach(function (e) {
-    chrome.webNavigation[e].addListener(function () {
+  navEventList.forEach(function(e) {
+    chrome.webNavigation[e].addListener(function() {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function (tabs) {
+      }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1409,8 +1412,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (var i = 0; i < listeners[eventName].length; i++) {
-      var callback = listeners[eventName][i];
+    for (let i = 0; i < listeners[eventName].length; i++) {
+      let callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1421,7 +1424,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function (request) {
+  chrome.runtime.onMessage.addListener(function(request) {
     trigger(request);
   });
 }
@@ -1851,7 +1854,8 @@ function showDashboard() {
  * @date 2015-06-14
  */
 function showPasswordForm() {
-  ReactDOM.render(React.createElement(FormPassword, { onFinished: showDashboard }), $('#js-repo-pjax-container')[0]);
+  $('.repository-content').empty();
+  ReactDOM.render(React.createElement(FormPassword, { onFinished: showDashboard }), $('.repository-content')[0]);
 }
 
 module.exports = function () {
