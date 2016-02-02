@@ -1,3 +1,7 @@
+# 0.1.2
+- Replaced all icons with superscripts because GitHub is dumb and won't let octicons or font-awesome be used
+- Added Travis CI status to all PRs
+
 # 0.1.1
 - Fixed a bug that wouldn't allow you to log in
 
