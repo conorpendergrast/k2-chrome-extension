@@ -227,3 +227,11 @@ body.dark .reviewing {
   width: 200px;
   text-align: right;
 }
+
+.travis-status {
+  color: #F7A632;
+}
+
+.travis-status.success {
+  color: #2cb528;
+}

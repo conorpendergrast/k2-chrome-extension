@@ -679,15 +679,15 @@ module.exports = React.createClass({ displayName: "exports",
     return className;
   },
   render: function render() {
-    var isBug = _(this.props.data.labels).findWhere({ name: 'Bug' }) ? React.createElement("span", { className: "octicon octicon-bug" }) : '';
-    var isTask = _(this.props.data.labels).findWhere({ name: 'Task' }) ? React.createElement("span", { className: "octicon octicon-checklist" }) : '';
-    var isFeature = _(this.props.data.labels).findWhere({ name: 'Feature' }) ? React.createElement("span", { className: "octicon octicon-gift" }) : '';
+    var isBug = _(this.props.data.labels).findWhere({ name: 'Bug' }) ? React.createElement("sup", null, "B") : '';
+    var isTask = _(this.props.data.labels).findWhere({ name: 'Task' }) ? React.createElement("sup", null, "T") : '';
+    var isFeature = _(this.props.data.labels).findWhere({ name: 'Feature' }) ? React.createElement("sup", null, "F") : '';
     var isHourly = _(this.props.data.labels).findWhere({ name: 'Hourly' }) ? React.createElement("span", { className: "label hourly" }, "H") : '';
     var isDaily = _(this.props.data.labels).findWhere({ name: 'Daily' }) ? React.createElement("span", { className: "label daily" }, "D") : '';
     var isWeekly = _(this.props.data.labels).findWhere({ name: 'Weekly' }) ? React.createElement("span", { className: "label weekly" }, "W") : '';
     var isMonthly = _(this.props.data.labels).findWhere({ name: 'Monthly' }) ? React.createElement("span", { className: "label monthly" }, "M") : '';
 
-    return React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-check" }), React.createElement("span", { className: "octicon octicon-alert" }), isBug, isTask, isFeature, isHourly, isDaily, isWeekly, isMonthly, this.props.data.title);
+    return React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, isHourly, isDaily, isWeekly, isMonthly, isBug, isTask, isFeature, this.props.data.title);
   }
 });
 
@@ -753,7 +753,7 @@ module.exports = React.createClass({ displayName: "exports",
       }
     }
 
-    return React.createElement("div", { className: "panel-item" }, React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title), React.createElement("span", { className: "panel-item-meta" }, person, React.createElement("span", { className: "age" }, moment(this.props.data.updated_at).fromNow()), React.createElement("span", { className: "comments" }, React.createElement("span", { className: "octicon octicon-comment" }), this.props.data.comments)));
+    return React.createElement("div", { className: "panel-item" }, React.createElement("span", { className: "panel-item-meta" }, person, React.createElement("span", { className: "age" }, "Updated: ", moment(this.props.data.updated_at).fromNow()), React.createElement("span", { className: "comments" }, "Comments:", ' ', this.props.data.comments), this.props.data.pr && this.props.data.pr.status && this.props.data.pr.status.length ? React.createElement("span", { className: 'travis-status ' + this.props.data.pr.status[0].state }, "Travis: ", this.props.data.pr.status[0].state) : null), React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title));
   }
 });
 
@@ -1041,7 +1041,41 @@ function getPullsByType(type, cb) {
         Authorization: 'Basic ' + btoa(currentUser + ':' + ghPassword)
       }
     }).done(function (data) {
-      cb(null, data.items);
+      var done;
+      if (!data.items || !data.items.length) {
+        return cb(null, []);
+      }
+
+      done = _.after(data.items.length, function () {
+        cb(null, data.items);
+      });
+
+      // Get the detailed PR info for each PR
+      _.each(data.items, function (item) {
+        var repoArray = item.repository_url.split('/');
+        var repo = repoArray[repoArray.length - 2];
+        var owner = repoArray[repoArray.length - 1];
+        var url2 = baseUrl + '/repos/' + repo + '/' + owner + '/pulls/' + item.number;
+        $.ajax({
+          url: url2,
+          headers: {
+            Authorization: 'Basic ' + btoa(currentUser + ':' + ghPassword)
+          }
+        }).done(function (data2) {
+          item.pr = data2;
+
+          // Now get the PR status
+          $.ajax({
+            url: data2._links.statuses.href,
+            headers: {
+              Authorization: 'Basic ' + btoa(currentUser + ':' + ghPassword)
+            }
+          }).done(function (data3) {
+            item.pr.status = data3;
+            done();
+          });
+        });
+      });
     }).fail(function (err) {
       cb(err);
     });
@@ -1923,7 +1957,7 @@ module.exports = React.createClass({ displayName: "exports",
       emptyTitle: 'No Issues Here',
       emptyText: 'You completed all issues'
     };
-    return React.createElement("div", { className: "issueList" }, React.createElement("div", { className: "legend" }, React.createElement("button", { onClick: this.signOut, className: "btn tooltipped tooltipped-sw", "aria-label": "Sign Out" }, "Sign Out"), React.createElement("br", null), React.createElement("div", { className: "issue reviewing" }, React.createElement("span", { className: "octicon octicon-check" }), " Under Review"), React.createElement("div", { className: "issue overdue" }, React.createElement("span", { className: "octicon octicon-alert" }), " Overdue"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-bug" }), " Bug"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-checklist" }), " Task"), React.createElement("div", { className: "issue" }, React.createElement("span", { className: "octicon octicon-gift" }), " Feature")), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Hourly", extraClass: "hourly", action: ActionsIssueHourly, store: StoreIssueHourly, item: "issue",
+    return React.createElement("div", { className: "issueList" }, React.createElement("div", { className: "legend" }, React.createElement("button", { onClick: this.signOut, className: "btn tooltipped tooltipped-sw", "aria-label": "Sign Out" }, "Sign Out"), React.createElement("br", null), React.createElement("div", { className: "issue reviewing" }, "Under Review"), React.createElement("div", { className: "issue overdue" }, "Overdue"), React.createElement("div", { className: "issue" }, React.createElement("sup", null, "B"), " Bug"), React.createElement("div", { className: "issue" }, React.createElement("sup", null, "T"), " Task"), React.createElement("div", { className: "issue" }, React.createElement("sup", null, "F"), " Feature")), React.createElement("div", { className: "columns" }, React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Hourly", extraClass: "hourly", action: ActionsIssueHourly, store: StoreIssueHourly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Daily", extraClass: "daily", action: ActionsIssueDaily, store: StoreIssueDaily, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Weekly", extraClass: "weekly", action: ActionsIssueWeekly, store: StoreIssueWeekly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Monthly", extraClass: "monthly", action: ActionsIssueMonthly, store: StoreIssueMonthly, item: "issue",

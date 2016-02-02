@@ -14,6 +14,7 @@ $color-green: #D4E529;
 $color-black: #000000;
 $color-white: #ffffff;
 $color-blue: #0000ff;
+$color-darker-green: #2cb528;
 
 .k2-inactive {
   opacity: 0.2;
@@ -207,5 +208,13 @@ body.dark {
     left: -210px;
     width: 200px;
     text-align: right;
+  }
+}
+
+.travis-status {
+  color: $color-orange;
+
+  &.success {
+    color: $color-darker-green;
   }
 }
