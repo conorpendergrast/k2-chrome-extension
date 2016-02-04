@@ -2,7 +2,10 @@
 .k2-hourly.inactive,
 .k2-daily.inactive,
 .k2-weekly.inactive,
-.k2-monthly.inactive {
+.k2-monthly.inactive,
+.k2-bug.inactive,
+.k2-task.inactive,
+.k2-feature.inactive {
   opacity: 0.2;
 }
 
@@ -11,7 +14,7 @@
 }
 
 .k2-hourly.active {
-  background-color: #FF0000 !important;
+  background-color: #D52354 !important;
 }
 
 .k2-daily {
@@ -38,6 +41,12 @@
   background-color: #A85AD4 !important;
 }
 
+.k2-bug.active,
+.k2-task.active,
+.k2-feature.active {
+  background-color: #999999 !important;
+}
+
 .panel {
   border: 1px solid #dddddd;
   border-radius: 3px;
@@ -49,7 +58,7 @@
 
 .panel.hourly .panel-title,
 .panel.hourly .panel-footer {
-  background-color: #FF0000;
+  background-color: #D52354;
   color: #ffffff;
 }
 
@@ -85,7 +94,7 @@
 }
 
 .label.hourly {
-  background-color: #FF0000;
+  background-color: #D52354;
 }
 
 .label.daily {
@@ -234,4 +243,8 @@ body.dark .reviewing {
 
 .travis-status.success {
   color: #2cb528;
+}
+
+.travis-status.failure {
+  color: #D52354;
 }
