@@ -5,6 +5,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var $ = require('jquery');
 var alt = require('../alt');
 var API = require('../lib/api');
 
@@ -35,6 +36,9 @@ var Action = (function () {
           return _this.actions.failed(err);
         }
 
+        // Update the tab counter
+        $('[data-key="core"] .counter').html(data.length);
+
         _this.actions.update(data);
       });
     }
@@ -45,7 +49,7 @@ var Action = (function () {
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":12,"../lib/api":25}],2:[function(require,module,exports){
+},{"../alt":12,"../lib/api":25,"jquery":91}],2:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -146,6 +150,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var $ = require('jquery');
 var alt = require('../alt');
 var API = require('../lib/api');
 
@@ -176,6 +181,9 @@ var Action = (function () {
           return _this.actions.failed(err);
         }
 
+        // Update the tab counter
+        $('[data-key="integrations"] .counter').html(data.length);
+
         _this.actions.update(data);
       });
     }
@@ -186,7 +194,7 @@ var Action = (function () {
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":12,"../lib/api":25}],5:[function(require,module,exports){
+},{"../alt":12,"../lib/api":25,"jquery":91}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -287,6 +295,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var $ = require('jquery');
 var alt = require('../alt');
 var API = require('../lib/api');
 
@@ -317,6 +326,9 @@ var Action = (function () {
           return _this.actions.failed(err);
         }
 
+        // Update the tab counter
+        $('[data-key="scrapers"] .counter').html(data.length);
+
         _this.actions.update(data);
       });
     }
@@ -327,13 +339,14 @@ var Action = (function () {
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":12,"../lib/api":25}],8:[function(require,module,exports){
+},{"../alt":12,"../lib/api":25,"jquery":91}],8:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var $ = require('jquery');
 var alt = require('../alt');
 var API = require('../lib/api');
 
@@ -364,6 +377,9 @@ var Action = (function () {
           return _this.actions.failed(err);
         }
 
+        // Update the tab counter
+        $('[data-key="web"] .counter').html(data.length);
+
         _this.actions.update(data);
       });
     }
@@ -374,7 +390,7 @@ var Action = (function () {
 
 module.exports = alt.createActions(Action);
 
-},{"../alt":12,"../lib/api":25}],9:[function(require,module,exports){
+},{"../alt":12,"../lib/api":25,"jquery":91}],9:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -967,9 +983,9 @@ module.exports = React.createClass({ displayName: "exports",
     var selectedId = selectedItem ? selectedItem.id : null;
 
     return React.createElement("div", null, React.createElement("nav", { className: "reponav js-repo-nav js-sidenav-container-pjax js-octicon-loaders", role: "navigation", "data-pjax": "#js-repo-pjax-container" }, _(this.state.items).map(function (i) {
-      return React.createElement("a", { key: i.id, href: '#k2-' + i.id, className: 'reponav-item ' + i.selected, onClick: function onClick() {
+      return React.createElement("a", { key: i.id, "data-key": i.id, href: '#k2-' + i.id, className: 'reponav-item ' + i.selected, onClick: function onClick() {
           return _this2.setActive(i.id);
-        } }, React.createElement("span", { "aria-hidden": "true", className: 'octicon ' + i.icon }), ' ', i.title);
+        } }, React.createElement("span", { "aria-hidden": "true", className: 'octicon ' + i.icon }), ' ', i.title, ' ', React.createElement("span", { className: "counter" }, "0"));
     })), _(this.props.children).map(function (c) {
       var displayClass = c.props.id === selectedId ? '' : 'hide';
       return React.createElement("div", { key: c.props.id, className: displayClass }, c);
@@ -1398,26 +1414,25 @@ exports.addLabels = addLabels;
 exports.removeLabel = removeLabel;
 
 },{"./prefs":32,"jquery":91,"moment":92,"underscore":225}],26:[function(require,module,exports){
-'use strict';
+'use strict'
 /* global chrome */
 
-let listeners = {};
+;
+var listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  let navEventList = [
-    'onHistoryStateUpdated'
-  ];
+  var navEventList = ['onHistoryStateUpdated'];
 
-  navEventList.forEach(function(e) {
-    chrome.webNavigation[e].addListener(function() {
+  navEventList.forEach(function (e) {
+    chrome.webNavigation[e].addListener(function () {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function(tabs) {
+      }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1446,8 +1461,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (let i = 0; i < listeners[eventName].length; i++) {
-      let callback = listeners[eventName][i];
+    for (var i = 0; i < listeners[eventName].length; i++) {
+      var callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1458,7 +1473,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function(request) {
+  chrome.runtime.onMessage.addListener(function (request) {
     trigger(request);
   });
 }
