@@ -41,7 +41,8 @@ $color-darker-green: #2cb528;
 }
 .k2-bug,
 .k2-task,
-.k2-feature {
+.k2-feature,
+.k2-reviewing {
   &.active { background-color: $color-nuetral !important; }
   &.inactive { @extend .k2-inactive; }
 }

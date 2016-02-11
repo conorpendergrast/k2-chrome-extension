@@ -5,7 +5,8 @@
 .k2-monthly.inactive,
 .k2-bug.inactive,
 .k2-task.inactive,
-.k2-feature.inactive {
+.k2-feature.inactive,
+.k2-reviewing.inactive {
   opacity: 0.2;
 }
 
@@ -43,7 +44,8 @@
 
 .k2-bug.active,
 .k2-task.active,
-.k2-feature.active {
+.k2-feature.active,
+.k2-reviewing.active {
   background-color: #999999 !important;
 }
 
