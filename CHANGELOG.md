@@ -1,3 +1,8 @@
+# 0.1.3
+- Added a reviewing label switching button
+- Add a bug/task/feature label switching button
+- Fixed some errors for grabbing the repo name
+
 # 0.1.2
 - Replaced all icons with superscripts because GitHub is dumb and won't let octicons or font-awesome be used
 - Added Travis CI status to all PRs
