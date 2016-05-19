@@ -14,6 +14,7 @@ $color-green: #D4E529;
 $color-black: #000000;
 $color-white: #ffffff;
 $color-blue: #0000ff;
+$color-light-blue: #12a4d5;
 $color-darker-green: #2cb528;
 
 .k2-inactive {
@@ -101,6 +102,9 @@ $color-darker-green: #2cb528;
   &.monthly {
     background-color: $color-purple;
   }
+  &.newhire {
+    background-color: $color-light-blue;
+  }
 }
 
 .panel-title {
@@ -137,6 +141,14 @@ $color-darker-green: #2cb528;
   &:hover {
     text-decoration: none;
   }
+  &.overdue {
+      color: $color-alert;
+      // Only show the alert icon if the item is overdue
+      .octicon-alert {
+        display: inline;
+      }
+  }
+  &.planning,
   &.hold,
   &.reviewing {
       color: $color-nuetral-light;
@@ -145,12 +157,8 @@ $color-darker-green: #2cb528;
         display: inline;
       }
   }
-  &.overdue {
-      color: $color-alert !important;
-      // Only show the alert icon if the item is overdue
-      .octicon-alert {
-        display: inline;
-      }
+  &.waiting-on-customer {
+    color: $color-purple;
   }
   // Hide the icons for all issues by default
   .octicon {
