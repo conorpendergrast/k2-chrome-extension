@@ -1,3 +1,8 @@
+# 0.1.4
+- Added a label to the list of issues for newhire tickets
+- Added styles so that "Planning" and "Waiting for customer" issues are greyed out
+- Made it so that when the lists refresh, there is no loading view and the data stays there
+
 # 0.1.3
 - Added a reviewing label switching button
 - Add a bug/task/feature label switching button
