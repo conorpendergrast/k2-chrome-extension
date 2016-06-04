@@ -1,3 +1,6 @@
+# 0.1.5
+- Fixed a bug where clicking on the K2 tab didn't work anymore
+
 # 0.1.4
 - Added a label to the list of issues for newhire tickets
 - Added styles so that "Planning" and "Waiting for customer" issues are greyed out
