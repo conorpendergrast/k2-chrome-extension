@@ -1415,21 +1415,23 @@ exports.removeLabel = removeLabel;
 'use strict';
 /* global chrome */
 
-var listeners = {};
+let listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  var navEventList = ['onHistoryStateUpdated'];
+  let navEventList = [
+    'onHistoryStateUpdated'
+  ];
 
-  navEventList.forEach(function (e) {
-    chrome.webNavigation[e].addListener(function () {
+  navEventList.forEach(function(e) {
+    chrome.webNavigation[e].addListener(function() {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function (tabs) {
+      }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1458,8 +1460,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (var i = 0; i < listeners[eventName].length; i++) {
-      var callback = listeners[eventName][i];
+    for (let i = 0; i < listeners[eventName].length; i++) {
+      let callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1470,7 +1472,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function (request) {
+  chrome.runtime.onMessage.addListener(function(request) {
     trigger(request);
   });
 }
@@ -1591,7 +1593,7 @@ module.exports = function () {
         url: '#'
       });
       $('.js-repo-nav [data-hotkey="g w"]').after(button).end().find('.js-repo-nav .k2-extension').click(function (e) {
-        var url = $('.entry-title strong a').first().attr('href');
+        var url = $('.pagehead .container h1 strong a').first().attr('href');
         // When the link is clicked, we need to take them to the homepage
         // of the repo with something in the hash.
         e.preventDefault();
