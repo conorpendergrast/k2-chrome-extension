@@ -1,3 +1,6 @@
+# 0.1.6
+- Fixed a bug where the label quick selectors didn't work anymore
+
 # 0.1.5
 - Fixed a bug where clicking on the K2 tab didn't work anymore
 
