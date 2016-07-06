@@ -20,7 +20,6 @@
     "babel-preset-react": "^6.0.15",
     "babelify": "*",
     "browserify": "*",
-    "crx": "*",
     "eslint": "*",
     "eslint-plugin-react": "*",
     "gulp": "*",
