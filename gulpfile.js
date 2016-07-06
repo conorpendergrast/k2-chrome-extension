@@ -17,7 +17,7 @@ var gulp = require('./gulp')([
   'imagecopy',
   'manifestcopy',
   'watch',
-  'crx'
+  'zip'
 ], {
   watchify: watchFiles,
   uglify: false
@@ -31,5 +31,5 @@ gulp.task('build', [
 gulp.task('default', ['build', 'watch']);
 
 gulp.task('package', function () {
-  runSequence.use(gulp)('build', 'crx');
+  runSequence.use(gulp)('build', 'zip');
 });

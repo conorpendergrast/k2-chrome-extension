@@ -1,3 +1,8 @@
+# 0.1.7
+- Fixed a bug where Merge button wasn't disabled for PRs on HOLD when there's a trailing slash in the PRs URL
+- Removed crx gulp task
+- Added zip gulp task
+
 # 0.1.6
 - Fixed a bug where the label quick selectors didn't work anymore
 
