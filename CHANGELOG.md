@@ -1,3 +1,6 @@
+# 0.1.8
+- Added Area 51 to the list of issues
+
 # 0.1.7
 - Fixed a bug where Merge button wasn't disabled for PRs on HOLD when there's a trailing slash in the PRs URL
 - Removed crx gulp task
