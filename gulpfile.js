@@ -30,6 +30,6 @@ gulp.task('build', [
 
 gulp.task('default', ['build', 'watch']);
 
-gulp.task('package', function () {
+gulp.task('package', [function () {
   runSequence.use(gulp)('build', 'zip');
-});
+}]);

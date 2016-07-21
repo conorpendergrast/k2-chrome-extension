@@ -1,3 +1,6 @@
+# 0.1.9
+- Bumping version because previous package was corrupt (no js/content.js)
+
 # 0.1.8
 - Added Area 51 to the list of issues
 
