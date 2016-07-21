@@ -1092,7 +1092,8 @@ function getPullsByType(type, cb) {
   // Get the PRs assigned to me
   query += '+state:open';
   query += '+is:pr';
-  query += '+user:expensify';
+  // query += '+user:expensify';
+  query += '+repo:expensify/expensify';
   query += '+' + type + ':' + currentUser;
 
   query += '&sort=updated';
@@ -1167,7 +1168,8 @@ function getIssuesByLabel(label, cb) {
   // Get the PRs assigned to me
   query += '+state:open';
   query += '+is:issue';
-  query += '+user:expensify';
+  // query += '+user:expensify';
+  query += '+repo:expensify/expensify';
   query += '+assignee:' + currentUser;
 
   // We need to exclude our other filter labels if we are searching
@@ -1214,9 +1216,10 @@ function getIssuesByArea(area, cb) {
   // Get the PRs assigned to me
   query += '+state:open';
   query += '+is:issue';
-  query += '+user:expensify';
+  // query += '+user:expensify';
   query += '+label:' + area;
   query += '+no:assignee';
+  query += '+repo:expensify/expensify';
 
   url = baseUrl + '/search/issues' + query;
   prefs.get('ghPassword', function (ghPassword) {
@@ -1476,21 +1479,23 @@ exports.removeLabel = removeLabel;
 'use strict';
 /* global chrome */
 
-var listeners = {};
+let listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  var navEventList = ['onHistoryStateUpdated'];
+  let navEventList = [
+    'onHistoryStateUpdated'
+  ];
 
-  navEventList.forEach(function (e) {
-    chrome.webNavigation[e].addListener(function () {
+  navEventList.forEach(function(e) {
+    chrome.webNavigation[e].addListener(function() {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function (tabs) {
+      }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1519,8 +1524,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (var i = 0; i < listeners[eventName].length; i++) {
-      var callback = listeners[eventName][i];
+    for (let i = 0; i < listeners[eventName].length; i++) {
+      let callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1531,7 +1536,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function (request) {
+  chrome.runtime.onMessage.addListener(function(request) {
     trigger(request);
   });
 }
