@@ -1,5 +1,8 @@
+# 0.1.11
+- Fixing a bug where the PR query shouldn't be just querying the expensify/expensify repo
+
 # 0.1.10
-- Restring issue searches to the expensify/expensify repo
+- Switching issue searches to the expensify/expensify repo
 
 # 0.1.9
 - Bumping version because previous package was corrupt (no js/content.js)

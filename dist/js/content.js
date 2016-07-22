@@ -1092,8 +1092,8 @@ function getPullsByType(type, cb) {
   // Get the PRs assigned to me
   query += '+state:open';
   query += '+is:pr';
-  // query += '+user:expensify';
-  query += '+repo:expensify/expensify';
+  query += '+user:expensify';
+  // query += '+repo:expensify/expensify';
   query += '+' + type + ':' + currentUser;
 
   query += '&sort=updated';
