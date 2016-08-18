@@ -1,3 +1,6 @@
+# 0.2.0
+- Added a picker for areas and a some color for the other pickers
+
 # 0.1.11
 - Fixing a bug where the PR query shouldn't be just querying the expensify/expensify repo
 
