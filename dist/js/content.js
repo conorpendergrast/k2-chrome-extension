@@ -2301,54 +2301,24 @@ module.exports = React.createClass({ displayName: "exports",
    * @return {Object}
    */
   getInitialState: function getInitialState() {
-    return {
-      web: defaultBtnClass + ' k2-web',
-      core: defaultBtnClass + ' k2-core',
-      'area-51': defaultBtnClass + ' k2-area51',
-      design: defaultBtnClass + ' k2-design',
-      'integration server': defaultBtnClass + ' k2-is',
-      ops: defaultBtnClass + ' k2-ops',
-      scraper: defaultBtnClass + ' k2-scraper'
+    var state = {
+      web: defaultBtnClass + ' inactive k2-web',
+      core: defaultBtnClass + ' inactive k2-core',
+      'area-51': defaultBtnClass + ' inactive k2-area-51',
+      design: defaultBtnClass + ' inactive k2-design',
+      'integration server': defaultBtnClass + ' inactive k2-integration server',
+      ops: defaultBtnClass + ' inactive k2-ops',
+      scraper: defaultBtnClass + ' inactive k2-scraper'
     };
-  },
-
-
-  /**
-   * When the component has renered, we need to see if there
-   * is an existing label, and if so, make that button enabled
-   *
-   * @author Tim Golen <tim@golen.net>
-   *
-   * @date 2015-07-30
-   */
-  componentDidMount: function componentDidMount() {
-    var _this = this;
     $('.labels .label').each(function () {
       var label = $(this).text().toLowerCase();
-      if (_(_this.state).keys().indexOf(label) > -1) {
-        _this._setActiveLabel(label);
+      if (state[label]) {
+        state[label] = state[label].replace('inactive', 'active');
       }
     });
-  },
-  _saveNewLabel: function _saveNewLabel(label) {
-    var previousLabel = null;
-    _(this.state).each(function (val, key) {
-      if (val.search('active') > -1 && val.search('inactive') === -1) {
-        previousLabel = key;
-      }
-    });
-    if (label !== previousLabel) {
-      API.addLabels([label], function () {
-        if (previousLabel) {
-          API.removeLabel(previousLabel);
-        }
-      });
-    } else {
-      API.removeLabel(label);
-    }
+    return state;
   },
   clickNSave: function clickNSave(label) {
-    this._saveNewLabel(label);
     this._setActiveLabel(label);
   },
 
@@ -2363,28 +2333,24 @@ module.exports = React.createClass({ displayName: "exports",
    * @param {String} label
    */
   _setActiveLabel: function _setActiveLabel(label) {
-    var initialState = this.getInitialState();
-    var newState = {};
+    var newState = _.clone(this.state);
 
-    // If that label is already active, then set everything back
-    // to the default (which removes all labels)
-    if (this.state[label].indexOf(' active') > -1) {
-      this.setState(initialState);
-      return;
+    if (newState[label].search('inactive') > -1) {
+      newState[label] = newState[label].replace('inactive', 'active');
+      API.addLabels([label]);
+    } else {
+      newState[label] = newState[label].replace('active', 'inactive');
+      API.removeLabel(label);
     }
 
-    // Set all the proper active/inactive classes
-    newState = _(initialState).mapObject(function (val, key) {
-      return key === label ? defaultBtnClass + ' k2-' + key + ' active' : defaultBtnClass + ' k2-' + key + ' inactive';
-    });
     this.setState(newState);
   },
   render: function render() {
-    var _this2 = this;
+    var _this = this;
 
     return React.createElement("div", null, React.createElement("label", null, "Area"), React.createElement(BtnGroup, null, _(_(this.state).keys()).map(function (label) {
-      return React.createElement("button", { className: _this2.state[label], "aria-label": label, onClick: function onClick() {
-          return _this2.clickNSave(label);
+      return React.createElement("button", { key: label, className: _this.state[label], "aria-label": label, onClick: function onClick() {
+          return _this.clickNSave(label);
         } }, label[0].toUpperCase());
     })));
   }
