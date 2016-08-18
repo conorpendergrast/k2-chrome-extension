@@ -2640,7 +2640,7 @@ module.exports = React.createClass({ displayName: "exports",
 
     return React.createElement(BtnGroup, null, React.createElement("button", { className: this.state.reviewing, "aria-label": "Reviewing", onClick: function onClick() {
         return _this2.clickNSave('reviewing');
-      } }, "Reviewing"));
+      } }, this.state.reviewing.indexOf('inactive') > -1 ? 'Not Reviewing' : 'Reviewing'));
   }
 });
 
