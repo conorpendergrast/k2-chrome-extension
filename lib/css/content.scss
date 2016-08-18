@@ -20,32 +20,51 @@ $color-darker-green: #2cb528;
 .k2-inactive {
   opacity: 0.2;
 }
-.k2-hourly {
+.k2-hourly,
+.k2-daily,
+.k2-weekly,
+.k2-monthly,
+.k2-web,
+.k2-core,
+.k2-area-51,
+.k2-integration.server,
+.k2-scraper,
+.k2-design,
+.k2-ops {
   background-image: none !important;
-  &.active { background-color: $color-alert !important; }
   &.inactive { @extend .k2-inactive; }
 }
-.k2-daily {
-  background-image: none !important;
-  &.active { background-color: $color-orange !important; }
-  &.inactive { @extend .k2-inactive; }
-}
-.k2-weekly {
-  background-image: none !important;
-  &.active { background-color: $color-green !important; }
-  &.inactive { @extend .k2-inactive; }
-}
-.k2-monthly {
-  background-image: none !important;
-  &.active { background-color: $color-purple !important; }
-  &.inactive { @extend .k2-inactive; }
-}
+
+.k2-hourly.active { background-color: $color-alert !important; }
+.k2-daily.active { background-color: $color-orange !important; }
+.k2-weekly.active { background-color: $color-green !important; }
+.k2-monthly.active { background-color: $color-purple !important; }
+.k2-web.active { background-color: #274073 !important; color: white; }
+.k2-core.active { background-color: #ff0066 !important; }
+.k2-area-51.active { background-color: #6CC417 !important; }
+.k2-integration.server.active { background-color: #c7def8 !important; }
+.k2-scraper.active { background-color: #bfe5bf !important; }
+.k2-design.active { background-color: #00a4d3 !important; }
+.k2-ops.active { background-color: #37916C !important; }
+
 .k2-bug,
 .k2-task,
 .k2-feature,
 .k2-reviewing {
-  &.active { background-color: $color-nuetral !important; }
+  &.active { background-color: $color-nuetral; }
   &.inactive { @extend .k2-inactive; }
+}
+.discussion-sidebar-item.discussion-sidebar-item.no-border {
+  margin: 0 !important;
+  border: 0 !important;
+  position: relative;
+
+  label {
+    color: #eee;
+    font-size: 22px;
+    left: 100%;
+    position: absolute;
+  }
 }
 .panel {
   border: 1px solid $color-nuetral-light;

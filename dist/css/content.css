@@ -3,6 +3,13 @@
 .k2-daily.inactive,
 .k2-weekly.inactive,
 .k2-monthly.inactive,
+.k2-web.inactive,
+.k2-core.inactive,
+.k2-area-51.inactive,
+.k2-integration.server.inactive,
+.k2-scraper.inactive,
+.k2-design.inactive,
+.k2-ops.inactive,
 .k2-bug.inactive,
 .k2-task.inactive,
 .k2-feature.inactive,
@@ -10,7 +17,17 @@
   opacity: 0.2;
 }
 
-.k2-hourly {
+.k2-hourly,
+.k2-daily,
+.k2-weekly,
+.k2-monthly,
+.k2-web,
+.k2-core,
+.k2-area-51,
+.k2-integration.server,
+.k2-scraper,
+.k2-design,
+.k2-ops {
   background-image: none !important;
 }
 
@@ -18,35 +35,65 @@
   background-color: #D52354 !important;
 }
 
-.k2-daily {
-  background-image: none !important;
-}
-
 .k2-daily.active {
   background-color: #F7A632 !important;
-}
-
-.k2-weekly {
-  background-image: none !important;
 }
 
 .k2-weekly.active {
   background-color: #D4E529 !important;
 }
 
-.k2-monthly {
-  background-image: none !important;
-}
-
 .k2-monthly.active {
   background-color: #A85AD4 !important;
+}
+
+.k2-web.active {
+  background-color: #274073 !important;
+  color: white;
+}
+
+.k2-core.active {
+  background-color: #ff0066 !important;
+}
+
+.k2-area-51.active {
+  background-color: #6CC417 !important;
+}
+
+.k2-integration.server.active {
+  background-color: #c7def8 !important;
+}
+
+.k2-scraper.active {
+  background-color: #bfe5bf !important;
+}
+
+.k2-design.active {
+  background-color: #00a4d3 !important;
+}
+
+.k2-ops.active {
+  background-color: #37916C !important;
 }
 
 .k2-bug.active,
 .k2-task.active,
 .k2-feature.active,
 .k2-reviewing.active {
-  background-color: #999999 !important;
+  background-color: #999999;
+}
+
+.discussion-sidebar-item.discussion-sidebar-item.no-border {
+  margin: 0 !important;
+  border: 0 !important;
+  position: relative;
+}
+
+.discussion-sidebar-item.discussion-sidebar-item.no-border label {
+  color: #eee;
+  font-size: 22px;
+  left: 100%;
+  position: absolute;
 }
 
 .panel {
