@@ -9,8 +9,8 @@ $color-alert: #D52354;
 
 $color-red: #FF0000;
 $color-purple: #A85AD4;
-$color-orange: #F7A632;
-$color-green: #D4E529;
+$color-orange: #eb6420;
+$color-green: #009800;
 $color-black: #000000;
 $color-white: #ffffff;
 $color-blue: #0000ff;
@@ -30,26 +30,29 @@ $color-darker-green: #2cb528;
 .k2-integration.server,
 .k2-scraper,
 .k2-design,
-.k2-ops {
+.k2-ops,
+.k2-bug,
+.k2-task,
+.k2-feature {
   background-image: none !important;
   &.inactive { @extend .k2-inactive; }
 }
 
 .k2-hourly.active { background-color: $color-alert !important; }
-.k2-daily.active { background-color: $color-orange !important; }
-.k2-weekly.active { background-color: $color-green !important; }
+.k2-daily.active { background-color: $color-orange !important; color: white; }
+.k2-weekly.active { background-color: $color-green !important; color: white; }
 .k2-monthly.active { background-color: $color-purple !important; }
 .k2-web.active { background-color: #274073 !important; color: white; }
-.k2-core.active { background-color: #ff0066 !important; }
+.k2-core.active { background-color: #ff0066 !important; color: white; }
 .k2-area-51.active { background-color: #6CC417 !important; }
 .k2-integration.server.active { background-color: #c7def8 !important; }
 .k2-scraper.active { background-color: #bfe5bf !important; }
-.k2-design.active { background-color: #00a4d3 !important; }
-.k2-ops.active { background-color: #37916C !important; }
+.k2-design.active { background-color: #00a4d3 !important; color: white; }
+.k2-ops.active { background-color: #37916C !important; color: white; }
+.k2-bug.active { background-color: #e11d21 !important; color: white; }
+.k2-task.active { background-color: #9C5959 !important; color: white; }
+.k2-feature.active { background-color: #A52A2A !important; color: white; }
 
-.k2-bug,
-.k2-task,
-.k2-feature,
 .k2-reviewing {
   &.active { background-color: $color-nuetral; }
   &.inactive { @extend .k2-inactive; }

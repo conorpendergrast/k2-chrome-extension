@@ -27,7 +27,10 @@
 .k2-integration.server,
 .k2-scraper,
 .k2-design,
-.k2-ops {
+.k2-ops,
+.k2-bug,
+.k2-task,
+.k2-feature {
   background-image: none !important;
 }
 
@@ -36,11 +39,13 @@
 }
 
 .k2-daily.active {
-  background-color: #F7A632 !important;
+  background-color: #eb6420 !important;
+  color: white;
 }
 
 .k2-weekly.active {
-  background-color: #D4E529 !important;
+  background-color: #009800 !important;
+  color: white;
 }
 
 .k2-monthly.active {
@@ -54,6 +59,7 @@
 
 .k2-core.active {
   background-color: #ff0066 !important;
+  color: white;
 }
 
 .k2-area-51.active {
@@ -70,15 +76,29 @@
 
 .k2-design.active {
   background-color: #00a4d3 !important;
+  color: white;
 }
 
 .k2-ops.active {
   background-color: #37916C !important;
+  color: white;
 }
 
-.k2-bug.active,
-.k2-task.active,
-.k2-feature.active,
+.k2-bug.active {
+  background-color: #e11d21 !important;
+  color: white;
+}
+
+.k2-task.active {
+  background-color: #9C5959 !important;
+  color: white;
+}
+
+.k2-feature.active {
+  background-color: #A52A2A !important;
+  color: white;
+}
+
 .k2-reviewing.active {
   background-color: #999999;
 }
@@ -117,7 +137,7 @@
 
 .panel.daily .panel-title,
 .panel.daily .panel-footer {
-  background-color: #F7A632;
+  background-color: #eb6420;
 }
 
 .panel.weekly .label {
@@ -126,7 +146,7 @@
 
 .panel.weekly .panel-title,
 .panel.weekly .panel-footer {
-  background-color: #D4E529;
+  background-color: #009800;
 }
 
 .panel.monthly .label {
@@ -147,11 +167,11 @@
 }
 
 .label.daily {
-  background-color: #F7A632;
+  background-color: #eb6420;
 }
 
 .label.weekly {
-  background-color: #D4E529;
+  background-color: #009800;
 }
 
 .label.monthly {
@@ -297,7 +317,7 @@ body.dark .reviewing {
 }
 
 .travis-status {
-  color: #F7A632;
+  color: #eb6420;
 }
 
 .travis-status.success {
