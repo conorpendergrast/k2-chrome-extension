@@ -1,3 +1,6 @@
+# 0.2.1
+- Added a waiting label for issues that are waiting for customers
+
 # 0.2.0
 - Added a picker for areas and a some color for the other pickers
 

@@ -182,6 +182,10 @@
   background-color: #12a4d5;
 }
 
+.label.waiting {
+  background-color: #dddddd;
+}
+
 .panel-title,
 .panel-footer {
   background: #eeeeee;
