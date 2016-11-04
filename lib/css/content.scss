@@ -127,6 +127,9 @@ $color-darker-green: #2cb528;
   &.newhire {
     background-color: $color-light-blue;
   }
+  &.waiting {
+    background-color: $color-nuetral-light;
+  }
 }
 
 .panel-title {
