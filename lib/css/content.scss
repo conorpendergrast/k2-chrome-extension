@@ -261,3 +261,21 @@ body.dark {
     color: $color-alert;
   }
 }
+
+.light {
+  display: inline-block;
+  border-radius: 5px;
+  margin: 0 5px;
+  position: relative;
+  top: 1px;
+  color: white;
+  padding-left: 5px;
+
+  &.red {
+    background-color: $color-nuetral;
+  }
+
+  &.green {
+    background-color: $color-green;
+  }
+}
