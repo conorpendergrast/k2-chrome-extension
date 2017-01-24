@@ -1,3 +1,6 @@
+# 0.3.0
+- Added full support for GitHub reviewers. This assumes that a PR assignee is the one responsible for merging it. Reviewers, their only job is to review code.
+
 # 0.2.1
 - Added a waiting label for issues that are waiting for customers
 
