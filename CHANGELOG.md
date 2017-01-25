@@ -1,3 +1,7 @@
+# 0.3.1
+- Added pagination to the API calls
+- Tried to fix tab switching without much luck
+
 # 0.3.0
 - Added full support for GitHub reviewers. This assumes that a PR assignee is the one responsible for merging it. Reviewers, their only job is to review code.
 
