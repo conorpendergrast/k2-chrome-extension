@@ -965,8 +965,11 @@ var Title = require('../panel-title/index');
 var List = require('../list/index');
 
 module.exports = React.createClass({ displayName: "exports",
+  fetched: false,
   componentDidMount: function componentDidMount() {
-    this.fetch();
+    if (!this.fetched) {
+      this.fetch();
+    }
     if (this.props.pollInterval) {
       this.interval = setInterval(this.fetch, this.props.pollInterval);
     }
@@ -1031,27 +1034,20 @@ module.exports = React.createClass({ displayName: "exports",
    * @param {String} id of the tab to activate
    */
   setActive: function setActive(id) {
-    var currentItems = this.state.items;
-    _(currentItems).each(function (i) {
-      i.selected = i.id === id ? 'selected' : '';
-    });
-    this.setState({ items: currentItems });
+    this.setState({ items: _(this.state.items).each(function (i) {
+        i.selected = i.id === id ? 'selected' : '';
+      }) });
   },
 
 
   render: function render() {
-    var _this2 = this;
-
     var selectedItem = _(this.state.items).findWhere({ selected: 'selected' });
     var selectedId = selectedItem ? selectedItem.id : null;
 
     return React.createElement("div", null, React.createElement("nav", { className: "reponav js-repo-nav js-sidenav-container-pjax js-octicon-loaders", role: "navigation", "data-pjax": "#js-repo-pjax-container" }, _(this.state.items).map(function (i) {
-      return React.createElement("a", { key: i.id, "data-key": i.id, href: '#k2-' + i.id, className: 'reponav-item ' + i.selected, onClick: function onClick() {
-          return _this2.setActive(i.id);
-        } }, React.createElement("span", { "aria-hidden": "true", className: 'octicon ' + i.icon }), ' ', i.title, ' ', React.createElement("span", { className: "counter" }, "0"));
+      return React.createElement("a", { key: i.id, "data-key": i.id, href: '?' + _.uniqueId() + '#k2-' + i.id, className: 'reponav-item ' + i.selected }, React.createElement("span", { "aria-hidden": "true", className: 'octicon ' + i.icon }), ' ', i.title, ' ', React.createElement("span", { className: "counter" }, "-"));
     })), _(this.props.children).map(function (c) {
-      var displayClass = c.props.id === selectedId ? '' : 'hide';
-      return React.createElement("div", { key: c.props.id, className: displayClass }, c);
+      return c.props.id === selectedId ? React.createElement("div", { key: c.props.id }, c) : null;
     }));
   }
 });
