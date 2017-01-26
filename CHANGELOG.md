@@ -1,3 +1,6 @@
+# 0.3.4
+- Fixed a bug when sorting issues when there were more than 100
+
 # 0.3.3
 - Improved text for your own pull requests
 
