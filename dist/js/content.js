@@ -1304,7 +1304,7 @@ function getIssuesByArea(area, cb) {
 
       i.score = score;
       i.age = age;
-    }).sortBy('score').value();
+    }).value();
     result = result.concat(sortedData);
 
     // If we have a next link, then we do some recursive pagination
@@ -1313,14 +1313,13 @@ function getIssuesByArea(area, cb) {
       var links = parse_link_header(responseHeaderLink);
       if (links.next) {
         /* eslint-disable no-use-before-define */
-        console.log('getting the next page', links.next);
         makeRequest(links.next);
         /* eslint-enable no-use-before-define */
         return;
       }
     }
 
-    cb(null, result.reverse());
+    cb(null, _(result).sortBy('score').reverse());
   }
 
   function makeRequest(overwriteUrl) {
