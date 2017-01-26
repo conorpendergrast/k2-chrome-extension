@@ -1,3 +1,6 @@
+# 0.3.3
+- Improved text for your own pull requests
+
 # 0.3.2
 - Improved text for your own pull requests
 
