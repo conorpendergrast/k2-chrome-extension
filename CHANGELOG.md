@@ -1,3 +1,6 @@
+# 0.3.2
+- Improved text for your own pull requests
+
 # 0.3.1
 - Added pagination to the API calls
 - Tried to fix tab switching without much luck
