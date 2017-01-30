@@ -1,3 +1,6 @@
+# 0.3.5
+- Corrected the logic for the PR lists so that they show the proper PRs now
+
 # 0.3.4
 - Fixed a bug when sorting issues when there were more than 100
 
