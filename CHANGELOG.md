@@ -1,3 +1,6 @@
+# 0.3.6
+- Swapped the NewHire label for the FirstPick label
+
 # 0.3.5
 - Corrected the logic for the PR lists so that they show the proper PRs now
 

@@ -750,7 +750,7 @@ module.exports = React.createClass({ displayName: "exports",
     var isDaily = _(this.props.data.labels).findWhere({ name: 'Daily' }) ? React.createElement("span", { className: "label daily" }, "D") : null;
     var isWeekly = _(this.props.data.labels).findWhere({ name: 'Weekly' }) ? React.createElement("span", { className: "label weekly" }, "W") : null;
     var isMonthly = _(this.props.data.labels).findWhere({ name: 'Monthly' }) ? React.createElement("span", { className: "label monthly" }, "M") : null;
-    var isNewhire = _(this.props.data.labels).findWhere({ name: 'NewHire' }) ? React.createElement("span", { className: "label newhire" }, "NH") : '';
+    var isNewhire = _(this.props.data.labels).findWhere({ name: 'FirstPick' }) ? React.createElement("span", { className: "label newhire" }, "FP") : '';
     var isWaitingForCustomer = _(this.props.data.labels).findWhere({ name: 'Waiting for customer' }) ? React.createElement("span", { className: "label waiting" }, "Waiting") : '';
 
     return React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, isHourly, isDaily, isWeekly, isMonthly, isNewhire, isWaitingForCustomer, isBug, isTask, isFeature, this.props.data.title);
