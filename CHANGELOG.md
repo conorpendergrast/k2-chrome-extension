@@ -1,3 +1,9 @@
+# 0.4.0
+- Added a quick label button for the mobile area
+- Added a tab for viewing mobile issues to work on
+- Tried once again (and pretty much failed) to fix tab switching
+- Added automatic API retrying according to GitHubs rate limiting headers
+
 # 0.3.4
 - Fixed a bug when sorting issues when there were more than 100
 
