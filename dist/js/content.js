@@ -758,27 +758,116 @@ module.exports = React.createClass({ displayName: "exports",
  * A component for tabs to show the selected tab and the corresponding content
  */
 
+var $ = require('jquery');
 var React = require('react');
 var _ = require('underscore');
+var API = require('../../lib/api');
+var ListItemIssue = require('../list-item/issue');
+var ListItemPull = require('../list-item/pull');
+var ListItemForm = require('../list-item/form');
 
 module.exports = React.createClass({ displayName: "exports",
+  fetched: false,
   getInitialState: function getInitialState() {
     return {
-      loading: false,
+      error: null,
+      loading: true,
       retrying: false,
-      retryingIn: null,
+      retryingIn: 0,
       data: []
     };
+  },
+  componentDidMount: function componentDidMount() {
+    this.loadData();
+  },
+  componentDidUpdate: function componentDidUpdate() {
+    this.loadData();
+  },
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+    // Reset our fetched flag if our API method changed
+    this.fetched = this.props.apiMethod === nextProps.apiMethod;
+    if (!this.fetched) {
+      this.setState({
+        loading: true,
+        retrying: false,
+        error: null
+      });
+    }
+  },
+  loadData: function loadData() {
+    var _this = this;
+
+    // Don't load any data if we have already fetched it
+    if (this.fetched) {
+      return;
+    }
+
+    if (!API[this.props.apiMethod]) {
+      throw new Error('The method ' + this.props.apiMethod + ' does not exist on the API module');
+    }
+
+    API[this.props.apiMethod](function (error, data) {
+      if (error) {
+        return _this.setState({
+          error: error,
+          loading: false,
+          retrying: false
+        });
+      }
+
+      // Update the tab counter
+      $('[data-key="' + _this.props.apiMethod + '"] .counter').html(data.length);
+
+      // Handle the data being loaded
+      _this.setState({
+        loading: false,
+        retrying: false,
+        data: data
+      });
+
+      _this.fetched = true;
+    }, function (data) {
+      // Handle the API retrying
+      _this.setState({
+        loading: false,
+        retrying: true,
+        retryingIn: Math.round(data / 1000)
+      });
+    });
   },
 
 
   render: function render() {
-    console.log(1, this.props);
-    return React.createElement("div", null, "test");
+    var _this2 = this;
+
+    if (this.state.error) {
+      return React.createElement("div", { className: "panel" }, React.createElement("div", { className: "blankslate capped clean-background" }, "Error: ", this.state.error));
+    }
+
+    if (this.state.loading) {
+      return React.createElement("div", { className: "panel" }, React.createElement("div", { className: "blankslate capped clean-background" }, "Loading..."));
+    }
+
+    if (this.state.retrying) {
+      return React.createElement("div", { className: "panel" }, React.createElement("div", { className: "blankslate capped clean-background" }, "Retrying in ", this.state.retryingIn, " seconds"));
+    }
+
+    return React.createElement("div", { className: "panel" }, React.createElement("div", null, _(this.state.data).map(function (item) {
+      var result = void 0;
+      switch (_this2.props.type) {
+        case 'issue':
+          result = React.createElement(ListItemIssue, { key: item.id, data: item });break;
+        case 'pull':
+          result = React.createElement(ListItemPull, { key: item.id, data: item });break;
+        case 'form':
+          result = React.createElement(ListItemForm, { key: item.id, data: item });break;
+      }
+      return result;
+    })));
   }
 });
 
-},{"react":220,"underscore":222}],20:[function(require,module,exports){
+},{"../../lib/api":22,"../list-item/form":13,"../list-item/issue":14,"../list-item/pull":15,"jquery":88,"react":220,"underscore":222}],20:[function(require,module,exports){
 'use strict';
 
 /**
@@ -835,14 +924,14 @@ module.exports = React.createClass({ displayName: "exports",
     return React.createElement("div", null, React.createElement("nav", { className: "reponav js-repo-nav js-sidenav-container-pjax js-octicon-loaders", role: "navigation", "data-pjax": "#js-repo-pjax-container" }, _(this.state.items).map(function (i) {
       return React.createElement("a", {
         key: _.uniqueId(),
-        "data-key": i.id,
+        "data-key": i.apiMethod,
         className: 'reponav-item ' + i.selected,
         onClick: function onClick(e) {
           e.preventDefault();
           _this2.setActive(i.id);
         }
       }, ' ', i.title, ' ', React.createElement("span", { className: "counter" }, "-"));
-    })), selectedItem ? React.createElement(Contents, React.__spread({}, selectedItem)) : null);
+    })), selectedItem ? React.createElement(Contents, React.__spread({}, selectedItem, { type: this.props.type })) : null);
   }
 });
 
@@ -1958,30 +2047,31 @@ module.exports = React.createClass({ displayName: "exports",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "None", extraClass: "none", action: ActionsIssueNone, store: StoreIssueNone, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval }))), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Your Pull Requests", action: ActionsPullAssigned, store: StorePullAssigned, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Pull Requests - You need to review", action: ActionsPullReviewing, store: StorePullReviewing, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(Tabs, {
       pollInterval: this.props.pollInterval,
+      type: "issue",
       items: [{
         title: 'Web',
         id: 'web',
-        area: 'web'
+        apiMethod: 'getWebIssues'
       }, {
         title: 'Core',
         id: 'core',
-        area: 'core'
+        apiMethod: 'getCoreIssues'
       }, {
         title: 'Integrations',
         id: 'integrations',
-        area: '"integration+server"'
+        apiMethod: 'getIntegrationsIssues'
       }, {
         title: 'Scrapers',
         id: 'scrapers',
-        area: 'scraper'
+        apiMethod: 'getScrapersIssues'
       }, {
         title: 'Area51',
         id: 'area51',
-        area: 'area-51'
+        apiMethod: 'getArea51Issues'
       }, {
         title: 'Mobile',
         id: 'mobile',
-        area: 'mobile'
+        apiMethod: 'getMobileIssues'
       }] })));
   }
 });
