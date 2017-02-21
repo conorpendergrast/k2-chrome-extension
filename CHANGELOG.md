@@ -1,3 +1,6 @@
+# 0.4.2
+- Fixed a bug with the API that would create an infinite loop with retrying the API
+
 # 0.4.1
 - Refactored the tabs so that they load appropriately now
 
