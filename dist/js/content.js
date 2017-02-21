@@ -25,6 +25,12 @@ var Action = function () {
       this.dispatch(msg);
     }
   }, {
+    key: 'retry',
+    value: function retry(data) {
+      // console.log('retry()');
+      this.dispatch(data);
+    }
+  }, {
     key: 'fetch',
     value: function fetch() {
       var _this = this;
@@ -40,6 +46,9 @@ var Action = function () {
         $('[data-key="area51"] .counter').html(data.length);
 
         _this.actions.update(data);
+      }, function (data) {
+        // console.log('hit the retryCb')
+        _this.actions.retry(data);
       });
     }
   }]);
@@ -76,6 +85,12 @@ var Action = function () {
       this.dispatch(msg);
     }
   }, {
+    key: 'retry',
+    value: function retry(data) {
+      // console.log('retry()');
+      this.dispatch(data);
+    }
+  }, {
     key: 'fetch',
     value: function fetch() {
       var _this = this;
@@ -91,6 +106,9 @@ var Action = function () {
         $('[data-key="core"] .counter').html(data.length);
 
         _this.actions.update(data);
+      }, function (data) {
+        // console.log('hit the retryCb')
+        _this.actions.retry(data);
       });
     }
   }]);
@@ -221,6 +239,12 @@ var Action = function () {
       this.dispatch(msg);
     }
   }, {
+    key: 'retry',
+    value: function retry(data) {
+      // console.log('retry()');
+      this.dispatch(data);
+    }
+  }, {
     key: 'fetch',
     value: function fetch() {
       var _this = this;
@@ -236,6 +260,9 @@ var Action = function () {
         $('[data-key="integrations"] .counter').html(data.length);
 
         _this.actions.update(data);
+      }, function (data) {
+        // console.log('hit the retryCb')
+        _this.actions.retry(data);
       });
     }
   }]);
@@ -366,6 +393,12 @@ var Action = function () {
       this.dispatch(msg);
     }
   }, {
+    key: 'retry',
+    value: function retry(data) {
+      // console.log('retry()');
+      this.dispatch(data);
+    }
+  }, {
     key: 'fetch',
     value: function fetch() {
       var _this = this;
@@ -381,6 +414,9 @@ var Action = function () {
         $('[data-key="scrapers"] .counter').html(data.length);
 
         _this.actions.update(data);
+      }, function (data) {
+        // console.log('hit the retryCb')
+        _this.actions.retry(data);
       });
     }
   }]);
@@ -417,6 +453,12 @@ var Action = function () {
       this.dispatch(msg);
     }
   }, {
+    key: 'retry',
+    value: function retry(data) {
+      // console.log('retry()');
+      this.dispatch(data);
+    }
+  }, {
     key: 'fetch',
     value: function fetch() {
       var _this = this;
@@ -432,6 +474,9 @@ var Action = function () {
         $('[data-key="web"] .counter').html(data.length);
 
         _this.actions.update(data);
+      }, function (data) {
+        // console.log('hit the retryCb')
+        _this.actions.retry(data);
       });
     }
   }]);
@@ -915,11 +960,15 @@ module.exports = React.createClass({ displayName: "exports",
 
   render: function render() {
     if (this.state.loading) {
-      return React.createElement("div", { className: "blankslate capped clean-background" }, React.createElement("span", { className: "mega-octicon octicon-watch" }));
+      return React.createElement("div", { className: "blankslate capped clean-background" }, "Loading");
+    }
+
+    if (this.state.retrying) {
+      return React.createElement("div", { className: "blankslate capped clean-background" }, "Automatically retrying in x seconds");
     }
 
     if (!this.state.data.length) {
-      return React.createElement("div", { className: "blankslate capped clean-background" }, React.createElement("span", { className: "mega-octicon octicon-thumbsup" }));
+      return React.createElement("div", { className: "blankslate capped clean-background" }, "No items");
     }
 
     return React.createElement("div", null, this._getItems());
@@ -970,7 +1019,15 @@ module.exports = React.createClass({ displayName: "exports",
     if (!this.fetched) {
       this.fetch();
     }
-    if (this.props.pollInterval) {
+    if (this.props.pollInterval && !this.interval) {
+      this.interval = setInterval(this.fetch, this.props.pollInterval);
+    }
+  },
+  componentDidUpdate: function componentDidUpdate() {
+    if (!this.fetched) {
+      this.fetch();
+    }
+    if (this.props.pollInterval && !this.interval) {
       this.interval = setInterval(this.fetch, this.props.pollInterval);
     }
   },
@@ -1003,6 +1060,7 @@ module.exports = React.createClass({ displayName: "exports",
 
 var React = require('react');
 var _ = require('underscore');
+var PanelList = require('../../component/panel/list');
 
 module.exports = React.createClass({ displayName: "exports",
   getInitialState: function getInitialState() {
@@ -1042,20 +1100,29 @@ module.exports = React.createClass({ displayName: "exports",
 
 
   render: function render() {
+    var _this2 = this;
+
     var selectedItem = _(this.state.items).findWhere({ selected: 'selected' });
+    if (selectedItem) {
+      // console.log(selectedItem.content);
+    }
 
     return React.createElement("div", null, React.createElement("nav", { className: "reponav js-repo-nav js-sidenav-container-pjax js-octicon-loaders", role: "navigation", "data-pjax": "#js-repo-pjax-container" }, _(this.state.items).map(function (i) {
       return React.createElement("a", {
         key: _.uniqueId(),
         "data-key": i.id,
         className: 'reponav-item ' + i.selected,
-        href: '?' + _.uniqueId() + '#k2-' + i.id
+        onClick: function onClick(e) {
+          e.preventDefault();
+          _this2.setActive(i.id);
+          window.location.hash = 'k2-' + i.id;
+        }
       }, ' ', i.title, ' ', React.createElement("span", { className: "counter" }, "-"));
-    })), selectedItem ? selectedItem.content : null);
+    })), selectedItem ? React.createElement(PanelList, React.__spread({}, selectedItem.content)) : null);
   }
 });
 
-},{"react":229,"underscore":231}],25:[function(require,module,exports){
+},{"../../component/panel/list":23,"react":229,"underscore":231}],25:[function(require,module,exports){
 'use strict';
 
 var messenger = require('./lib/messenger');
@@ -1089,7 +1156,7 @@ var baseUrl = 'https://api.github.com';
 
 function parse_link_header(header) {
   if (header.length === 0) {
-    throw new Error("input must not be of zero length");
+    throw new Error('input must not be of zero length');
   }
 
   // Split parts by comma
@@ -1099,7 +1166,7 @@ function parse_link_header(header) {
   for (var i = 0; i < parts.length; i++) {
     var section = parts[i].split(';');
     if (section.length !== 2) {
-      throw new Error("section could not be split on ';'");
+      throw new Error('section could not be split on \';\'');
     }
     var url = section[0].replace(/<(.*)>/, '$1').trim();
     var name = section[1].replace(/rel="(.*)"/, '$1').trim();
@@ -1270,9 +1337,10 @@ function getIssuesByLabel(label, cb) {
  * @private
  *
  * @param {string} area
- * @param {Function} cb [description]
+ * @param {Function} cb
+ * @param {Function} retryCb called each time we attempting to retry the API call
  */
-function getIssuesByArea(area, cb) {
+function getIssuesByArea(area, cb, retryCb) {
   var query = '?per_page=300&q=';
   var currentUser = $('.header-nav-link.name img').attr('alt').replace('@', '');
   var url = void 0;
@@ -1349,9 +1417,8 @@ function getIssuesByArea(area, cb) {
           var _ret = function () {
             var resetTime = new Date(xhr.getResponseHeader('X-RateLimit-Reset') * 1000);
             var resetInterval = setInterval(function () {
-              console.log('tick', resetTime - new Date());
+              retryCb(resetTime - new Date());
               if (new Date() > resetTime) {
-                console.log('retry request now');
                 clearInterval(resetInterval);
                 makeRequest(overwriteUrl);
               }
@@ -1497,45 +1564,50 @@ function getNoneIssues(cb) {
  * Gets the issues for web that are open and should be worked on
  *
  * @param {Function} cb
+ * @param {Function} retryCb called each time we attempting to retry the API call
  */
-function getWebIssues(cb) {
-  getIssuesByArea('web', cb);
+function getWebIssues(cb, retryCb) {
+  getIssuesByArea('web', cb, retryCb);
 }
 
 /**
  * Gets the issues for core that are open and should be worked on
  *
  * @param {Function} cb
+ * @param {Function} retryCb called each time we attempting to retry the API call
  */
-function getCoreIssues(cb) {
-  getIssuesByArea('core', cb);
+function getCoreIssues(cb, retryCb) {
+  getIssuesByArea('core', cb, retryCb);
 }
 
 /**
  * Gets the issues for integrations that are open and should be worked on
  *
  * @param {Function} cb
+ * @param {Function} retryCb called each time we attempting to retry the API call
  */
-function getIntegrationsIssues(cb) {
-  getIssuesByArea('"integration+server"', cb);
+function getIntegrationsIssues(cb, retryCb) {
+  getIssuesByArea('"integration+server"', cb, retryCb);
 }
 
 /**
  * Gets the issues for scrapers that are open and should be worked on
  *
  * @param {Function} cb
+ * @param {Function} retryCb called each time we attempting to retry the API call
  */
-function getScrapersIssues(cb) {
-  getIssuesByArea('scraper', cb);
+function getScrapersIssues(cb, retryCb) {
+  getIssuesByArea('scraper', cb, retryCb);
 }
 
 /**
  * Gets the issues for area51 that are open and should be worked on
  *
  * @param {Function} cb
+ * @param {Function} retryCb called each time we attempting to retry the API call
  */
-function getArea51Issues(cb) {
-  getIssuesByArea('area-51', cb);
+function getArea51Issues(cb, retryCb) {
+  getIssuesByArea('area-51', cb, retryCb);
 }
 
 /**
@@ -1597,23 +1669,21 @@ exports.removeLabel = removeLabel;
 'use strict';
 /* global chrome */
 
-let listeners = {};
+var listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  let navEventList = [
-    'onHistoryStateUpdated'
-  ];
+  var navEventList = ['onHistoryStateUpdated'];
 
-  navEventList.forEach(function(e) {
-    chrome.webNavigation[e].addListener(function() {
+  navEventList.forEach(function (e) {
+    chrome.webNavigation[e].addListener(function () {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function(tabs) {
+      }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1642,8 +1712,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (let i = 0; i < listeners[eventName].length; i++) {
-      let callback = listeners[eventName][i];
+    for (var i = 0; i < listeners[eventName].length; i++) {
+      var callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1654,7 +1724,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function(request) {
+  chrome.runtime.onMessage.addListener(function (request) {
     trigger(request);
   });
 }
@@ -2163,43 +2233,48 @@ module.exports = React.createClass({ displayName: "exports",
       items: [{
         title: 'Web',
         id: 'web',
-        content: React.createElement(PanelList, {
+        content: {
           action: ActionsIssueWeb,
           store: StoreIssueWeb,
-          item: "issue",
-          pollInterval: this.props.pollInterval })
+          item: 'issue',
+          pollInterval: this.props.pollInterval
+        }
       }, {
         title: 'Core',
         id: 'core',
-        content: React.createElement(PanelList, {
+        content: {
           action: ActionsIssueCore,
           store: StoreIssueCore,
-          item: "issue",
-          pollInterval: this.props.pollInterval })
+          item: 'issue',
+          pollInterval: this.props.pollInterval
+        }
       }, {
         title: 'Integrations',
         id: 'integrations',
-        content: React.createElement(PanelList, {
+        content: {
           action: ActionsIssueIntegrations,
           store: StoreIssueIntegrations,
-          item: "issue",
-          pollInterval: this.props.pollInterval })
+          item: 'issue',
+          pollInterval: this.props.pollInterval
+        }
       }, {
         title: 'Scrapers',
         id: 'scrapers',
-        content: React.createElement(PanelList, {
+        content: {
           action: ActionsIssueScrapers,
           store: StoreIssueScrapers,
-          item: "issue",
-          pollInterval: this.props.pollInterval })
+          item: 'issue',
+          pollInterval: this.props.pollInterval
+        }
       }, {
         title: 'Area51',
         id: 'area51',
-        content: React.createElement(PanelList, {
+        content: {
           action: ActionsIssueArea51,
           store: StoreIssueArea51,
-          item: "issue",
-          pollInterval: this.props.pollInterval })
+          item: 'issue',
+          pollInterval: this.props.pollInterval
+        }
       }] })));
   }
 });
@@ -2762,6 +2837,7 @@ var BaseStore = function () {
     _classCallCheck(this, BaseStore);
 
     this.loading = false;
+    this.retrying = false;
     this.data = [];
     this.errorMessage = null;
   }
@@ -2786,6 +2862,14 @@ var BaseStore = function () {
     value: function handleFailed(msg) {
       this.loading = false;
       this.errorMessage = msg;
+    }
+  }, {
+    key: 'handleRetry',
+    value: function handleRetry(data) {
+      // console.log('handleRetry()');
+      this.loading = false;
+      this.retrying = true;
+      this.data = data;
     }
   }]);
 
