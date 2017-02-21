@@ -1014,6 +1014,7 @@ module.exports = React.createClass({ displayName: "exports",
     var _this = this;
 
     var foundActiveTab = false;
+
     // Set the currently selected tab based on our hash
     _(this.state.items).each(function (i) {
       if (window.location.hash.search('#k2-' + i.id) > -1) {
@@ -1042,13 +1043,15 @@ module.exports = React.createClass({ displayName: "exports",
 
   render: function render() {
     var selectedItem = _(this.state.items).findWhere({ selected: 'selected' });
-    var selectedId = selectedItem ? selectedItem.id : null;
 
     return React.createElement("div", null, React.createElement("nav", { className: "reponav js-repo-nav js-sidenav-container-pjax js-octicon-loaders", role: "navigation", "data-pjax": "#js-repo-pjax-container" }, _(this.state.items).map(function (i) {
-      return React.createElement("a", { key: i.id, "data-key": i.id, href: '?' + _.uniqueId() + '#k2-' + i.id, className: 'reponav-item ' + i.selected }, React.createElement("span", { "aria-hidden": "true", className: 'octicon ' + i.icon }), ' ', i.title, ' ', React.createElement("span", { className: "counter" }, "-"));
-    })), _(this.props.children).map(function (c) {
-      return c.props.id === selectedId ? React.createElement("div", { key: c.props.id }, c) : null;
-    }));
+      return React.createElement("a", {
+        key: _.uniqueId(),
+        "data-key": i.id,
+        className: 'reponav-item ' + i.selected,
+        href: '?' + _.uniqueId() + '#k2-' + i.id
+      }, ' ', i.title, ' ', React.createElement("span", { className: "counter" }, "-"));
+    })), selectedItem ? selectedItem.content : null);
   }
 });
 
@@ -1075,6 +1078,8 @@ setupPages();
 
 },{"./lib/messenger":27,"./lib/pages/github/all":29,"./lib/pages/github/issue":30,"./lib/pages/github/main":31,"./lib/pages/github/pr":32}],26:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var $ = require('jquery');
 var _ = require('underscore');
@@ -1339,7 +1344,27 @@ function getIssuesByArea(area, cb) {
         headers: {
           Authorization: 'Basic ' + btoa(currentUser + ':' + ghPassword)
         }
-      }).done(handleData).fail(cb);
+      }).done(handleData).fail(function (xhr, err, msg) {
+        if (xhr.status === 403) {
+          var _ret = function () {
+            var resetTime = new Date(xhr.getResponseHeader('X-RateLimit-Reset') * 1000);
+            var resetInterval = setInterval(function () {
+              console.log('tick', resetTime - new Date());
+              if (new Date() > resetTime) {
+                console.log('retry request now');
+                clearInterval(resetInterval);
+                makeRequest(overwriteUrl);
+              }
+            }, 1000);
+            return {
+              v: void 0
+            };
+          }();
+
+          if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+        }
+        cb(xhr, err, msg);
+      });
     });
   }
 
@@ -1572,21 +1597,23 @@ exports.removeLabel = removeLabel;
 'use strict';
 /* global chrome */
 
-var listeners = {};
+let listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  var navEventList = ['onHistoryStateUpdated'];
+  let navEventList = [
+    'onHistoryStateUpdated'
+  ];
 
-  navEventList.forEach(function (e) {
-    chrome.webNavigation[e].addListener(function () {
+  navEventList.forEach(function(e) {
+    chrome.webNavigation[e].addListener(function() {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function (tabs) {
+      }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1615,8 +1642,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (var i = 0; i < listeners[eventName].length; i++) {
-      var callback = listeners[eventName][i];
+    for (let i = 0; i < listeners[eventName].length; i++) {
+      let callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1627,7 +1654,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function (request) {
+  chrome.runtime.onMessage.addListener(function(request) {
     trigger(request);
   });
 }
@@ -2135,26 +2162,45 @@ module.exports = React.createClass({ displayName: "exports",
       listOptions: listOptions, pollInterval: this.props.pollInterval }))), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Your Pull Requests", action: ActionsPullAssigned, store: StorePullAssigned, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Pull Requests - You need to review", action: ActionsPullReviewing, store: StorePullReviewing, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(Tabs, {
       items: [{
         title: 'Web',
-        icon: 'octicon-globe',
-        id: 'web'
+        id: 'web',
+        content: React.createElement(PanelList, {
+          action: ActionsIssueWeb,
+          store: StoreIssueWeb,
+          item: "issue",
+          pollInterval: this.props.pollInterval })
       }, {
         title: 'Core',
-        icon: 'octicon-circuit-board',
-        id: 'core'
+        id: 'core',
+        content: React.createElement(PanelList, {
+          action: ActionsIssueCore,
+          store: StoreIssueCore,
+          item: "issue",
+          pollInterval: this.props.pollInterval })
       }, {
         title: 'Integrations',
-        icon: 'octicon-plug',
-        id: 'integrations'
+        id: 'integrations',
+        content: React.createElement(PanelList, {
+          action: ActionsIssueIntegrations,
+          store: StoreIssueIntegrations,
+          item: "issue",
+          pollInterval: this.props.pollInterval })
       }, {
         title: 'Scrapers',
-        icon: 'octicon-credit-card',
-        id: 'scrapers'
+        id: 'scrapers',
+        content: React.createElement(PanelList, {
+          action: ActionsIssueScrapers,
+          store: StoreIssueScrapers,
+          item: "issue",
+          pollInterval: this.props.pollInterval })
       }, {
         title: 'Area51',
-        icon: 'octicon-credit-card',
-        id: 'area51'
-      }]
-    }, React.createElement(PanelList, { id: "web", title: "Things to Work On", action: ActionsIssueWeb, store: StoreIssueWeb, item: "issue", pollInterval: this.props.pollInterval }), React.createElement(PanelList, { id: "core", title: "Things to Work On", action: ActionsIssueCore, store: StoreIssueCore, item: "issue", pollInterval: this.props.pollInterval }), React.createElement(PanelList, { id: "integrations", title: "Things to Work On", action: ActionsIssueIntegrations, store: StoreIssueIntegrations, item: "issue", pollInterval: this.props.pollInterval }), React.createElement(PanelList, { id: "scrapers", title: "Things to Work On", action: ActionsIssueScrapers, store: StoreIssueScrapers, item: "issue", pollInterval: this.props.pollInterval }), React.createElement(PanelList, { id: "area51", title: "Things to Work On", action: ActionsIssueArea51, store: StoreIssueArea51, item: "issue", pollInterval: this.props.pollInterval }))));
+        id: 'area51',
+        content: React.createElement(PanelList, {
+          action: ActionsIssueArea51,
+          store: StoreIssueArea51,
+          item: "issue",
+          pollInterval: this.props.pollInterval })
+      }] })));
   }
 });
 
