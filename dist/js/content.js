@@ -1572,23 +1572,21 @@ exports.removeLabel = removeLabel;
 'use strict';
 /* global chrome */
 
-let listeners = {};
+var listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  let navEventList = [
-    'onHistoryStateUpdated'
-  ];
+  var navEventList = ['onHistoryStateUpdated'];
 
-  navEventList.forEach(function(e) {
-    chrome.webNavigation[e].addListener(function() {
+  navEventList.forEach(function (e) {
+    chrome.webNavigation[e].addListener(function () {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function(tabs) {
+      }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1617,8 +1615,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (let i = 0; i < listeners[eventName].length; i++) {
-      let callback = listeners[eventName][i];
+    for (var i = 0; i < listeners[eventName].length; i++) {
+      var callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1629,7 +1627,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function(request) {
+  chrome.runtime.onMessage.addListener(function (request) {
     trigger(request);
   });
 }
@@ -2401,7 +2399,8 @@ module.exports = React.createClass({ displayName: "exports",
       design: defaultBtnClass + ' inactive k2-design',
       'integration server': defaultBtnClass + ' inactive k2-integration server',
       ops: defaultBtnClass + ' inactive k2-ops',
-      scraper: defaultBtnClass + ' inactive k2-scraper'
+      scraper: defaultBtnClass + ' inactive k2-scraper',
+      mobile: defaultBtnClass + ' inactive k2-mobile'
     };
     $('.labels .label').each(function () {
       var label = $(this).text().toLowerCase();

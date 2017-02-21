@@ -9,6 +9,7 @@
 .k2-integration.server.inactive,
 .k2-scraper.inactive,
 .k2-design.inactive,
+.k2-mobile.inactive,
 .k2-ops.inactive,
 .k2-bug.inactive,
 .k2-task.inactive,
@@ -27,6 +28,7 @@
 .k2-integration.server,
 .k2-scraper,
 .k2-design,
+.k2-mobile,
 .k2-ops,
 .k2-bug,
 .k2-task,
@@ -72,6 +74,10 @@
 
 .k2-scraper.active {
   background-color: #bfe5bf !important;
+}
+
+.k2-mobile.active {
+  background-color: #fad8c7 !important;
 }
 
 .k2-design.active {
