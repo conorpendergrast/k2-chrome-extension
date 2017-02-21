@@ -795,8 +795,6 @@ module.exports = React.createClass({ displayName: "exports",
     }
   },
   loadData: function loadData() {
-    var _this = this;
-
     // Don't load any data if we have already fetched it
     if (this.fetched) {
       return;
@@ -806,6 +804,14 @@ module.exports = React.createClass({ displayName: "exports",
       throw new Error('The method ' + this.props.apiMethod + ' does not exist on the API module');
     }
 
+    this.callApi();
+
+    this.fetched = true;
+  },
+  callApi: function callApi() {
+    var _this = this;
+
+    clearInterval(this.interval);
     API[this.props.apiMethod](function (error, data) {
       if (error) {
         return _this.setState({
@@ -825,7 +831,9 @@ module.exports = React.createClass({ displayName: "exports",
         data: data
       });
 
-      _this.fetched = true;
+      if (_this.props.pollInterval) {
+        _this.interval = setInterval(_this.callApi, _this.props.pollInterval);
+      }
     }, function (data) {
       // Handle the API retrying
       _this.setState({
@@ -931,7 +939,7 @@ module.exports = React.createClass({ displayName: "exports",
           _this2.setActive(i.id);
         }
       }, ' ', i.title, ' ', React.createElement("span", { className: "counter" }, "-"));
-    })), selectedItem ? React.createElement(Contents, React.__spread({}, selectedItem, { type: this.props.type })) : null);
+    })), selectedItem ? React.createElement(Contents, React.__spread({}, selectedItem, { type: this.props.type, pollInterval: this.props.pollInterval })) : null);
   }
 });
 
@@ -1493,23 +1501,21 @@ exports.removeLabel = removeLabel;
 'use strict';
 /* global chrome */
 
-let listeners = {};
+var listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  let navEventList = [
-    'onHistoryStateUpdated'
-  ];
+  var navEventList = ['onHistoryStateUpdated'];
 
-  navEventList.forEach(function(e) {
-    chrome.webNavigation[e].addListener(function() {
+  navEventList.forEach(function (e) {
+    chrome.webNavigation[e].addListener(function () {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function(tabs) {
+      }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1538,8 +1544,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (let i = 0; i < listeners[eventName].length; i++) {
-      let callback = listeners[eventName][i];
+    for (var i = 0; i < listeners[eventName].length; i++) {
+      var callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1550,7 +1556,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function(request) {
+  chrome.runtime.onMessage.addListener(function (request) {
     trigger(request);
   });
 }
@@ -2046,7 +2052,7 @@ module.exports = React.createClass({ displayName: "exports",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Monthly", extraClass: "monthly", action: ActionsIssueMonthly, store: StoreIssueMonthly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "None", extraClass: "none", action: ActionsIssueNone, store: StoreIssueNone, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval }))), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Your Pull Requests", action: ActionsPullAssigned, store: StorePullAssigned, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Pull Requests - You need to review", action: ActionsPullReviewing, store: StorePullReviewing, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(Tabs, {
-      pollInterval: this.props.pollInterval,
+      pollInterval: 15000,
       type: "issue",
       items: [{
         title: 'Web',
