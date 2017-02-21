@@ -1,3 +1,6 @@
+# 0.4.1
+- Refactored the tabs so that they load appropriately now
+
 # 0.4.0
 - Added a quick label button for the mobile area
 - Added a tab for viewing mobile issues to work on
