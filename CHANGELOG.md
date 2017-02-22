@@ -1,3 +1,6 @@
+# 0.4.3
+- Fixed a bug where FirstPick issues wheren't being labeled properly
+
 # 0.4.2
 - Fixed a bug with the API that would create an infinite loop with retrying the API
 
