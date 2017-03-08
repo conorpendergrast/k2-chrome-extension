@@ -564,7 +564,7 @@ module.exports = React.createClass({ displayName: "exports",
       }
     }
 
-    return React.createElement("div", { className: "panel-item" }, React.createElement("span", { className: "panel-item-meta" }, person, React.createElement("span", { className: "age" }, "Updated: ", moment(this.props.data.updated_at).fromNow()), React.createElement("span", { className: "comments" }, "Comments:", ' ', this.props.data.comments), this.props.showReviews ? React.createElement("span", { className: "comments" }, "Reviews:", ' ', this.props.data.reviews.length) : null, this.props.data.pr && this.props.data.pr.status && this.props.data.pr.status.length ? React.createElement("span", { className: 'travis-status ' + this.props.data.pr.status[0].state }, "Travis: ", this.props.data.pr.status[0].state) : null), React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title));
+    return React.createElement("div", { className: "panel-item" }, React.createElement("span", { className: "panel-item-meta" }, person, React.createElement("span", { className: "age" }, "Updated: ", moment(this.props.data.updated_at).fromNow()), React.createElement("span", { className: "comments" }, "Comments:", ' ', this.props.data.comments), this.props.showReviews ? React.createElement("span", { className: "comments" }, "Reviews:", ' ', this.props.data.reviews.length) : null, this.props.data.pr && this.props.data.pr.status && this.props.data.pr.status.length ? React.createElement("span", { className: 'travis-status ' + this.props.data.pr.status[0].state }, "Travis: ", this.props.data.pr.status[0].state) : null), React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title, this.props.data.userIsFinishedReviewing ? React.createElement("span", { className: "counter" }, "done reviewing") : null));
   }
 });
 
@@ -802,7 +802,7 @@ module.exports = React.createClass({ displayName: "exports",
     API[this.props.apiMethod](function (error, data) {
       if (error) {
         return _this.setState({
-          error: error,
+          error: 'There was an error loading data. Refresh the page to try again.',
           loading: false,
           retrying: false
         });
@@ -1003,8 +1003,8 @@ function getPullsByType(type, cb, getReviews) {
 
   // Get the PRs assigned to me
   query += '+state:open';
-  query += '+is:pr';
-  query += '+user:expensify';
+  query += '+type:pr';
+  // query += '+user:expensify';
   // query += '+repo:expensify/expensify';
   query += '+' + type + ':' + currentUser;
 
@@ -1084,13 +1084,7 @@ function getPullsByType(type, cb, getReviews) {
                 var approved = _(reviewsByUser).findWhere({ state: 'APPROVED' });
                 var commented = _(reviewsByUser).findWhere({ state: 'COMMENTED' });
                 var changesRequested = _(reviewsByUser).findWhere({ state: 'CHANGES_REQUESTED' });
-                var userIsFinishedReviewing = commented && !changesRequested || approved;
-                // If the user is finished reviewing it, then we will remove this item from our data
-                if (type === 'reviewed-by' && userIsFinishedReviewing) {
-                  data.items = _(data.items).filter(function (i) {
-                    return i.id !== item.id;
-                  });
-                }
+                item.userIsFinishedReviewing = commented && !changesRequested || approved;
                 done();
               });
             });
@@ -1467,16 +1461,29 @@ function getPullsAssigned(cb) {
  * @param {Function} cb [description]
  */
 function getPullsReviewing(cb) {
+  var result = [];
+  var done = _.after(2, function () {
+    cb(null, result);
+  });
+
   getPullsByType('review-requested', function (err, data) {
     if (err) {
-      return cb(err);
+      console.error(err);
+      done();
+      return;
     }
-    getPullsByType('reviewed-by', function (err2, data2) {
-      if (err2) {
-        return cb(err2);
-      }
-      cb(null, data.concat(data2));
-    }, true);
+    result = result.concat(data);
+    done();
+  }, true);
+
+  getPullsByType('reviewed-by', function (err, data) {
+    if (err) {
+      console.error(err);
+      done();
+      return;
+    }
+    result = result.concat(data);
+    done();
   }, true);
 }
 
@@ -1514,21 +1521,23 @@ exports.removeLabel = removeLabel;
 'use strict';
 /* global chrome */
 
-var listeners = {};
+let listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  var navEventList = ['onHistoryStateUpdated'];
+  let navEventList = [
+    'onHistoryStateUpdated'
+  ];
 
-  navEventList.forEach(function (e) {
-    chrome.webNavigation[e].addListener(function () {
+  navEventList.forEach(function(e) {
+    chrome.webNavigation[e].addListener(function() {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function (tabs) {
+      }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1557,8 +1566,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (var i = 0; i < listeners[eventName].length; i++) {
-      var callback = listeners[eventName][i];
+    for (let i = 0; i < listeners[eventName].length; i++) {
+      let callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1569,7 +1578,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function (request) {
+  chrome.runtime.onMessage.addListener(function(request) {
     trigger(request);
   });
 }
@@ -2064,13 +2073,9 @@ module.exports = React.createClass({ displayName: "exports",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Weekly", extraClass: "weekly", action: ActionsIssueWeekly, store: StoreIssueWeekly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "Monthly", extraClass: "monthly", action: ActionsIssueMonthly, store: StoreIssueMonthly, item: "issue",
       listOptions: listOptions, pollInterval: this.props.pollInterval })), React.createElement("div", { className: "one-fifth column" }, React.createElement(PanelList, { title: "None", extraClass: "none", action: ActionsIssueNone, store: StoreIssueNone, item: "issue",
-<<<<<<< HEAD
       listOptions: listOptions, pollInterval: this.props.pollInterval }))), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Your Pull Requests", action: ActionsPullAssigned, store: StorePullAssigned, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Pull Requests - You need to finish reviewing", action: ActionsPullReviewing, store: StorePullReviewing, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(Tabs, {
-=======
-      listOptions: listOptions, pollInterval: this.props.pollInterval }))), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Your Pull Requests", action: ActionsPullAssigned, store: StorePullAssigned, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(PanelList, { title: "Pull Requests - You need to review", action: ActionsPullReviewing, store: StorePullReviewing, options: { showAssignee: false, showReviews: true }, item: "pull", pollInterval: this.props.pollInterval })), React.createElement("br", null), React.createElement("div", null, React.createElement(Tabs, {
       pollInterval: 15000,
       type: "issue",
->>>>>>> origin/master
       items: [{
         title: 'Web',
         id: 'web',
@@ -19846,12 +19851,7 @@ return hooks;
 
 })));
 
-<<<<<<< HEAD
-},{}],99:[function(require,module,exports){
-=======
-}));
 },{}],90:[function(require,module,exports){
->>>>>>> origin/master
 // shim for using process in browser
 var process = module.exports = {};
 
