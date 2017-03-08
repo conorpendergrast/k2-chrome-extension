@@ -564,7 +564,7 @@ module.exports = React.createClass({ displayName: "exports",
       }
     }
 
-    return React.createElement("div", { className: "panel-item" }, React.createElement("span", { className: "panel-item-meta" }, person, React.createElement("span", { className: "age" }, "Updated: ", moment(this.props.data.updated_at).fromNow()), React.createElement("span", { className: "comments" }, "Comments:", ' ', this.props.data.comments), this.props.showReviews ? React.createElement("span", { className: "comments" }, "Reviews:", ' ', this.props.data.reviews.length) : null, this.props.data.pr && this.props.data.pr.status && this.props.data.pr.status.length ? React.createElement("span", { className: 'travis-status ' + this.props.data.pr.status[0].state }, "Travis: ", this.props.data.pr.status[0].state) : null), React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title, this.props.data.userIsFinishedReviewing ? React.createElement("span", { className: "counter" }, "done reviewing") : null));
+    return React.createElement("div", { className: "panel-item" }, React.createElement("span", { className: "panel-item-meta" }, person, React.createElement("span", { className: "age" }, "Updated: ", moment(this.props.data.updated_at).fromNow()), React.createElement("span", { className: "comments" }, "Comments:", ' ', this.props.data.comments), this.props.showReviews ? React.createElement("span", { className: "comments" }, "Reviews:", ' ', this.props.data.reviews.length) : null, this.props.data.pr && this.props.data.pr.status && this.props.data.pr.status.length ? React.createElement("span", { className: 'travis-status ' + this.props.data.pr.status[0].state }, "Travis: ", this.props.data.pr.status[0].state) : null), React.createElement("a", { href: this.props.data.html_url, className: this.getClassName(), target: "_blank" }, React.createElement("span", { className: "octicon octicon-alert" }), this.props.data.title, ' ', this.props.data.userIsFinishedReviewing ? React.createElement("span", { className: "counter" }, "done reviewing") : null));
   }
 });
 
@@ -1463,7 +1463,7 @@ function getPullsAssigned(cb) {
 function getPullsReviewing(cb) {
   var result = [];
   var done = _.after(2, function () {
-    cb(null, result);
+    cb(null, _(result).sortBy('userIsFinishedReviewing').reverse());
   });
 
   getPullsByType('review-requested', function (err, data) {
