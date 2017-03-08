@@ -1,3 +1,6 @@
+# 0.4.5
+- Changed the view for PRs waiting on you to show PRs that you have finished reviewing, but haven't merged yet
+
 # 0.4.4
 - Fixed a bug where an API failure would cause a weirdly formatted issue list
 
