@@ -1,3 +1,21 @@
+# 0.4.4
+- Fixed a bug where an API failure would cause a weirdly formatted issue list
+
+# 0.4.3
+- Fixed a bug where FirstPick issues wheren't being labeled properly
+
+# 0.4.2
+- Fixed a bug with the API that would create an infinite loop with retrying the API
+
+# 0.4.1
+- Refactored the tabs so that they load appropriately now
+
+# 0.4.0
+- Added a quick label button for the mobile area
+- Added a tab for viewing mobile issues to work on
+- Tried once again (and pretty much failed) to fix tab switching
+- Added automatic API retrying according to GitHubs rate limiting headers
+
 # 0.3.6
 - Swapped the NewHire label for the FirstPick label
 
