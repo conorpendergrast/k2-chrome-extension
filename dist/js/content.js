@@ -1461,9 +1461,12 @@ function getPullsAssigned(cb) {
  * @param {Function} cb [description]
  */
 function getPullsReviewing(cb) {
+  var currentUser = $('.header-nav-link.name img').attr('alt').replace('@', '');
   var result = [];
   var done = _.after(2, function () {
-    cb(null, _(result).sortBy('userIsFinishedReviewing').reverse());
+    cb(null, _(result).chain().filter(function (pr) {
+      return pr.assignee && pr.assignee.login !== currentUser;
+    }).sortBy('userIsFinishedReviewing').value().reverse());
   });
 
   getPullsByType('review-requested', function (err, data) {
@@ -1521,23 +1524,21 @@ exports.removeLabel = removeLabel;
 'use strict';
 /* global chrome */
 
-let listeners = {};
+var listeners = {};
 
 /**
  * Listens to all of our nav events and sends a 'nav' message
  * to each tab when one of the events is triggered
  */
 function startNavEventPublisher() {
-  let navEventList = [
-    'onHistoryStateUpdated'
-  ];
+  var navEventList = ['onHistoryStateUpdated'];
 
-  navEventList.forEach(function(e) {
-    chrome.webNavigation[e].addListener(function() {
+  navEventList.forEach(function (e) {
+    chrome.webNavigation[e].addListener(function () {
       chrome.tabs.query({
         active: true,
         currentWindow: true
-      }, function(tabs) {
+      }, function (tabs) {
         chrome.tabs.sendMessage(tabs[0].id, 'nav');
       });
     });
@@ -1566,8 +1567,8 @@ function on(eventName, cb) {
  */
 function trigger(eventName, data) {
   if (listeners[eventName] && listeners[eventName].length) {
-    for (let i = 0; i < listeners[eventName].length; i++) {
-      let callback = listeners[eventName][i];
+    for (var i = 0; i < listeners[eventName].length; i++) {
+      var callback = listeners[eventName][i];
       callback.apply(null, data);
     }
   }
@@ -1578,7 +1579,7 @@ function trigger(eventName, data) {
  * event listeners
  */
 function startMessageListener() {
-  chrome.runtime.onMessage.addListener(function(request) {
+  chrome.runtime.onMessage.addListener(function (request) {
     trigger(request);
   });
 }
