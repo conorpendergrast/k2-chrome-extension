@@ -1,3 +1,6 @@
+# 0.4.6
+- Updated the view for PR waiting for to to not show PRs that are assigned to you
+
 # 0.4.5
 - Changed the view for PRs waiting on you to show PRs that you have finished reviewing, but haven't merged yet
 
