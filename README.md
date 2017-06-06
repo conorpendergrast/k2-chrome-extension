@@ -17,8 +17,13 @@ Read about the features in the [wiki](https://github.com/tgolen/k2-chrome-extens
 3. Click _Load Unpacked Extension_
 4. Navigate to the `dist` folder and select it
 
-## NOTE: It Requests Your GitHub Password
-Your github password is stored locally and securely. It is used to make basic auth calls to the GitHub API. This is so that we don't have to implement OAuth or a separate API and we can get around a lot of the rate limiting issues.
+## NOTE: It Requires a Personal Access token
+Your personal access token is stored locally and securely. It is used to make basic auth calls to the GitHub API. This is so that we don't have to implement OAuth or a separate API and we can get around a lot of the rate limiting issues.
+
+1. Go to https://github.com/settings/tokens
+2. Generate a new token
+3. Give it full permission to notifications, repo and user
+4. Use that token when signing in to the KSv2 dashboard
 
 # Installing this repo
 ```
